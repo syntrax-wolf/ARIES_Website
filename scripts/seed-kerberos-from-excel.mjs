@@ -82,28 +82,44 @@ function mapPostToLevel(post) {
   return "executive";
 }
 
-function findMember(members, name) {
+function findMember(members, name, excelLevel, kerberos) {
   const n = normName(name);
-  const byNorm = new Map();
-  for (const m of members) {
-    const dn = normName(m.data?.name);
-    if (dn) byNorm.set(dn, m);
-    byNorm.set(normName(m.slug.replace(/-/g, " ")), m);
+  const exact = members.filter((m) => normName(m.data?.name) === n);
+  const candidates =
+    exact.length > 0
+      ? exact
+      : (() => {
+          const first = n.split(" ")[0];
+          const firstHits = members.filter(
+            (m) => normName(m.data?.name).split(" ")[0] === first,
+          );
+          if (firstHits.length) return firstHits;
+          return members.filter((m) => {
+            const dn = normName(m.data?.name);
+            return dn.includes(n) || n.includes(dn);
+          });
+        })();
+
+  if (!candidates.length) return null;
+  if (candidates.length === 1) return candidates[0];
+
+  // Prefer already-correct kerberos (idempotent re-runs)
+  const byKerberos = candidates.find(
+    (m) => m.entry_number === kerberos || m.username === kerberos,
+  );
+  if (byKerberos) return byKerberos;
+
+  // Disambiguate duplicate names (e.g. two Manasvis) by club level / slug
+  const byLevel = candidates.filter((m) => m.level === excelLevel);
+  if (byLevel.length === 1) return byLevel[0];
+  if (excelLevel === "executive") {
+    const execSlug = candidates.find((m) => /-executive$/.test(m.slug));
+    if (execSlug) return execSlug;
   }
-  if (byNorm.has(n)) return byNorm.get(n);
-  if (byNorm.has(normName(slugifyName(name)))) return byNorm.get(normName(slugifyName(name)));
-
-  // Fuzzy: unique first-name match
-  const first = n.split(" ")[0];
-  const firstHits = members.filter((m) => normName(m.data?.name).split(" ")[0] === first);
-  if (firstHits.length === 1) return firstHits[0];
-
-  // Contained name
-  const contains = members.filter((m) => {
-    const dn = normName(m.data?.name);
-    return dn.includes(n) || n.includes(dn);
-  });
-  if (contains.length === 1) return contains[0];
+  if (excelLevel === "coordinator") {
+    const coords = candidates.filter((m) => m.level === "coordinator");
+    if (coords.length === 1) return coords[0];
+  }
   return null;
 }
 
@@ -135,11 +151,16 @@ async function main() {
     }
 
     const { kerberos, iitdEmail } = resolved;
-    let match = findMember(members ?? [], name);
+    const excelLevel = mapPostToLevel(post);
+    let match = findMember(members ?? [], name, excelLevel, kerberos);
 
     if (!match) {
-      const slug = slugifyName(name);
-      const level = mapPostToLevel(post);
+      const slug =
+        excelLevel === "executive" &&
+        (members ?? []).some((m) => normName(m.data?.name) === normName(name))
+          ? `${slugifyName(name)}-executive`
+          : slugifyName(name);
+      const level = excelLevel;
       const data = {
         slug,
         name,
