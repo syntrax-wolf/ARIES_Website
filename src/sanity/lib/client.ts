@@ -18,10 +18,15 @@ export function getClient(): SanityClient {
 
 /**
  * Lazy-initialized client for backward compat with existing blog pages.
- * Falls back gracefully at build time when env vars aren't set.
+ * Uses a Proxy that binds methods to the real instance (required because
+ * next-sanity uses private class fields which break if `this` is a Proxy).
  */
 export const client = new Proxy({} as SanityClient, {
   get(_target, prop) {
-    return (getClient() as any)[prop]
+    const value = (getClient() as any)[prop]
+    if (typeof value === 'function') {
+      return value.bind(getClient())
+    }
+    return value
   },
 })

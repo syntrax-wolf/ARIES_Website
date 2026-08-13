@@ -1,25 +1,39 @@
 export const apiVersion =
-  process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2026-08-08'
+  sanitizeEnv(process.env.NEXT_PUBLIC_SANITY_API_VERSION) || '2026-08-08'
 
 export function getDataset(): string {
   return assertValue(
-    process.env.NEXT_PUBLIC_SANITY_DATASET,
+    sanitizeEnv(process.env.NEXT_PUBLIC_SANITY_DATASET),
     'Missing environment variable: NEXT_PUBLIC_SANITY_DATASET'
   )
 }
 
 export function getProjectId(): string {
   return assertValue(
-    process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+    sanitizeEnv(process.env.NEXT_PUBLIC_SANITY_PROJECT_ID),
     'Missing environment variable: NEXT_PUBLIC_SANITY_PROJECT_ID'
   )
 }
 
 /** @deprecated Use getDataset() — kept for sanity.config.ts compatibility */
-export const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || ''
+export const dataset = sanitizeEnv(process.env.NEXT_PUBLIC_SANITY_DATASET) || ''
 
 /** @deprecated Use getProjectId() — kept for sanity.config.ts compatibility */
-export const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || ''
+export const projectId = sanitizeEnv(process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) || ''
+
+function sanitizeEnv(v: string | undefined): string | undefined {
+  if (v == null) return undefined
+
+  let value = v.trim()
+  if (
+    (value.startsWith('"') && value.endsWith('"')) ||
+    (value.startsWith("'") && value.endsWith("'"))
+  ) {
+    value = value.slice(1, -1).trim()
+  }
+
+  return value || undefined
+}
 
 function assertValue(v: string | undefined, errorMessage: string): string {
   if (!v) {
