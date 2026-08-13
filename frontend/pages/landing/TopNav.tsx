@@ -48,22 +48,24 @@ export function TopNav() {
         <AriesLogo tone="dark" />
 
         <nav className="hidden items-center gap-8 lg:flex">
-          {topNavLinks.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              className="text-sm font-medium text-navy transition-colors hover:text-purple"
-            >
-              {l.label}
-            </Link>
-          ))}
+          {topNavLinks
+            .filter((l) => l.href !== "/contact")
+            .map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                className="text-sm font-medium text-navy transition-colors hover:text-purple"
+              >
+                {l.label}
+              </Link>
+            ))}
+          <UserMenu tone="light" />
           <Link
             href="/contact"
             className="rounded-full bg-navy px-7 py-2.5 text-sm font-bold text-white shadow-cta transition-transform hover:scale-105"
           >
             Contact Us →
           </Link>
-          <UserMenu tone="light" />
         </nav>
 
         <button
@@ -78,16 +80,21 @@ export function TopNav() {
 
       {open && (
         <nav className="border-t border-navy/5 px-4 pb-5 pt-2 lg:hidden">
-          {topNavLinks.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              className="block rounded-lg px-4 py-3 text-base font-semibold text-navy hover:bg-lilac"
-              onClick={() => setOpen(false)}
-            >
-              {l.label}
-            </Link>
-          ))}
+          {topNavLinks
+            .filter((l) => l.href !== "/contact")
+            .map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                className="block rounded-lg px-4 py-3 text-base font-semibold text-navy hover:bg-lilac"
+                onClick={() => setOpen(false)}
+              >
+                {l.label}
+              </Link>
+            ))}
+          <div className="mt-3 px-2">
+            <UserMenu tone="light" />
+          </div>
           <Link
             href="/contact"
             className="mt-2 block rounded-full bg-navy px-6 py-3 text-center text-sm font-bold text-white"
@@ -95,9 +102,6 @@ export function TopNav() {
           >
             Contact Us →
           </Link>
-          <div className="mt-3 px-2">
-            <UserMenu tone="light" />
-          </div>
         </nav>
       )}
     </header>
