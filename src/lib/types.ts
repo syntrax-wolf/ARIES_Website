@@ -135,6 +135,16 @@ export type Resource = {
   body?: string; // long-form markdown content
   featured?: boolean;
   coverImage?: string;
+  /** True when the resource originates from Sanity CMS. */
+  _sanity?: boolean;
+};
+
+/** A Sanity blog post surfaced as a Resource with its Portable Text body. */
+export type SanityBlogResource = Resource & {
+  _sanity: true;
+  _sanitySlug: string;
+  _portableTextBody?: any[];
+  _mainImage?: any;
 };
 
 /* ---------- Team ---------- */

@@ -98,9 +98,20 @@ export function ResourcesExplorer({ resources }: { resources: Resource[] }) {
                 href={`/resources/${r.slug}`}
                 className="group w-60 shrink-0 rounded-2xl bg-white p-4 shadow-card-sm transition-transform hover:-translate-y-1"
               >
-                <div className="grid h-28 place-items-center rounded-xl bg-[linear-gradient(135deg,#ece5f8,#d9ccf4)] text-purple">
-                  <FeaturedIcon type={r.type} />
-                </div>
+                {r.coverImage ? (
+                  <div className="h-28 overflow-hidden rounded-xl">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={r.coverImage}
+                      alt=""
+                      className="size-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
+                ) : (
+                  <div className="grid h-28 place-items-center rounded-xl bg-[linear-gradient(135deg,#ece5f8,#d9ccf4)] text-purple">
+                    <FeaturedIcon type={r.type} />
+                  </div>
+                )}
                 <div className="mt-4">
                   <CategoryBadge>{r.type}</CategoryBadge>
                 </div>

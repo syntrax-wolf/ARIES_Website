@@ -1,15 +1,19 @@
 /**
  * Content readers. Source of truth: Supabase (ARIES_Website project).
  * content/*.json is retained as a backup; refresh with `npm run content:export`.
+ * Blog posts come from Sanity CMS and are surfaced as Resources.
  */
 import type {
   AriesEvent,
   Member,
   Project,
   Resource,
+  SanityBlogResource,
   TeamData,
 } from "./types";
 import { createClient } from "@supabase/supabase-js";
+import { getClient } from "@/sanity/lib/client";
+import { urlFor } from "@/sanity/lib/image";
 
 function taggedFetch(tags: string[]) {
   return (input: RequestInfo | URL, init?: RequestInit) =>
@@ -128,6 +132,92 @@ export async function getResources(): Promise<Resource[]> {
 export async function getResource(slug: string): Promise<Resource | undefined> {
   const all = await getResources();
   return all.find((r) => r.slug === slug);
+}
+
+/* Sanity blog posts → Resources */
+
+interface SanityPost {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  mainImage?: any;
+  publishedAt: string;
+  body?: any[];
+}
+
+const BLOG_QUERY = `*[_type == "post"] | order(publishedAt desc) {
+  _id, title, slug, mainImage, publishedAt, body
+}`;
+
+function extractExcerpt(body: any[] = []): string {
+  const text = body
+    .filter((b) => b._type === "block")
+    .map((b) => b.children?.map((c: any) => c.text).join("") ?? "")
+    .join(" ");
+  return text.length > 200 ? text.slice(0, 197) + "…" : text;
+}
+
+function sanityPostToResource(post: SanityPost): SanityBlogResource {
+  let coverImage: string | undefined;
+  try {
+    if (post.mainImage?.asset) {
+      coverImage = urlFor(post.mainImage).width(800).height(450).url();
+    }
+  } catch { /* ignore missing images */ }
+
+  return {
+    slug: `blog-${post.slug.current}`,
+    title: post.title,
+    description: extractExcerpt(post.body),
+    type: "Blog",
+    addedOn: post.publishedAt?.slice(0, 10) ?? new Date().toISOString().slice(0, 10),
+    featured: true,
+    coverImage,
+    _sanity: true,
+    _sanitySlug: post.slug.current,
+    _portableTextBody: post.body,
+    _mainImage: post.mainImage,
+  };
+}
+
+export async function getSanityBlogs(): Promise<SanityBlogResource[]> {
+  try {
+    const posts: SanityPost[] = await getClient().fetch(
+      BLOG_QUERY,
+      {},
+      { next: { revalidate: 60 } },
+    );
+    return posts.map(sanityPostToResource);
+  } catch {
+    return [];
+  }
+}
+
+export async function getSanityBlog(
+  sanitySlug: string,
+): Promise<SanityBlogResource | undefined> {
+  try {
+    const post: SanityPost | null = await getClient().fetch(
+      `*[_type == "post" && slug.current == $slug][0] {
+        _id, title, slug, mainImage, publishedAt, body
+      }`,
+      { slug: sanitySlug },
+      { next: { revalidate: 60 } },
+    );
+    if (!post) return undefined;
+    return sanityPostToResource(post);
+  } catch {
+    return undefined;
+  }
+}
+
+/** Fetch all resources (Supabase + Sanity blogs merged). */
+export async function getAllResources(): Promise<Resource[]> {
+  const [supabase, sanity] = await Promise.all([
+    getResources(),
+    getSanityBlogs(),
+  ]);
+  return [...supabase, ...sanity];
 }
 
 /* Team */
