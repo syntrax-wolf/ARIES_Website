@@ -66,7 +66,17 @@ export async function getMember(slug: string): Promise<Member | undefined> {
     .maybeSingle();
   if (error) throw error;
   if (!data) return undefined;
-  return { ...(data.data as Member), level: data.level as Member["level"] };
+  const raw = data.data as Partial<Member>;
+  return {
+    slug: raw.slug ?? slug,
+    name: raw.name ?? slug,
+    role: raw.role ?? "",
+    tagline: raw.tagline ?? "",
+    socials: raw.socials ?? [],
+    blocks: raw.blocks ?? [],
+    ...raw,
+    level: data.level as Member["level"],
+  };
 }
 
 /* Projects */
