@@ -47,7 +47,7 @@ export function ResourcesExplorer({ resources }: { resources: Resource[] }) {
       {/* Heading + search */}
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div>
-          <h1 className="text-4xl font-black text-ink md:text-5xl">Byte Sized blogs</h1>
+          <h1 className="text-4xl font-black text-ink md:text-5xl">Learning Resources</h1>
           <p className="mt-4 max-w-sm text-sm leading-6 text-ink/70">
             Curated blogs, tutorials, courses and featured finds from the ARIES community.
           </p>
@@ -89,7 +89,7 @@ export function ResourcesExplorer({ resources }: { resources: Resource[] }) {
       {!activeType && !query && featured.length > 0 && (
         <section className="mt-10">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold text-ink">✦ Byte Sized blogs</h2>
+            <h2 className="text-lg font-bold text-ink">✦ Featured Resources</h2>
           </div>
           <div className="no-scrollbar mt-5 flex gap-5 overflow-x-auto pb-2">
             {featured.map((r) => (
