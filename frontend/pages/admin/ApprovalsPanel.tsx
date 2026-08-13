@@ -2,44 +2,37 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Check, ClipboardList, History, X } from "lucide-react";
+import { Check, ClipboardList, X } from "lucide-react";
 
 type ChangeRequest = {
   id: string;
   entity_type: string;
   entity_slug: string;
   payload: Record<string, unknown>;
-  status: string;
   submitted_by: string;
   created_at: string;
 };
 
-type ChangeLogRow = {
-  id: string;
-  entity_type: string;
-  entity_slug: string;
-  actor_slug: string;
-  actor_level: string | null;
-  source: string;
-  summary: string | null;
-  created_at: string;
-};
+function labelFor(r: ChangeRequest) {
+  const kind = String(r.payload?.__kind || "edit");
+  if (kind === "join") return `Join ${r.entity_type} · ${r.entity_slug}`;
+  if (r.payload?.__delete) return `Delete ${r.entity_type} · ${r.entity_slug}`;
+  return `${kind} ${r.entity_type} · ${r.entity_slug}`;
+}
 
 export function ApprovalsPanel() {
   const router = useRouter();
-  const [requests, setRequests] = useState<ChangeRequest[]>([]);
-  const [log, setLog] = useState<ChangeLogRow[]>([]);
+  const [inbox, setInbox] = useState<ChangeRequest[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setError(null);
     try {
-      const res = await fetch("/api/admin/approvals", { credentials: "include" });
+      const res = await fetch("/api/admin/requests", { credentials: "include" });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Failed to load");
-      setRequests(data.requests ?? []);
-      setLog(data.log ?? []);
+      setInbox(data.inbox ?? []);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to load");
     }
@@ -52,16 +45,15 @@ export function ApprovalsPanel() {
   const review = async (requestId: string, approve: boolean) => {
     setBusy(requestId);
     try {
-      const res = await fetch("/api/admin/approvals", {
+      const res = await fetch("/api/admin/requests", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ requestId, approve }),
+        body: JSON.stringify({ action: "review", requestId, approve }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Review failed");
       await load();
-      // Refresh RSC caches so /projects and /events show the approved item
       router.refresh();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Review failed");
@@ -78,26 +70,22 @@ export function ApprovalsPanel() {
 
       <section className="rounded-2xl bg-white p-6 shadow-card-sm">
         <h2 className="flex items-center gap-2 text-base font-bold text-ink">
-          <ClipboardList size={16} /> Pending approvals
+          <ClipboardList size={16} /> Pending requests
         </h2>
         <p className="mt-1 text-xs text-ink/55">
-          Executive project/event/team edits wait here for OC, Co-Overall Coordinator, or Research Lead.
-          Approving applies the change immediately.
+          One approve or reject is final. The other copy is deleted — nothing is archived.
         </p>
         <ul className="mt-4 space-y-3">
-          {requests.length === 0 && (
+          {inbox.length === 0 && (
             <li className="text-sm text-ink/50">No pending requests.</li>
           )}
-          {requests.map((r) => (
+          {inbox.map((r) => (
             <li
               key={r.id}
               className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-ink/5 bg-[#f8f4fc] px-4 py-3"
             >
               <div>
-                <p className="text-sm font-bold text-ink">
-                  {r.payload && (r.payload as { __delete?: boolean }).__delete ? "delete " : ""}
-                  {r.entity_type} · {r.entity_slug}
-                </p>
+                <p className="text-sm font-bold text-ink">{labelFor(r)}</p>
                 <p className="text-xs text-ink/55">
                   by {r.submitted_by} · {new Date(r.created_at).toLocaleString()}
                 </p>
@@ -120,24 +108,6 @@ export function ApprovalsPanel() {
                   <X size={12} /> Reject
                 </button>
               </div>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="rounded-2xl bg-white p-6 shadow-card-sm">
-        <h2 className="flex items-center gap-2 text-base font-bold text-ink">
-          <History size={16} /> Recent changes
-        </h2>
-        <ul className="mt-4 space-y-2">
-          {log.length === 0 && <li className="text-sm text-ink/50">No changes logged yet.</li>}
-          {log.map((row) => (
-            <li key={row.id} className="border-b border-ink/5 py-2 text-xs text-ink/70 last:border-0">
-              <span className="font-semibold text-ink">{row.actor_slug}</span>
-              {row.actor_level ? ` (${row.actor_level})` : ""} · {row.source} · {row.entity_type}/
-              {row.entity_slug}
-              {row.summary ? ` — ${row.summary}` : ""}
-              <span className="text-ink/40"> · {new Date(row.created_at).toLocaleString()}</span>
             </li>
           ))}
         </ul>

@@ -23,6 +23,7 @@ export function PeoplePicker<T extends PeopleRef>({
   members,
   factory,
   onEnsureMember,
+  onMemberCreated,
   placeholder = "Search members by name or slug…",
 }: {
   label: string;
@@ -31,6 +32,7 @@ export function PeoplePicker<T extends PeopleRef>({
   members: Pick<Member, "slug" | "name" | "level">[];
   factory: (name: string, slug: string) => T;
   onEnsureMember?: (slug: string, name: string) => Promise<void>;
+  onMemberCreated?: (member: Pick<Member, "slug" | "name" | "level">) => void;
   placeholder?: string;
 }) {
   const [query, setQuery] = useState("");
@@ -105,6 +107,7 @@ export function PeoplePicker<T extends PeopleRef>({
     setError(null);
     try {
       await onEnsureMember(slug, name);
+      onMemberCreated?.({ slug, name, level: "visitor" });
       onChange([...value, factory(name, slug)]);
       setPending(null);
       setQuery("");
@@ -206,12 +209,10 @@ export function PeoplePicker<T extends PeopleRef>({
                   className="flex w-full items-baseline justify-between gap-3 px-3 py-2 text-left hover:bg-[#f3eef8]"
                 >
                   <span className="text-sm font-semibold text-ink">
-                    {m.name}
                     {isVisitor(m.level) && (
-                      <span className="ml-2 rounded bg-[#efe9fb] px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-purple">
-                        Non-ARIES
-                      </span>
+                      <em className="mr-1.5 font-normal not-italic text-ink/50">(non-aries)</em>
                     )}
+                    <span className={isVisitor(m.level) ? "italic" : ""}>{m.name}</span>
                   </span>
                   <span className="text-xs text-ink/50">{m.slug}</span>
                 </button>

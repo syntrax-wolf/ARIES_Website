@@ -13,7 +13,7 @@ import {
   ShieldAlert,
   X,
 } from "lucide-react";
-import type { Member } from "@/lib/types";
+import type { AriesEvent, Member, Project, Resource } from "@/lib/types";
 import { isVisitor } from "@/lib/supabase/env";
 import { BlockGrid } from "frontend/shared/profile/BlockGrid";
 import { BackToSource } from "frontend/shared/profile/BackToSource";
@@ -54,9 +54,15 @@ async function saveProfile(member: Member) {
 export function EditableMemberProfile({
   member,
   projectNames,
+  contributions,
 }: {
   member: Member;
   projectNames: Record<string, string>;
+  contributions?: {
+    projects: Project[];
+    events: AriesEvent[];
+    resources: Resource[];
+  };
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -363,8 +369,72 @@ export function EditableMemberProfile({
           ) : (
             <BlockGrid blocks={display.blocks} />
           )}
+
+          {!editing && contributions && (
+            <section className="rounded-2xl bg-white/95 p-6 shadow-card-sm md:p-7">
+              <h3 className="text-[15px] font-bold text-ink">Contributions</h3>
+              <p className="mt-1 text-xs text-ink/55">
+                Projects, events, and resources this person is listed on.
+              </p>
+              <div className="mt-5 grid gap-6 md:grid-cols-3">
+                <ContributionColumn
+                  title="Projects"
+                  empty="No projects listed yet."
+                  items={contributions.projects.map((p) => ({
+                    href: `/projects/${p.slug}`,
+                    label: p.name,
+                  }))}
+                />
+                <ContributionColumn
+                  title="Events"
+                  empty="No events listed yet."
+                  items={contributions.events.map((e) => ({
+                    href: `/events/${e.slug}`,
+                    label: e.title,
+                  }))}
+                />
+                <ContributionColumn
+                  title="Resources"
+                  empty="No resources listed yet."
+                  items={contributions.resources.map((r) => ({
+                    href: `/resources/${r.slug}`,
+                    label: r.title,
+                  }))}
+                />
+              </div>
+            </section>
+          )}
         </div>
       </div>
+    </div>
+  );
+}
+
+function ContributionColumn({
+  title,
+  empty,
+  items,
+}: {
+  title: string;
+  empty: string;
+  items: { href: string; label: string }[];
+}) {
+  return (
+    <div>
+      <h4 className="text-xs font-bold uppercase tracking-wide text-ink/50">{title}</h4>
+      {items.length === 0 ? (
+        <p className="mt-2 text-sm text-ink/50">{empty}</p>
+      ) : (
+        <ul className="mt-2 space-y-1.5">
+          {items.map((item) => (
+            <li key={item.href}>
+              <Link href={item.href} className="text-sm font-semibold text-purple hover:underline">
+                {item.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

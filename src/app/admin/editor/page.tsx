@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { getEvents, getMembers, getProjects, getResources, getTeam } from "@/lib/content";
+import { getEvents, getAllMembers, getProjects, getResources, getTeam } from "@/lib/content";
 import { AdminTabs } from "frontend/pages/admin/AdminTabs";
 
 export const metadata: Metadata = { title: "Editor" };
 
 export default async function AdminEditorPage() {
   const [members, projects, events, resources, team] = await Promise.all([
-    getMembers(),
+    getAllMembers(),
     getProjects(),
     getEvents(),
     getResources(),

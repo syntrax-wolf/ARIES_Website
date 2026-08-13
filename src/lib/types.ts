@@ -122,6 +122,8 @@ export type AriesEvent = {
   images?: string[];
   video?: string; // short clip URL (mp4/webm)
   links: { label: string; url: string }[];
+  /** Organizers / people listed on the event (same shape as project contributors). */
+  contributors?: Array<string | ProjectContributor>;
 };
 
 /* ---------- Resources ---------- */

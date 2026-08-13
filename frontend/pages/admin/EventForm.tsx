@@ -1,33 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Save, Trash2 } from "lucide-react";
-import type { AriesEvent } from "@/lib/types";
+import type { AriesEvent, Member, ProjectContributor } from "@/lib/types";
+import { normalizeContributors } from "@/lib/contributors";
 import { Input, TextArea } from "./ProjectForm";
 import { MediaField } from "./ImageField";
 import { MultiImageField } from "./MultiImageField";
+import { PeoplePicker } from "./PeoplePicker";
 
 /** Create/edit an event with cover image, gallery images, and optional video. */
 export function EventForm({
   initial,
+  members = [],
   onSaved,
   onDeleted,
 }: {
-  initial?: {
-    slug?: string;
-    title?: string;
-    type?: string;
-    date?: string;
-    startTime?: string;
-    endTime?: string;
-    venue?: string;
-    description?: string;
-    body?: string;
-    image?: string;
-    images?: string[];
-    video?: string;
-    calendar?: string;
-  };
+  initial?: Partial<AriesEvent> & { slug?: string; calendar?: string };
+  members?: Pick<Member, "slug" | "name" | "level">[];
   onSaved?: (event: AriesEvent, mode: "direct" | "pending") => void;
   onDeleted?: (slug: string, mode: "direct" | "pending") => void;
 }) {
@@ -36,6 +26,25 @@ export function EventForm({
   const [image, setImage] = useState(initial?.image ?? "");
   const [images, setImages] = useState<string[]>(initial?.images ?? []);
   const [video, setVideo] = useState(initial?.video ?? "");
+  const [contributors, setContributors] = useState<ProjectContributor[]>(() =>
+    normalizeContributors(initial?.contributors, members),
+  );
+  const [people, setPeople] = useState(members);
+
+  useEffect(() => {
+    setPeople(members);
+  }, [members]);
+
+  const ensureMember = async (slug: string, name: string) => {
+    const res = await fetch("/api/admin/ensure-member", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug, name }),
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body.error ?? `Could not register member (${res.status})`);
+  };
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -61,6 +70,7 @@ export function EventForm({
       images: images.length ? images : undefined,
       video: video || undefined,
       links: calendar ? [{ label: "Save to Google Calendar", url: calendar }] : [],
+      contributors,
     };
 
     setStatus("saving");
@@ -145,6 +155,18 @@ export function EventForm({
         <Input name="venue" label="Venue" placeholder="LH 114, IIT Delhi" defaultValue={initial?.venue} />
         <Input name="calendar" label="Google Calendar link" defaultValue={initial?.calendar} />
       </div>
+      <PeoplePicker
+        label="Organizers / contributors"
+        value={contributors}
+        onChange={setContributors}
+        members={people}
+        onEnsureMember={ensureMember}
+        onMemberCreated={(m) =>
+          setPeople((prev) => (prev.some((x) => x.slug === m.slug) ? prev : [...prev, m]))
+        }
+        factory={(name, slug): ProjectContributor => ({ name, slug, kind: "member" })}
+        placeholder="Search by name or slug…"
+      />
       <TextArea name="description" label="Short description (cards) *" rows={2} required defaultValue={initial?.description} />
       <TextArea name="body" label="Full description (detail page)" rows={5} defaultValue={initial?.body} />
 

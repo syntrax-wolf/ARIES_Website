@@ -75,6 +75,16 @@ export async function POST(req: Request) {
   });
 
   if (error) {
+    const msg = error.message || "";
+    if (/members_level_check|violates check constraint/i.test(msg)) {
+      return NextResponse.json(
+        {
+          error:
+            "Database is missing the visitor role. Run supabase/migrations/20260802000000_add_visitor_level.sql in the Supabase SQL editor, then try again.",
+        },
+        { status: 400 },
+      );
+    }
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
 

@@ -25,16 +25,17 @@ import { TeamPhotoForm } from "./TeamPhotoForm";
 import { ApprovalsPanel } from "./ApprovalsPanel";
 import { useAuth } from "@/context/AuthContext";
 import { canApprove, canManageTeamContent, canPublishResource } from "@/lib/roles";
+import { slugOnEvent, slugOnProject, slugOnResource } from "@/lib/entity-access";
 import { isVisitor } from "@/lib/supabase/env";
 import { cn } from "@/lib/utils";
 
 const BASE_TABS = [
-  { id: "members", label: "Members", icon: Users },
+  { id: "members", label: "Members", icon: Users, leadershipOnly: true },
   { id: "team", label: "Team", icon: ImageIcon, adminOnly: true },
   { id: "projects", label: "Projects", icon: FolderPlus },
   { id: "events", label: "Events", icon: CalendarPlus },
   { id: "resources", label: "Resources", icon: BookOpen, publisherOnly: true },
-  { id: "profile", label: "My profile", icon: UserRound },
+  { id: "profile", label: "Account", icon: UserRound },
   { id: "approvals", label: "Approvals", icon: ClipboardList, adminOnly: true },
 ] as const;
 
@@ -67,6 +68,7 @@ export function AdminTabs({
   const TABS = useMemo(
     () =>
       BASE_TABS.filter((t) => {
+        if ("leadershipOnly" in t && t.leadershipOnly) return isAdmin;
         if ("adminOnly" in t && t.adminOnly) return isAdmin;
         if ("publisherOnly" in t && t.publisherOnly) return canUseResources;
         if (isBlogger) return t.id === "resources" || t.id === "profile";
@@ -109,7 +111,19 @@ export function AdminTabs({
   }, [members, session?.memberSlug]);
 
   const selectedMember = members.find((m) => m.slug === editMember);
-  const selectedProject = projects.find((p) => p.slug === editProject);
+  const editableProjects = useMemo(() => {
+    if (session?.level !== "executive" || !session.memberSlug) return projects;
+    return projects.filter((p) => slugOnProject(p, session.memberSlug));
+  }, [projects, session?.level, session?.memberSlug]);
+  const editableEvents = useMemo(() => {
+    if (session?.level !== "executive" || !session.memberSlug) return events;
+    return events.filter((e) => slugOnEvent(e, session.memberSlug));
+  }, [events, session?.level, session?.memberSlug]);
+  const editableResources = useMemo(() => {
+    if (session?.level !== "executive" || !session.memberSlug) return resources;
+    return resources.filter((r) => slugOnResource(r, session.memberSlug));
+  }, [resources, session?.level, session?.memberSlug]);
+  const selectedProject = editableProjects.find((p) => p.slug === editProject);
   const knownTags = useMemo(() => {
     const set = new Set<string>();
     for (const p of projects) {
@@ -117,8 +131,8 @@ export function AdminTabs({
     }
     return [...set].sort((a, b) => a.localeCompare(b));
   }, [projects]);
-  const selectedEvent = events.find((e) => e.slug === editEvent);
-  const selectedResource = resources.find((r) => r.slug === editResource);
+  const selectedEvent = editableEvents.find((e) => e.slug === editEvent);
+  const selectedResource = editableResources.find((r) => r.slug === editResource);
 
   return (
     <div>
@@ -166,7 +180,7 @@ export function AdminTabs({
       </div>
 
       <div className="mt-8 space-y-6">
-        {tab === "members" && (
+        {tab === "members" && isAdmin && (
           <>
             <label className="block max-w-md text-xs font-semibold text-ink">
               Edit existing member
@@ -250,7 +264,7 @@ export function AdminTabs({
                 className="mt-1.5 w-full rounded-lg bg-white px-3 py-2.5 text-sm shadow-card-sm"
               >
                 <option value="">— create new —</option>
-                {projects.map((p) => (
+                {editableProjects.map((p) => (
                   <option key={p.slug} value={p.slug}>
                     {p.name}
                   </option>
@@ -303,7 +317,7 @@ export function AdminTabs({
                 className="mt-1.5 w-full rounded-lg bg-white px-3 py-2.5 text-sm shadow-card-sm"
               >
                 <option value="">— create new —</option>
-                {events.map((ev) => (
+                {editableEvents.map((ev) => (
                   <option key={ev.slug} value={ev.slug}>
                     {ev.title}
                   </option>
@@ -312,6 +326,7 @@ export function AdminTabs({
             </label>
             <EventForm
               key={`${editEvent || "new-event"}-${eventFormKey}`}
+              members={members}
               initial={
                 selectedEvent
                   ? {
@@ -361,7 +376,7 @@ export function AdminTabs({
                 className="mt-1.5 w-full rounded-lg bg-white px-3 py-2.5 text-sm shadow-card-sm"
               >
                 <option value="">— create new —</option>
-                {resources.map((r) => (
+                {editableResources.map((r) => (
                   <option key={r.slug} value={r.slug}>
                     {r.title}
                   </option>
@@ -401,14 +416,7 @@ export function AdminTabs({
         )}
 
         {tab === "profile" && member && (
-          <ProfileEditor
-            member={member}
-            onSaved={(updated) => {
-              setMembers((prev) => prev.map((m) => (m.slug === updated.slug ? updated : m)));
-              void refreshSession();
-              router.refresh();
-            }}
-          />
+          <ProfileEditor member={member} />
         )}
         {tab === "profile" && !member && (
           <div className="max-w-2xl rounded-2xl bg-white p-6 shadow-card-sm">

@@ -36,8 +36,8 @@ export function ContributorList({
         {contributors.map((c, i) => {
           const name = contributorLabel(c);
           const member = c.slug ? members.find((m) => m.slug === c.slug) : undefined;
-          const hasProfile = isProfileLinked(c) && !!c.slug && !!member;
           const visitor = isVisitor(member?.level);
+          const hasProfile = isProfileLinked(c) && !!c.slug && !!member && !visitor;
           const chip = (
             <>
               <span className="grid size-9 place-items-center rounded-full bg-purple text-xs font-bold text-white">
@@ -45,11 +45,6 @@ export function ContributorList({
               </span>
               <span className="flex items-center gap-2 text-sm font-bold text-ink">
                 {name}
-                {visitor && (
-                  <span className="rounded bg-[#efe9fb] px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-purple">
-                    Non-ARIES
-                  </span>
-                )}
               </span>
             </>
           );

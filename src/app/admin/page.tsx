@@ -12,7 +12,7 @@ type Mode = "login" | "signup";
 
 function afterLoginPathFor(level: string | undefined) {
   if (level === "blogger" || canManageTeamContent(level)) return "/admin/editor";
-  return "/profile";
+  return "/account";
 }
 
 /**
@@ -106,7 +106,7 @@ export default function AdminLoginPage() {
                   const data = await res.json();
                   if (!res.ok) throw new Error(data.error ?? "Signup failed");
                   if (data.ok && !data.message?.includes("sign in")) {
-                    window.location.href = "/profile";
+                    window.location.href = "/account";
                     return;
                   }
                   setMode("login");

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { getMember, getMembers, getProjects } from "@/lib/content";
+import { getEvents, getMember, getMembers, getProjects, getResources } from "@/lib/content";
+import { isVisitor } from "@/lib/supabase/env";
+import { slugOnEvent, slugOnProject, slugOnResource } from "@/lib/entity-access";
 import { EditableMemberProfile } from "frontend/shared/profile/EditableMemberProfile";
 
 export const revalidate = 60;
@@ -28,14 +30,27 @@ export default async function MemberProfilePage({
 }) {
   const { slug } = await params;
   const member = await getMember(slug);
-  if (!member) notFound();
+  if (!member || isVisitor(member.level)) notFound();
 
-  const projects = await getProjects();
+  const [projects, events, resources] = await Promise.all([
+    getProjects(),
+    getEvents(),
+    getResources(),
+  ]);
   const projectNames = Object.fromEntries(projects.map((p) => [p.slug, p.name]));
+  const contributions = {
+    projects: projects.filter((p) => slugOnProject(p, member.slug)),
+    events: events.filter((e) => slugOnEvent(e, member.slug)),
+    resources: resources.filter((r) => slugOnResource(r, member.slug)),
+  };
 
   return (
     <Suspense>
-      <EditableMemberProfile member={member} projectNames={projectNames} />
+      <EditableMemberProfile
+        member={member}
+        projectNames={projectNames}
+        contributions={contributions}
+      />
     </Suspense>
   );
 }

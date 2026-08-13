@@ -44,8 +44,8 @@ function buildSlides(years: TeamYear[]): Slide[] {
 }
 
 /**
- * Stacked full-team photo switcher. Supports multiple photos per year;
- * rosters elsewhere stay on the current year entry.
+ * Stacked full-team photo switcher. Years are newest-first (26-27 left, older to the right).
+ * Rosters elsewhere use only the newest year.
  */
 export function TeamPhotoCarousel({ years }: { years: TeamYear[] }) {
   const slides = useMemo(() => buildSlides(years), [years]);

@@ -12,6 +12,8 @@ import type {
   TeamData,
 } from "./types";
 import { createClient } from "@supabase/supabase-js";
+import { isVisitor } from "@/lib/supabase/env";
+import { normalizeTeamData } from "@/lib/team-years";
 import { getClient } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 
@@ -44,6 +46,32 @@ function supabaseTagged(tags: string[]) {
 
 /* Members */
 export async function getMembers(): Promise<Member[]> {
+  const { data, error } = await supabaseTagged(["members"])
+    .from("members")
+    .select("slug, data, level, entry_number, email")
+    .neq("slug", "admin")
+    .order("slug");
+  if (error) throw error;
+  return (data ?? [])
+    .filter((row) => row.slug !== "blogger" && !isVisitor(row.level as string))
+    .map((row) => {
+    const raw = (row.data ?? {}) as Partial<Member>;
+    return {
+      ...raw,
+      slug: row.slug as string,
+      name: raw.name ?? (row.slug as string),
+      role: raw.role ?? "",
+      tagline: raw.tagline ?? "",
+      socials: raw.socials ?? [],
+      blocks: raw.blocks ?? [],
+      level: row.level as Member["level"],
+      entryNumber: (row.entry_number as string | null) ?? undefined,
+      email: (row.email as string | null) ?? undefined,
+    };
+  });
+}
+
+export async function getAllMembers(): Promise<Member[]> {
   const { data, error } = await supabaseTagged(["members"])
     .from("members")
     .select("slug, data, level, entry_number, email")
@@ -247,5 +275,5 @@ export async function getTeam(): Promise<TeamData> {
     .eq("id", 1)
     .maybeSingle();
   if (error) throw error;
-  return (data?.data as TeamData) ?? { years: [], alumni: [] };
+  return normalizeTeamData((data?.data as TeamData) ?? { years: [], alumni: [] });
 }

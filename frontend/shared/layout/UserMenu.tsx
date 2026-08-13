@@ -6,10 +6,11 @@ import Link from "next/link";
 import { ChevronDown, ClipboardList, Image as ImageIcon, LogOut, UserRound } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { canApprove, canManageTeamContent } from "@/lib/roles";
+import { isCoreTeam } from "@/lib/entity-access";
 import { cn } from "@/lib/utils";
 
 /**
- * Nav account menu: Login when signed out; Profile / Approvals / Sign out when in.
+ * Nav account menu: Login when signed out; Account / Sign out when in.
  */
 export function UserMenu({
   tone = "light",
@@ -50,7 +51,8 @@ export function UserMenu({
     );
   }
 
-  const showApprovals = canApprove(session.level);
+  const showApprovals =
+    canApprove(session.level) || isCoreTeam(session.level) || session.level === "coordinator";
   const showTeamEditor = canManageTeamContent(session.level);
   const avatar = session.avatar?.trim();
 
@@ -90,19 +92,19 @@ export function UserMenu({
           )}
         >
           <Link
-            href="/profile"
+            href="/account"
             onClick={() => setOpen(false)}
             className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-ink hover:bg-lilac"
           >
-            <UserRound size={15} /> Profile
+            <UserRound size={15} /> Account
           </Link>
           {showApprovals && (
             <Link
-              href="/profile?tab=approvals"
+              href="/account"
               onClick={() => setOpen(false)}
               className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-ink hover:bg-lilac"
             >
-              <ClipboardList size={15} /> Approvals
+              <ClipboardList size={15} /> Review requests
             </Link>
           )}
           {showTeamEditor && (

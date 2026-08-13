@@ -12,7 +12,16 @@ import {
   applyMemberIdentityToContributors,
   applyMemberIdentityToTeam,
 } from "@/lib/member-hydrate";
-import type { Project, TeamData } from "@/lib/types";
+import type { AriesEvent, Project, Resource, TeamData } from "@/lib/types";
+import {
+  reviewerSlugsForEvent,
+  reviewerSlugsForProject,
+  reviewerSlugsForResource,
+  slugOnEvent,
+  slugOnProject,
+  slugOnResource,
+} from "@/lib/entity-access";
+import { normalizeTeamData } from "@/lib/team-years";
 
 async function sessionInfo(supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>) {
   const {
@@ -27,9 +36,11 @@ async function sessionInfo(supabase: Awaited<ReturnType<typeof createSupabaseSer
     .eq("auth_user_id", user.id)
     .maybeSingle();
 
-  // Prefer app_metadata level so the special "blogger" account (which cannot be stored in the
-  // members table due to the members_level_check constraint) is still recognised.
-  const level = String(user.app_metadata?.level || member?.level || "");
+  // Prefer live members.level — JWT app_metadata can be stale (e.g. alumni still
+  // tagged coordinator). Keep JWT only for the special blogger account.
+  const jwtLevel = String(user.app_metadata?.level || "");
+  const dbLevel = String(member?.level || "");
+  const level = jwtLevel === "blogger" ? "blogger" : dbLevel || jwtLevel;
   const memberSlug = String(member?.slug || user.app_metadata?.member_slug || "");
   const name = String(
     (member?.data as { name?: string } | null)?.name ||
@@ -228,12 +239,18 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid data" }, { status: 400 });
   }
 
-  const payload = kind === "team" ? data : { ...data, slug };
+  const payload =
+    kind === "team"
+      ? normalizeTeamData(data as TeamData)
+      : { ...data, slug };
 
   if (kind === "members") {
     const isOwn = memberSlug === slug;
-    if (!isOwn && !isLeadership(level) && level !== "coordinator") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    if (!isOwn && !isLeadership(level)) {
+      return NextResponse.json(
+        { error: "Forbidden — you can only edit your own profile" },
+        { status: 403 },
+      );
     }
 
     // SECURITY DEFINER RPC — reliable own-profile + leadership edits (bypasses INSERT RLS)
@@ -380,6 +397,47 @@ export async function POST(req: Request) {
   }
 
   if (kind === "projects" || kind === "events") {
+    const { data: memberRows } = await supabase.from("members").select("slug, level");
+    const roster = (memberRows ?? []) as { slug: string; level: string }[];
+
+    if (kind === "projects") {
+      const { data: row } = await supabase.from("projects").select("data").eq("slug", slug!).maybeSingle();
+      const existing = row?.data as Project | undefined;
+      if (level === "executive") {
+        const onIt = slugOnProject(existing, memberSlug) || slugOnProject(payload as Project, memberSlug);
+        if (existing && !slugOnProject(existing, memberSlug)) {
+          return NextResponse.json(
+            { error: "You can only edit projects you are listed on. Request to join from Account." },
+            { status: 403 },
+          );
+        }
+        if (!existing && !onIt) {
+          return NextResponse.json(
+            { error: "Add yourself as a contributor to submit a new project." },
+            { status: 403 },
+          );
+        }
+      }
+    } else {
+      const { data: row } = await supabase.from("events").select("data").eq("slug", slug!).maybeSingle();
+      const existing = row?.data as AriesEvent | undefined;
+      if (level === "executive") {
+        const onIt = slugOnEvent(existing, memberSlug) || slugOnEvent(payload as AriesEvent, memberSlug);
+        if (existing && !slugOnEvent(existing, memberSlug)) {
+          return NextResponse.json(
+            { error: "You can only edit events you are listed on. Request to join from Account." },
+            { status: 403 },
+          );
+        }
+        if (!existing && !onIt) {
+          return NextResponse.json(
+            { error: "Add yourself as a contributor to submit a new event." },
+            { status: 403 },
+          );
+        }
+      }
+    }
+
     if (canDirectPublish(level)) {
       const result = await publishDirect(supabase, kind, slug, payload, memberSlug, level);
       if ("error" in result && result.error) {
@@ -391,10 +449,14 @@ export async function POST(req: Request) {
 
     if (canSubmitForApproval(level)) {
       const entityType = kind === "projects" ? "project" : "event";
+      const reviewers =
+        kind === "projects"
+          ? reviewerSlugsForProject(payload as Project, roster)
+          : reviewerSlugsForEvent(payload as AriesEvent, roster);
       const { error } = await supabase.from("change_requests").insert({
         entity_type: entityType,
         entity_slug: slug!,
-        payload,
+        payload: { ...payload, __reviewers: reviewers, __kind: "edit" },
         submitted_by: memberSlug,
         status: "pending",
       });
@@ -402,7 +464,7 @@ export async function POST(req: Request) {
       return NextResponse.json({
         ok: true,
         mode: "pending",
-        message: "Submitted for approval by OC / Co-Overall Coordinator / Research Lead",
+        message: "Submitted for approval",
       });
     }
 
@@ -413,6 +475,33 @@ export async function POST(req: Request) {
   }
 
   if (kind === "resources") {
+    if (level === "executive") {
+      const { data: row } = await supabase.from("resources").select("data").eq("id", 1).maybeSingle();
+      const list = (Array.isArray(row?.data) ? row.data : []) as Resource[];
+      const existing = list.find((r) => r.slug === slug);
+      if (existing && !slugOnResource(existing, memberSlug)) {
+        return NextResponse.json(
+          { error: "You can only edit resources you are listed on. Request to join from Account." },
+          { status: 403 },
+        );
+      }
+      const { data: memberRows } = await supabase.from("members").select("slug, level");
+      const roster = (memberRows ?? []) as { slug: string; level: string }[];
+      const reviewers = reviewerSlugsForResource(payload as Resource, roster);
+      const { error } = await supabase.from("change_requests").insert({
+        entity_type: "resource",
+        entity_slug: slug!,
+        payload: { ...payload, __reviewers: reviewers, __kind: "edit" },
+        submitted_by: memberSlug,
+        status: "pending",
+      });
+      if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+      return NextResponse.json({
+        ok: true,
+        mode: "pending",
+        message: "Submitted for approval",
+      });
+    }
     if (!canPublishResource(level)) {
       return NextResponse.json(
         { error: "Forbidden — your role cannot publish resources" },
