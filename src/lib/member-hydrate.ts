@@ -1,6 +1,8 @@
 import type { Member, ProjectContributor, TeamData, TeamMemberRef } from "@/lib/types";
 
-type MemberIdentity = Pick<Member, "slug" | "name" | "avatar" | "role">;
+type MemberIdentity = Pick<Member, "slug" | "name" | "avatar" | "role"> & {
+  tagline?: string;
+};
 
 /** Overlay live member name/photo onto a team roster entry when linked by slug. */
 export function hydrateTeamMember(
@@ -38,10 +40,12 @@ export function hydrateTeamData(team: TeamData, members: MemberIdentity[]): Team
     if (!slug) return a;
     const m = bySlug.get(slug);
     if (!m) return a;
+    const tagline = m.tagline?.trim();
     return {
       ...a,
       name: m.name || a.name,
       photo: m.avatar || a.photo,
+      org: tagline || a.org,
     };
   });
 
@@ -74,7 +78,7 @@ export function hydrateContributors(
 export function applyMemberIdentityToTeam(
   team: TeamData,
   slug: string,
-  next: { name?: string; avatar?: string },
+  next: { name?: string; avatar?: string; tagline?: string },
 ): { team: TeamData; changed: boolean } {
   let changed = false;
   const patchPerson = (p: TeamMemberRef): TeamMemberRef => {
@@ -100,9 +104,11 @@ export function applyMemberIdentityToTeam(
     if (a.slug !== slug) return a;
     const name = next.name?.trim() || a.name;
     const photo = next.avatar !== undefined ? next.avatar || undefined : a.photo;
-    if (name === a.name && photo === a.photo) return a;
+    const org =
+      next.tagline !== undefined ? next.tagline.trim() || a.org : a.org;
+    if (name === a.name && photo === a.photo && org === a.org) return a;
     changed = true;
-    return { ...a, name, photo };
+    return { ...a, name, photo, org };
   });
 
   return { team: { ...team, years, alumni }, changed };

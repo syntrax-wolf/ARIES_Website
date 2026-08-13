@@ -50,31 +50,40 @@ export async function getMembers(): Promise<Member[]> {
     .neq("slug", "admin")
     .order("slug");
   if (error) throw error;
-  return (data ?? []).map((row) => ({
-    ...(row.data as Member),
-    level: row.level as Member["level"],
-    entryNumber: (row.entry_number as string | null) ?? undefined,
-    email: (row.email as string | null) ?? undefined,
-  }));
+  return (data ?? []).map((row) => {
+    const raw = (row.data ?? {}) as Partial<Member>;
+    return {
+      ...raw,
+      slug: row.slug as string,
+      name: raw.name ?? (row.slug as string),
+      role: raw.role ?? "",
+      tagline: raw.tagline ?? "",
+      socials: raw.socials ?? [],
+      blocks: raw.blocks ?? [],
+      level: row.level as Member["level"],
+      entryNumber: (row.entry_number as string | null) ?? undefined,
+      email: (row.email as string | null) ?? undefined,
+    };
+  });
 }
 
 export async function getMember(slug: string): Promise<Member | undefined> {
   const { data, error } = await supabaseTagged(["members"])
     .from("members")
-    .select("data, level")
+    .select("slug, data, level")
     .eq("slug", slug)
     .maybeSingle();
   if (error) throw error;
   if (!data) return undefined;
-  const raw = data.data as Partial<Member>;
+  const raw = (data.data ?? {}) as Partial<Member>;
   return {
-    slug: raw.slug ?? slug,
-    name: raw.name ?? slug,
+    ...raw,
+    slug: data.slug as string,
+    name: raw.name ?? (data.slug as string),
     role: raw.role ?? "",
     tagline: raw.tagline ?? "",
     socials: raw.socials ?? [],
     blocks: raw.blocks ?? [],
-    ...raw,
     level: data.level as Member["level"],
   };
 }

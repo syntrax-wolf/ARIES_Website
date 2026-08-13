@@ -57,7 +57,7 @@ export function AlumniSection({ alumni }: { alumni: Alumnus[] }) {
                 )}
                 <h3 className="mt-3 truncate text-sm font-bold text-ink">{a.name}</h3>
                 <p className="mt-1 truncate text-xs text-ink/70">{a.role}</p>
-                <p className="truncate text-xs text-ink/50">{a.org}</p>
+                {a.org && <p className="truncate text-xs text-ink/50">{a.org}</p>}
               </article>
             );
 
@@ -79,10 +79,10 @@ export function AlumniSection({ alumni }: { alumni: Alumnus[] }) {
           profile — we&rsquo;d love to keep you featured and stay connected.
         </p>
         <a
-          href="/contact"
+          href="/admin"
           className="rounded-full border border-purple bg-white px-5 py-2 text-sm font-bold text-purple"
         >
-          Update or add profile →
+          Sign in to update profile →
         </a>
       </div>
     </section>

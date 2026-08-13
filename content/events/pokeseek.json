@@ -1,9 +1,0 @@
-{
-  "body": "PokeSeek is an AI-based Pokémon battling competition where teams of two develop AI bots (heuristics or RL) to battle each other. Participants choose a starter Pokémon and strategically command their team. While participants can use search algorithms and neural networks, the battle simulator is a greybox — they only have direct information about their own Pokémon and moves, not the exact outcome of a turn. The competition involved an online preliminary quiz, followed by offline Round Robin and Knockout stages at IIT Delhi on March 10. The event witnessed 188 registrations and 100% shortlist attendance.",
-  "date": "2025-03-10",
-  "slug": "pokeseek",
-  "type": "Hackathon",
-  "links": [],
-  "title": "PokeSeek",
-  "description": "AI Pokémon battling competition — 188 registrations, 100% shortlist attendance."
-}

@@ -44,6 +44,14 @@ export type ProfileProject = {
 export type CourseworkItem = { name: string; topics: string };
 export type InternshipItem = { role: string; org?: string; description: string };
 
+export type SocialLinkKind = "linkedin" | "github" | "website" | "custom";
+
+export type SocialLink = {
+  label: string;
+  url: string;
+  kind?: SocialLinkKind;
+};
+
 export type Member = {
   slug: string;
   name: string;
@@ -53,7 +61,7 @@ export type Member = {
   location?: string; // e.g. "IIT Delhi"
   avatar?: string; // image path; falls back to initials
   resumeUrl?: string;
-  socials: { label: string; url: string }[];
+  socials: SocialLink[];
   blocks: ProfileBlock[];
   /** Club tier from the members table (e.g. visitor, executive). Backup JSON omits this. */
   level?: MemberLevel;

@@ -282,9 +282,10 @@ export async function POST(req: Request) {
     // Propagate name/avatar to JWT, team roster, alumni, and project contributor chips.
     try {
       const admin = createSupabaseServiceClient();
-      const memberData = payload as { name?: string; avatar?: string };
+      const memberData = payload as { name?: string; avatar?: string; tagline?: string };
       const nextName = String(memberData.name ?? "").trim();
       const nextAvatar = memberData.avatar ? String(memberData.avatar) : "";
+      const nextTagline = String(memberData.tagline ?? "").trim();
 
       const { data: memberRow } = await admin
         .from("members")
@@ -302,7 +303,7 @@ export async function POST(req: Request) {
         const { team: nextTeam, changed } = applyMemberIdentityToTeam(
           teamRow.data as TeamData,
           slug!,
-          { name: nextName || undefined, avatar: nextAvatar },
+          { name: nextName || undefined, avatar: nextAvatar, tagline: nextTagline },
         );
         if (changed) {
           await admin.from("team").update({ data: nextTeam }).eq("id", 1);
