@@ -23,6 +23,7 @@ import { MemberForm } from "./MemberForm";
 import { AlumniForm } from "./AlumniForm";
 import { TeamPhotoForm } from "./TeamPhotoForm";
 import { ApprovalsPanel } from "./ApprovalsPanel";
+import { ChangePasswordForm } from "frontend/pages/profile/ChangePasswordForm";
 import { useAuth } from "@/context/AuthContext";
 import { canApprove, canManageTeamContent, canPublishResource } from "@/lib/roles";
 import { slugOnEvent, slugOnProject, slugOnResource } from "@/lib/entity-access";
@@ -416,16 +417,29 @@ export function AdminTabs({
         )}
 
         {tab === "profile" && member && (
-          <ProfileEditor member={member} />
+          <div className="space-y-6">
+            <ProfileEditor
+              member={member}
+              onSaved={(updated) => {
+                setMembers((prev) => prev.map((m) => (m.slug === updated.slug ? updated : m)));
+                void refreshSession();
+                router.refresh();
+              }}
+            />
+            <ChangePasswordForm />
+          </div>
         )}
         {tab === "profile" && !member && (
-          <div className="max-w-2xl rounded-2xl bg-white p-6 shadow-card-sm">
-            <p className="text-sm font-bold text-ink">No public profile for this login</p>
-            <p className="mt-2 text-sm leading-6 text-ink/60">
-              The <code className="text-xs">admin</code> account is a CMS-only login, so it has no
-              member page to edit. Use the Members tab to edit someone&rsquo;s profile, or sign in
-              with a personal Kerberos account to edit your own.
-            </p>
+          <div className="max-w-2xl space-y-6">
+            <div className="rounded-2xl bg-white p-6 shadow-card-sm">
+              <p className="text-sm font-bold text-ink">No public profile for this login</p>
+              <p className="mt-2 text-sm leading-6 text-ink/60">
+                The <code className="text-xs">admin</code> account is a CMS-only login, so it has no
+                member page to edit. Use the Members tab to edit someone&rsquo;s profile, or sign in
+                with a personal Kerberos account to edit your own.
+              </p>
+            </div>
+            <ChangePasswordForm />
           </div>
         )}
 

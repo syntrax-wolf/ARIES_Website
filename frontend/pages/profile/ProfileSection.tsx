@@ -9,6 +9,7 @@ import { useAuth } from "@/context/AuthContext";
 import { canApprove, canManageTeamContent } from "@/lib/roles";
 import { ProfileEditor } from "frontend/pages/admin/ProfileEditor";
 import { ApprovalsPanel } from "frontend/pages/admin/ApprovalsPanel";
+import { ChangePasswordForm } from "frontend/pages/profile/ChangePasswordForm";
 import { cn } from "@/lib/utils";
 
 export function ProfileSection({ members }: { members: Member[] }) {
@@ -96,24 +97,30 @@ export function ProfileSection({ members }: { members: Member[] }) {
       </div>
 
       {tab === "profile" && member && (
-        <div className="rounded-3xl bg-white/85 p-4 shadow-[0_18px_40px_rgba(35,24,100,0.12)] backdrop-blur md:p-6">
-          <ProfileEditor
-            member={member}
-            onSaved={(updated) => {
-              setLocalMembers((prev) =>
-                prev.map((m) => (m.slug === updated.slug ? updated : m)),
-              );
-              void refreshSession();
-              router.refresh();
-            }}
-          />
+        <div className="space-y-6">
+          <div className="rounded-3xl bg-white/85 p-4 shadow-[0_18px_40px_rgba(35,24,100,0.12)] backdrop-blur md:p-6">
+            <ProfileEditor
+              member={member}
+              onSaved={(updated) => {
+                setLocalMembers((prev) =>
+                  prev.map((m) => (m.slug === updated.slug ? updated : m)),
+                );
+                void refreshSession();
+                router.refresh();
+              }}
+            />
+          </div>
+          <ChangePasswordForm />
         </div>
       )}
       {tab === "profile" && !member && (
-        <p className="rounded-2xl bg-white/70 px-5 py-4 text-sm text-[#31217a]">
-          No profile is linked to this login yet. Sign up with your Kerberos ID after your IITD mail
-          is on the roster.
-        </p>
+        <div className="space-y-6">
+          <p className="rounded-2xl bg-white/70 px-5 py-4 text-sm text-[#31217a]">
+            No profile is linked to this login yet. Sign up with your Kerberos ID after your IITD mail
+            is on the roster.
+          </p>
+          <ChangePasswordForm />
+        </div>
       )}
       {tab === "approvals" && showApprovals && (
         <div className="rounded-3xl bg-white/85 p-4 shadow-[0_18px_40px_rgba(35,24,100,0.12)] backdrop-blur md:p-6">

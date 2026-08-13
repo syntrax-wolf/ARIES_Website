@@ -20,6 +20,7 @@ import { ApprovalsPanel } from "./ApprovalsPanel";
 import { ProfileEditor } from "./ProfileEditor";
 import { ProjectForm } from "./ProjectForm";
 import { EventForm } from "./EventForm";
+import { ChangePasswordForm } from "frontend/pages/profile/ChangePasswordForm";
 import { initialsOf } from "frontend/shared/cards/PersonCard";
 import { cn } from "@/lib/utils";
 
@@ -196,24 +197,30 @@ export function MemberDashboard({
 
         <div className="mt-8">
           {tab === "profile" && member && (
-            <div className="rounded-3xl bg-white/80 p-2 shadow-[0_18px_40px_rgba(35,24,100,0.12)] backdrop-blur md:p-4">
-              <ProfileEditor
-                member={member}
-                onSaved={(updated) => {
-                  setMembers((prev) =>
-                    prev.map((m) => (m.slug === updated.slug ? updated : m)),
-                  );
-                  void refreshSession();
-                  router.refresh();
-                }}
-              />
+            <div className="space-y-6">
+              <div className="rounded-3xl bg-white/80 p-2 shadow-[0_18px_40px_rgba(35,24,100,0.12)] backdrop-blur md:p-4">
+                <ProfileEditor
+                  member={member}
+                  onSaved={(updated) => {
+                    setMembers((prev) =>
+                      prev.map((m) => (m.slug === updated.slug ? updated : m)),
+                    );
+                    void refreshSession();
+                    router.refresh();
+                  }}
+                />
+              </div>
+              <ChangePasswordForm />
             </div>
           )}
           {tab === "profile" && !member && (
-            <p className="rounded-2xl bg-white/70 px-5 py-4 text-sm text-[#31217a]">
-              No personal profile is linked to this login yet. Leadership can link your account after
-              credentials are imported.
-            </p>
+            <div className="space-y-6">
+              <p className="rounded-2xl bg-white/70 px-5 py-4 text-sm text-[#31217a]">
+                No personal profile is linked to this login yet. Leadership can link your account after
+                credentials are imported.
+              </p>
+              <ChangePasswordForm />
+            </div>
           )}
 
           {tab === "approvals" && showApprovals && (
