@@ -150,13 +150,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized — please sign in again" }, { status: 401 });
   }
 
-  const { kind, slug, data, action, entryNumber, email } = (await req.json()) as {
+  const { kind, slug, data, action, entryNumber, email, level: requestedLevel } = (await req.json()) as {
     kind?: string;
     slug?: string;
     data?: Record<string, unknown>;
     action?: string;
     entryNumber?: string | null;
     email?: string | null;
+    level?: string | null;
   };
 
   const ALLOWED = new Set(["members", "projects", "events", "team", "resources"]);
@@ -293,6 +294,27 @@ export async function POST(req: Request) {
           },
           { status: 500 },
         );
+      }
+    }
+
+    if (isLeadership(level) && requestedLevel) {
+      const ALLOWED_LEVELS = new Set([
+        "oc",
+        "co_overall_coordinator",
+        "research_lead",
+        "coordinator",
+        "executive",
+        "member",
+        "alumni",
+        "visitor",
+      ]);
+      if (ALLOWED_LEVELS.has(requestedLevel)) {
+        try {
+          const admin = createSupabaseServiceClient();
+          await admin.from("members").update({ level: requestedLevel }).eq("slug", slug!);
+        } catch {
+          // Profile data already saved; level patch is best-effort.
+        }
       }
     }
 

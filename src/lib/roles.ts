@@ -63,5 +63,6 @@ export function mapTeamRoleToLevel(role: string): MemberLevel | null {
   if (r.includes("coordinator")) return "coordinator";
   if (r.includes("executive")) return "executive";
   if (r.includes("alumni") || r.includes("alumn")) return "alumni";
+  if (r.includes("panel")) return "member";
   return null;
 }

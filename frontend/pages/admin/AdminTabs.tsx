@@ -28,7 +28,7 @@ import { useAuth } from "@/context/AuthContext";
 import { canApprove, canManageTeamContent, canPublishResource } from "@/lib/roles";
 import { slugOnEvent, slugOnProject, slugOnResource } from "@/lib/entity-access";
 import { isVisitor } from "@/lib/supabase/env";
-import { cn } from "@/lib/utils";
+import { cn, memberProfileSlug } from "@/lib/utils";
 
 const BASE_TABS = [
   { id: "members", label: "Members", icon: Users, leadershipOnly: true },
@@ -111,7 +111,85 @@ export function AdminTabs({
     return members.find((m) => m.slug === slug);
   }, [members, session?.memberSlug]);
 
-  const selectedMember = members.find((m) => m.slug === editMember);
+  const editorMembers = useMemo(() => {
+    const bySlug = new Map(members.map((m) => [m.slug, m]));
+    const extra: Member[] = [];
+
+    for (const a of teamData.alumni ?? []) {
+      const slug = memberProfileSlug(a);
+      if (!slug || bySlug.has(slug)) continue;
+      extra.push({
+        slug,
+        name: a.name,
+        role: a.role || "Alumni",
+        tagline: a.org ? `${a.role} · ${a.org}` : a.role || "",
+        socials: [],
+        blocks: [],
+        avatar: a.photo,
+        level: "alumni",
+      });
+      bySlug.set(slug, extra[extra.length - 1]);
+    }
+
+    for (const y of teamData.years ?? []) {
+      for (const p of y.coreTeam ?? []) {
+        if (!/panel/i.test(p.role)) continue;
+        const slug = memberProfileSlug(p);
+        if (!slug || bySlug.has(slug)) continue;
+        extra.push({
+          slug,
+          name: p.name,
+          role: p.role || "Panelist",
+          tagline: "",
+          socials: [],
+          blocks: [],
+          avatar: p.photo,
+          level: "member",
+        });
+        bySlug.set(slug, extra[extra.length - 1]);
+      }
+    }
+
+    return extra.length ? [...members, ...extra] : members;
+  }, [members, teamData]);
+
+  const memberGroups = useMemo(() => {
+    const alumniSlugs = new Set(
+      (teamData.alumni ?? []).map((a) => memberProfileSlug(a)).filter(Boolean) as string[],
+    );
+    const panelSlugs = new Set(
+      (teamData.years ?? [])
+        .flatMap((y) => y.coreTeam ?? [])
+        .filter((p) => /panel/i.test(p.role))
+        .map((p) => memberProfileSlug(p))
+        .filter(Boolean) as string[],
+    );
+
+    const current: Member[] = [];
+    const panelists: Member[] = [];
+    const alumni: Member[] = [];
+    const other: Member[] = [];
+
+    for (const m of editorMembers) {
+      if (m.slug === "blogger") continue;
+      const isAlum =
+        m.level === "alumni" || alumniSlugs.has(m.slug) || /alumni/i.test(m.role);
+      const isPanel = panelSlugs.has(m.slug) || /panel/i.test(m.role);
+      if (isAlum) alumni.push(m);
+      else if (isPanel) panelists.push(m);
+      else if (isVisitor(m.level)) other.push(m);
+      else current.push(m);
+    }
+
+    const byName = (a: Member, b: Member) => a.name.localeCompare(b.name);
+    current.sort(byName);
+    panelists.sort(byName);
+    alumni.sort(byName);
+    other.sort(byName);
+    return { current, panelists, alumni, other };
+  }, [editorMembers, teamData]);
+
+  const selectedMember = editorMembers.find((m) => m.slug === editMember);
   const editableProjects = useMemo(() => {
     if (session?.level !== "executive" || !session.memberSlug) return projects;
     return projects.filter((p) => slugOnProject(p, session.memberSlug));
@@ -191,12 +269,43 @@ export function AdminTabs({
                 className="mt-1.5 w-full rounded-lg bg-white px-3 py-2.5 text-sm shadow-card-sm"
               >
                 <option value="">— create new —</option>
-                {members.map((m) => (
-                  <option key={m.slug} value={m.slug}>
-                    {m.name} ({m.slug})
-                    {isVisitor(m.level) ? " — Non-ARIES" : ""}
-                  </option>
-                ))}
+                {memberGroups.current.length > 0 && (
+                  <optgroup label="Current team">
+                    {memberGroups.current.map((m) => (
+                      <option key={m.slug} value={m.slug}>
+                        {m.name} ({m.slug})
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
+                {memberGroups.panelists.length > 0 && (
+                  <optgroup label="Panelists">
+                    {memberGroups.panelists.map((m) => (
+                      <option key={m.slug} value={m.slug}>
+                        {m.name} ({m.slug}) — Panelist
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
+                {memberGroups.alumni.length > 0 && (
+                  <optgroup label="Alumni">
+                    {memberGroups.alumni.map((m) => (
+                      <option key={m.slug} value={m.slug}>
+                        {m.name} ({m.slug}) — Alumni
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
+                {memberGroups.other.length > 0 && (
+                  <optgroup label="Other">
+                    {memberGroups.other.map((m) => (
+                      <option key={m.slug} value={m.slug}>
+                        {m.name} ({m.slug})
+                        {isVisitor(m.level) ? " — Non-ARIES" : ""}
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
               </select>
             </label>
             <MemberForm
@@ -214,6 +323,7 @@ export function AdminTabs({
                       photo: selectedMember.avatar,
                       entryNumber: selectedMember.entryNumber,
                       email: selectedMember.email,
+                      level: selectedMember.level,
                       about:
                         typeof selectedMember.blocks.find((b) => b.type === "text")?.data === "string"
                           ? (selectedMember.blocks.find((b) => b.type === "text")?.data as string)

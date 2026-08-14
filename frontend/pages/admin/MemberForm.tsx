@@ -4,12 +4,15 @@ import { useState } from "react";
 import { Save } from "lucide-react";
 import { Input, TextArea } from "./ProjectForm";
 import { ImageField } from "./ImageField";
+import { mapTeamRoleToLevel } from "@/lib/roles";
 
 const MEMBER_ROLES = [
   "Research Coordinator",
   "Coordinator",
   "Executive",
   "Research Executive",
+  "Panelist",
+  "Alumni",
 ] as const;
 
 /** Create / update a member profile JSON (+ optional Kerberos for leadership). */
@@ -29,6 +32,7 @@ export function MemberForm({
     about?: string;
     entryNumber?: string;
     email?: string;
+    level?: string;
   };
   /** OC / Co-OC / Research Lead can set Kerberos so the person can sign up. */
   canSetKerberos?: boolean;
@@ -49,10 +53,13 @@ export function MemberForm({
     const entryNumber = String(f.get("entryNumber") ?? "").trim().toLowerCase();
     const email = String(f.get("email") ?? "").trim().toLowerCase();
 
+    const role = String(f.get("role") ?? "");
+    const mappedLevel = mapTeamRoleToLevel(role);
+
     const data = {
       slug,
       name,
-      role: String(f.get("role") ?? ""),
+      role,
       tagline: String(f.get("tagline") ?? ""),
       year: String(f.get("year") ?? "") || undefined,
       location: String(f.get("location") ?? "") || "IIT Delhi",
@@ -77,6 +84,7 @@ export function MemberForm({
           ? {
               entryNumber: entryNumber || null,
               email: email || null,
+              level: mappedLevel || initial?.level || null,
             }
           : {}),
       }),
