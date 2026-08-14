@@ -2,6 +2,7 @@ import type { Member, ProjectContributor, TeamData, TeamMemberRef } from "@/lib/
 
 type MemberIdentity = Pick<Member, "slug" | "name" | "avatar" | "role"> & {
   tagline?: string;
+  level?: Member["level"];
 };
 
 /** Overlay live member name/photo onto a team roster entry when linked by slug. */
@@ -24,16 +25,44 @@ export function hydrateTeamMember(
 /** Overlay live member fields onto team years + alumni for public display. */
 export function hydrateTeamData(team: TeamData, members: MemberIdentity[]): TeamData {
   const bySlug = new Map(members.map((m) => [m.slug, m]));
+  const listedOnCurrent = new Set<string>();
 
-  const years = (team.years ?? []).map((y) => ({
-    ...y,
-    coreTeam: (y.coreTeam ?? []).map((p) => hydrateTeamMember(p, bySlug)),
-    coordinators: (y.coordinators ?? []).map((p) => hydrateTeamMember(p, bySlug)),
-    executives: (y.executives ?? []).map((g) => ({
-      ...g,
-      members: (g.members ?? []).map((p) => hydrateTeamMember(p, bySlug)),
-    })),
-  }));
+  const years = (team.years ?? []).map((y, i) => {
+    const coreTeam = (y.coreTeam ?? []).map((p) => hydrateTeamMember(p, bySlug));
+    const coordinators = (y.coordinators ?? []).map((p) => hydrateTeamMember(p, bySlug));
+    if (i === 0) {
+      for (const p of [...coreTeam, ...coordinators]) {
+        if (p.slug) listedOnCurrent.add(p.slug);
+      }
+    }
+    return {
+      ...y,
+      coreTeam,
+      coordinators,
+      executives: (y.executives ?? []).map((g) => ({
+        ...g,
+        members: (g.members ?? []).map((p) => hydrateTeamMember(p, bySlug)),
+      })),
+    };
+  });
+
+  // Current-year coordinator grid = roster + anyone whose live level is coordinator.
+  if (years[0]) {
+    const extras: TeamMemberRef[] = members
+      .filter((m) => m.level === "coordinator" && m.slug && !listedOnCurrent.has(m.slug))
+      .map((m) => ({
+        name: m.name,
+        slug: m.slug,
+        role: m.role || "Coordinator",
+        photo: m.avatar,
+      }));
+    if (extras.length) {
+      years[0] = {
+        ...years[0],
+        coordinators: [...years[0].coordinators, ...extras],
+      };
+    }
+  }
 
   const alumni = (team.alumni ?? []).map((a) => {
     const slug = a.slug?.trim();
