@@ -67,8 +67,8 @@ export function AccountSection({
         </div>
       ) : (
         <p className="rounded-2xl bg-white/70 px-5 py-4 text-sm text-[#31217a]">
-          No profile is linked to this login yet. Sign up with your Kerberos ID after your IITD mail
-          is on the roster.
+          No ARIES profile is linked to this login yet. Ask OC to add your Kerberos ID on the roster,
+          then sign in with IIT Delhi again.
         </p>
       )}
 

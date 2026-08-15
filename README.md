@@ -12,15 +12,18 @@ Next.js (App Router) + TypeScript + Tailwind v4 site for the ARIES club at IIT D
 
 ## Development
 
-Copy `.env.example` to `.env.local` and fill in your Supabase credentials:
+Copy `.env.example` to `.env.local` and fill in Supabase plus DevClub OAuth:
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
-ADMIN_USER=admin
-ADMIN_PASSWORD=password
+DEVCLUB_CLIENT_ID=
+DEVCLUB_CLIENT_SECRET=
+DEVCLUB_REDIRECT_URI=http://localhost:3000/api/auth/callback/devclub
 ```
+
+Register the redirect URI at [auth.devclub.in](https://auth.devclub.in/docs). Members sign in with IIT Delhi; staff password login remains as a dual-run fallback.
 
 Run the dev server:
 

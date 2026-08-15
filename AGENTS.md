@@ -29,7 +29,7 @@ single-purpose components. Find the file, make the change, done.
 | Resources page UI | `frontend/pages/resources/ResourcesExplorer.tsx` |
 | Contact page | `src/app/(site)/contact/page.tsx`, form: `frontend/pages/contact/ContactForm.tsx` |
 | Club email / LinkedIn | `src/config/socials.ts` |
-| Member login | `/admin` — username/entry number + password (Supabase Auth); temp bootstrap `admin` / `password` |
+| Member login | `/admin` — IIT Delhi via DevClub OAuth (`/api/auth/devclub`). Staff password dual-run still on the login page. |
 | Profile page layout / hero / back-button logic | `src/app/[slug]/page.tsx` |
 | How a profile section renders | `frontend/shared/profile/blocks.tsx` (one renderer per block type) |
 | Profile 2-column packing | `frontend/shared/profile/BlockGrid.tsx` |
@@ -47,14 +47,14 @@ single-purpose components. Find the file, make the change, done.
 - `/` landing (own top navbar, no sidebar)
 - `/(site)/...` = events, projects, team, resources, contact + detail pages — all share the collapsible sidebar via `src/app/(site)/layout.tsx`
 - `/<member-slug>` member profile at the root (short URLs). Static routes win over the dynamic slug. `?from=team` or `?from=project:<slug>` renders the "Back to X" button.
-- `/admin` login → `/admin/editor`
+- `/admin` DevClub login → `/account` (leadership/blogger can open `/admin/editor`)
 
 ## Conventions
 
 - Public pages read via `src/lib/content.ts` (Supabase). Keep `content/` as backup.
-- Roles (`app_metadata.level`): `oc` | `co_overall_coordinator` | `research_lead` | `coordinator` | `executive` | `member` | `alumni`.
-- Executives: own profile free; project/event/team edits need approval. Coordinators + leadership direct-publish.
-- Env: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, server `SUPABASE_SERVICE_ROLE_KEY` (scripts only).
+- Club role is `members.level` (never IdP claims or a client-posted slug): `oc` | `co_overall_coordinator` | `research_lead` | `coordinator` | `executive` | `member` | `alumni` | `visitor` | `blogger`.
+- Profile JSON: own session slug only. Roster (name/Kerberos/level): leadership, merge-only. Projects/events: leadership any; coordinator/executive only if listed.
+- Env: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, server `SUPABASE_SERVICE_ROLE_KEY`, DevClub `DEVCLUB_CLIENT_ID` / `DEVCLUB_CLIENT_SECRET` / `DEVCLUB_REDIRECT_URI`.
 - Images: existing `/images/...` in `public/`; new uploads → Storage bucket `media`.
 - Category chip colors: `frontend/shared/ui/CategoryBadge.tsx`.
 - Icons: `lucide-react` (no brand icons — use monogram tiles like Contact page).
