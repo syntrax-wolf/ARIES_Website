@@ -53,6 +53,19 @@ export function canPublishResource(level: string | null | undefined) {
   return canDirectPublish(level) || level === "blogger";
 }
 
+export function canAccessEditor(level: string | null | undefined) {
+  return canDirectPublish(level) || canSubmitForApproval(level) || canPublishResource(level);
+}
+
+export function canUploadKind(level: string | null | undefined, kind: string) {
+  if (kind === "team") return canManageTeamContent(level);
+  if (kind === "projects" || kind === "events") {
+    return canDirectPublish(level) || canSubmitForApproval(level);
+  }
+  if (kind === "members" || kind === "misc") return Boolean(level);
+  return false;
+}
+
 export function mapTeamRoleToLevel(role: string): MemberLevel | null {
   const r = role.trim().toLowerCase();
   if (r === "oc") return "oc";

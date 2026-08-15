@@ -44,55 +44,57 @@ function supabaseTagged(tags: string[]) {
   });
 }
 
+function mapMemberRow(
+  row: {
+    slug: string;
+    data: unknown;
+    level: string | null;
+    entry_number?: string | null;
+    email?: string | null;
+  },
+  includePii = false,
+): Member {
+  const raw = (row.data ?? {}) as Partial<Member> & { email?: string; entryNumber?: string };
+  const { email: _jsonEmail, entryNumber: _jsonEntry, ...publicFields } = raw;
+  return {
+    ...publicFields,
+    slug: row.slug,
+    name: raw.name ?? row.slug,
+    role: raw.role ?? "",
+    tagline: raw.tagline ?? "",
+    socials: raw.socials ?? [],
+    blocks: raw.blocks ?? [],
+    level: row.level as Member["level"],
+    ...(includePii
+      ? {
+          entryNumber: row.entry_number ?? undefined,
+          email: row.email ?? undefined,
+        }
+      : {}),
+  };
+}
+
 /* Members */
 export async function getMembers(): Promise<Member[]> {
   const { data, error } = await supabaseTagged(["members"])
     .from("members")
-    .select("slug, data, level, entry_number, email")
+    .select("slug, data, level")
     .neq("slug", "admin")
     .order("slug");
   if (error) throw error;
   return (data ?? [])
     .filter((row) => row.slug !== "blogger" && !isVisitor(row.level as string))
-    .map((row) => {
-    const raw = (row.data ?? {}) as Partial<Member>;
-    return {
-      ...raw,
-      slug: row.slug as string,
-      name: raw.name ?? (row.slug as string),
-      role: raw.role ?? "",
-      tagline: raw.tagline ?? "",
-      socials: raw.socials ?? [],
-      blocks: raw.blocks ?? [],
-      level: row.level as Member["level"],
-      entryNumber: (row.entry_number as string | null) ?? undefined,
-      email: (row.email as string | null) ?? undefined,
-    };
-  });
+    .map((row) => mapMemberRow(row));
 }
 
 export async function getAllMembers(): Promise<Member[]> {
   const { data, error } = await supabaseTagged(["members"])
     .from("members")
-    .select("slug, data, level, entry_number, email")
+    .select("slug, data, level")
     .neq("slug", "admin")
     .order("slug");
   if (error) throw error;
-  return (data ?? []).map((row) => {
-    const raw = (row.data ?? {}) as Partial<Member>;
-    return {
-      ...raw,
-      slug: row.slug as string,
-      name: raw.name ?? (row.slug as string),
-      role: raw.role ?? "",
-      tagline: raw.tagline ?? "",
-      socials: raw.socials ?? [],
-      blocks: raw.blocks ?? [],
-      level: row.level as Member["level"],
-      entryNumber: (row.entry_number as string | null) ?? undefined,
-      email: (row.email as string | null) ?? undefined,
-    };
-  });
+  return (data ?? []).map((row) => mapMemberRow(row));
 }
 
 export async function getMember(slug: string): Promise<Member | undefined> {
@@ -103,17 +105,7 @@ export async function getMember(slug: string): Promise<Member | undefined> {
     .maybeSingle();
   if (error) throw error;
   if (!data) return undefined;
-  const raw = (data.data ?? {}) as Partial<Member>;
-  return {
-    ...raw,
-    slug: data.slug as string,
-    name: raw.name ?? (data.slug as string),
-    role: raw.role ?? "",
-    tagline: raw.tagline ?? "",
-    socials: raw.socials ?? [],
-    blocks: raw.blocks ?? [],
-    level: data.level as Member["level"],
-  };
+  return mapMemberRow(data);
 }
 
 /* Projects */

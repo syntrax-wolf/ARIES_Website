@@ -74,12 +74,20 @@ export function reviewerSlugsForResource(
   return reviewerSlugsForPeople(resourcePeople(resource), members);
 }
 
-export function canEditEntity(
-  level: string | null | undefined,
-  _slug: string,
-  onEntity: boolean,
-): boolean {
-  if (isLeadership(level) || level === "coordinator") return true;
-  if (level === "executive") return onEntity;
+/** Leadership: any entity. Coordinators/executives: only ones they are listed on. */
+export function canEditEntity(level: string | null | undefined, onEntity: boolean): boolean {
+  if (isLeadership(level)) return true;
+  if (level === "coordinator" || level === "executive") return onEntity;
   return false;
+}
+
+export function listedOnly<T>(
+  items: T[],
+  level: string | null | undefined,
+  memberSlug: string | undefined,
+  isOn: (item: T, slug: string) => boolean,
+): T[] {
+  if (isLeadership(level)) return items;
+  if (!memberSlug) return [];
+  return items.filter((item) => isOn(item, memberSlug));
 }

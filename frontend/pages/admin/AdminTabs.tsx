@@ -26,7 +26,7 @@ import { ApprovalsPanel } from "./ApprovalsPanel";
 import { ChangePasswordForm } from "frontend/pages/profile/ChangePasswordForm";
 import { useAuth } from "@/context/AuthContext";
 import { canApprove, canManageTeamContent, canPublishResource } from "@/lib/roles";
-import { slugOnEvent, slugOnProject, slugOnResource } from "@/lib/entity-access";
+import { listedOnly, slugOnEvent, slugOnProject, slugOnResource } from "@/lib/entity-access";
 import { isVisitor } from "@/lib/supabase/env";
 import { cn, memberProfileSlug } from "@/lib/utils";
 
@@ -190,18 +190,18 @@ export function AdminTabs({
   }, [editorMembers, teamData]);
 
   const selectedMember = editorMembers.find((m) => m.slug === editMember);
-  const editableProjects = useMemo(() => {
-    if (session?.level !== "executive" || !session.memberSlug) return projects;
-    return projects.filter((p) => slugOnProject(p, session.memberSlug));
-  }, [projects, session?.level, session?.memberSlug]);
-  const editableEvents = useMemo(() => {
-    if (session?.level !== "executive" || !session.memberSlug) return events;
-    return events.filter((e) => slugOnEvent(e, session.memberSlug));
-  }, [events, session?.level, session?.memberSlug]);
-  const editableResources = useMemo(() => {
-    if (session?.level !== "executive" || !session.memberSlug) return resources;
-    return resources.filter((r) => slugOnResource(r, session.memberSlug));
-  }, [resources, session?.level, session?.memberSlug]);
+  const editableProjects = useMemo(
+    () => listedOnly(projects, session?.level, session?.memberSlug, slugOnProject),
+    [projects, session?.level, session?.memberSlug],
+  );
+  const editableEvents = useMemo(
+    () => listedOnly(events, session?.level, session?.memberSlug, slugOnEvent),
+    [events, session?.level, session?.memberSlug],
+  );
+  const editableResources = useMemo(
+    () => listedOnly(resources, session?.level, session?.memberSlug, slugOnResource),
+    [resources, session?.level, session?.memberSlug],
+  );
   const selectedProject = editableProjects.find((p) => p.slug === editProject);
   const knownTags = useMemo(() => {
     const set = new Set<string>();
@@ -262,13 +262,13 @@ export function AdminTabs({
         {tab === "members" && isAdmin && (
           <>
             <label className="block max-w-md text-xs font-semibold text-ink">
-              Edit existing member
+              Edit roster entry
               <select
                 value={editMember}
                 onChange={(e) => setEditMember(e.target.value)}
                 className="mt-1.5 w-full rounded-lg bg-white px-3 py-2.5 text-sm shadow-card-sm"
               >
-                <option value="">— create new —</option>
+                <option value="">— create new roster row —</option>
                 {memberGroups.current.length > 0 && (
                   <optgroup label="Current team">
                     {memberGroups.current.map((m) => (
@@ -310,7 +310,6 @@ export function AdminTabs({
             </label>
             <MemberForm
               key={editMember || "new-member"}
-              canSetKerberos={isAdmin}
               initial={
                 selectedMember
                   ? {
@@ -324,10 +323,6 @@ export function AdminTabs({
                       entryNumber: selectedMember.entryNumber,
                       email: selectedMember.email,
                       level: selectedMember.level,
-                      about:
-                        typeof selectedMember.blocks.find((b) => b.type === "text")?.data === "string"
-                          ? (selectedMember.blocks.find((b) => b.type === "text")?.data as string)
-                          : "",
                     }
                   : undefined
               }

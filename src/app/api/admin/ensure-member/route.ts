@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { createSupabaseServerClient, createSupabaseServiceClient } from "@/lib/supabase/server";
+import { createSupabaseServiceClient } from "@/lib/supabase/server";
+import { getSessionInfo } from "@/lib/auth-session";
 import { canDirectPublish, canPublishResource, canSubmitForApproval } from "@/lib/roles";
 import { slugifyName } from "@/lib/utils";
 import type { Member } from "@/lib/types";
@@ -11,15 +12,12 @@ const SLUG_RE = /^[a-z0-9][a-z0-9-]*$/;
  * Only authenticated members who can edit projects/events may create visitors.
  */
 export async function POST(req: Request) {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
+  const session = await getSessionInfo();
+  if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const level = String(user.app_metadata?.level ?? "");
+  const level = session.level;
   if (!canDirectPublish(level) && !canSubmitForApproval(level) && !canPublishResource(level)) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }

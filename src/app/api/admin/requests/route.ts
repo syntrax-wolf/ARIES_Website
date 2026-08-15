@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createSupabaseServerClient, createSupabaseServiceClient } from "@/lib/supabase/server";
 import { revalidateContent } from "@/lib/revalidate";
 import { isLeadership } from "@/lib/roles";
+import { getSessionInfo } from "@/lib/auth-session";
 import {
   isCoreTeam,
   reviewerSlugsForEvent,
@@ -17,25 +18,11 @@ type RequestKind = "join" | "edit" | "create";
 type EntityType = "project" | "event" | "resource";
 
 async function actor() {
+  const session = await getSessionInfo();
+  if (!session) return null;
   const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return null;
-
-  const { data: member } = await supabase
-    .from("members")
-    .select("slug, level, data")
-    .eq("auth_user_id", user.id)
-    .maybeSingle();
-
-  const jwtLevel = String(user.app_metadata?.level || "");
-  const dbLevel = String(member?.level || "");
-  const level = jwtLevel === "blogger" ? "blogger" : dbLevel || jwtLevel;
-  const memberSlug = String(member?.slug || user.app_metadata?.member_slug || "");
-  const name = String((member?.data as { name?: string } | null)?.name || memberSlug);
-
-  return { supabase, user, level, memberSlug, name };
+  const db = createSupabaseServiceClient();
+  return { ...session, supabase, db };
 }
 
 function reviewersOf(payload: Record<string, unknown> | null | undefined): string[] {
@@ -56,8 +43,8 @@ export async function GET() {
   const session = await actor();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { supabase, memberSlug, level } = session;
-  const { data, error } = await supabase
+  const { db, memberSlug, level } = session;
+  const { data, error } = await db
     .from("change_requests")
     .select("*")
     .eq("status", "pending")
@@ -74,7 +61,7 @@ export async function GET() {
 export async function POST(req: Request) {
   const session = await actor();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const { supabase, memberSlug, name, level } = session;
+  const { supabase, db, memberSlug, name, level } = session;
 
   const body = (await req.json().catch(() => ({}))) as {
     action?: string;
@@ -89,7 +76,7 @@ export async function POST(req: Request) {
     if (!body.requestId || typeof body.approve !== "boolean") {
       return NextResponse.json({ error: "Invalid review" }, { status: 400 });
     }
-    const { data: pending, error: pErr } = await supabase
+    const { data: pending, error: pErr } = await db
       .from("change_requests")
       .select("*")
       .eq("id", body.requestId)
@@ -111,7 +98,7 @@ export async function POST(req: Request) {
     }
 
     // No audit trail — delete both approved and rejected copies.
-    await supabase.from("change_requests").delete().eq("id", body.requestId);
+    await db.from("change_requests").delete().eq("id", body.requestId);
     return NextResponse.json({ ok: true, approved: body.approve });
   }
 
@@ -122,7 +109,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Pick something to join" }, { status: 400 });
     }
 
-    const { data: memberRows } = await supabase.from("members").select("slug, level");
+    const { data: memberRows } = await db.from("members").select("slug, level");
     const roster = (memberRows ?? []) as { slug: string; level: string }[];
 
     let reviewers: string[] = [];
@@ -153,7 +140,7 @@ export async function POST(req: Request) {
       reviewers = reviewerSlugsForResource(resource, roster);
     }
 
-    const { error } = await supabase.from("change_requests").insert({
+    const { error } = await db.from("change_requests").insert({
       entity_type: entityType,
       entity_slug: entitySlug,
       payload: {

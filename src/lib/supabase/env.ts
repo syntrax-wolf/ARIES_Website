@@ -24,13 +24,6 @@ export function syntheticLoginEmail(usernameOrEntry: string) {
   return `${usernameOrEntry.trim().toLowerCase()}@${LOGIN_EMAIL_DOMAIN}`;
 }
 
-export const PUBLISH_LEVELS = [
-  "oc",
-  "co_overall_coordinator",
-  "research_lead",
-  "coordinator",
-] as const;
-
 export type MemberLevel =
   | "oc"
   | "co_overall_coordinator"
@@ -41,22 +34,6 @@ export type MemberLevel =
   | "blogger"
   | "alumni"
   | "visitor";
-
-export function canDirectPublish(level: string | null | undefined) {
-  return PUBLISH_LEVELS.includes(level as (typeof PUBLISH_LEVELS)[number]);
-}
-
-export function canApprove(level: string | null | undefined) {
-  return canDirectPublish(level);
-}
-
-export function isLeadership(level: string | null | undefined) {
-  return (
-    level === "oc" ||
-    level === "co_overall_coordinator" ||
-    level === "research_lead"
-  );
-}
 
 export function isVisitor(level: string | null | undefined) {
   return level === "visitor";
