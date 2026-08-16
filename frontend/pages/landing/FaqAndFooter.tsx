@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import { LandingFooter } from "./LandingFooter";
 
 const faqs = [
   {
@@ -91,30 +91,8 @@ export function FaqAndFooter() {
         </div>
       </div>
 
-      {/* Minimal mountain footer — full artwork, two end-aligned lines */}
-      <footer className="relative mt-auto aspect-[672/384] w-full min-h-[200px] max-h-[420px] overflow-hidden">
-        <Image
-          src="/images/landing/footer-overlay.png"
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover object-center"
-          priority={false}
-        />
-        {/* Soft blend from FAQ gradient into the mountain sky */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[#3a2d78]/70 to-transparent" />
-        {/* Bottom wash so white type stays crisp on the lilac foreground */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#2a1f5c]/45 to-transparent" />
-
-        <div className="absolute inset-x-0 bottom-0 z-10 flex items-end justify-between gap-4 px-6 pb-5 md:px-12 md:pb-6">
-          <p className="text-xs font-semibold tracking-wide text-white drop-shadow-[0_2px_10px_rgba(20,10,60,0.65)] md:text-sm">
-            © 2026 ARIES, IIT Delhi
-          </p>
-          <p className="font-mono text-xs font-semibold tracking-wide text-white drop-shadow-[0_2px_10px_rgba(20,10,60,0.65)] md:text-sm">
-            while(alive)&nbsp;learn();
-          </p>
-        </div>
-      </footer>
+      {/* Dark navy footer with link columns + mountain silhouette */}
+      <LandingFooter />
     </section>
   );
 }
