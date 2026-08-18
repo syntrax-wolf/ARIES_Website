@@ -8,7 +8,8 @@ import type { Member, Project } from "@/lib/types";
 import { ProjectCard } from "frontend/shared/cards/ProjectCard";
 import { ProjectForm } from "frontend/pages/admin/ProjectForm";
 import { useAuth } from "@/context/AuthContext";
-import { canDirectCreate, canSubmitForApproval } from "@/lib/roles";
+import { canDirectCreate, canSubmitForApproval, isLeadership } from "@/lib/roles";
+import { slugOnProject } from "@/lib/entity-access";
 import { contributorSearchText, normalizeContributors } from "@/lib/contributors";
 
 /** Search + grid; logged-in members can create/edit from this page. */
@@ -21,8 +22,16 @@ export function ProjectsExplorer({
 }) {
   const router = useRouter();
   const { session } = useAuth();
-  const canEdit =
+  const canCreate =
     !!session && (canDirectCreate(session.level) || canSubmitForApproval(session.level));
+  const canEditThis = (p: Project) => {
+    if (!session) return false;
+    if (isLeadership(session.level)) return true;
+    if (session.level === "coordinator" || session.level === "executive") {
+      return slugOnProject(p, session.memberSlug);
+    }
+    return false;
+  };
   const [query, setQuery] = useState("");
   const [projects, setProjects] = useState(initialProjects);
   const [editing, setEditing] = useState<string | null>(null); // slug or "" for new
@@ -98,7 +107,7 @@ export function ProjectsExplorer({
             className="w-full bg-transparent text-sm text-[#11154a] placeholder-[#8a8daa] outline-none"
           />
         </label>
-        {canEdit && (
+        {canCreate && (
           <button
             type="button"
             onClick={openNew}
@@ -114,7 +123,7 @@ export function ProjectsExplorer({
         )}
       </div>
 
-      {editing !== null && canEdit && (
+      {editing !== null && canCreate && (
         <div className="mt-6 rounded-2xl border border-purple/20 bg-white/90 p-4 shadow-card-sm">
           <div className="mb-3 flex items-center justify-between">
             <p className="text-sm font-bold text-ink">
@@ -160,7 +169,7 @@ export function ProjectsExplorer({
           {filtered.map((p) => (
             <div key={p.slug} className="relative">
               <ProjectCard project={p} members={members} />
-              {canEdit && (
+              {canEditThis(p) && (
                 <button
                   type="button"
                   onClick={() => openEdit(p.slug)}

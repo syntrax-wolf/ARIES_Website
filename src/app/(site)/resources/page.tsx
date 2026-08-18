@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { getResources } from "@/lib/content";
+import { getAllResources } from "@/lib/content";
 import { ResourcesExplorer } from "frontend/pages/resources/ResourcesExplorer";
 
 export const metadata: Metadata = { title: "Resources" };
 
 export default async function ResourcesPage() {
-  const resources = await getResources();
+  const resources = await getAllResources();
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#fbf4ec]">
       <div className="glow-circle absolute -left-24 top-4 size-72" />

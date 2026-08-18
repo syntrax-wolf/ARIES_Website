@@ -6,12 +6,13 @@ import { ExecutiveMarquee } from "frontend/pages/team/ExecutiveMarquee";
 import { TeamPhotoCarousel } from "frontend/pages/team/TeamPhotoCarousel";
 
 /**
- * Team page body: stacked year photos (roster stays on current year),
+ * Team page body: stacked year photos (newest year left), current-year roster only,
  * core team, coordinators grid, executive marquee rows.
  */
 export function TeamExplorer({ team }: { team: TeamData }) {
-  // Roster always reflects the current year entry; only the hero photo cycles.
+  // years are sorted newest-first in getTeam(); roster is always the current team.
   const roster = team.years[0];
+  if (!roster) return null;
   const brain = roster.executives.find((g) => g.group.toUpperCase() === "BRAIN");
   const canvas = roster.executives.find((g) => g.group.toUpperCase() === "CANVAS");
 

@@ -8,7 +8,8 @@ import type { AriesEvent } from "@/lib/types";
 import { EventCard } from "frontend/shared/cards/EventCard";
 import { EventForm } from "frontend/pages/admin/EventForm";
 import { useAuth } from "@/context/AuthContext";
-import { canDirectCreate, canSubmitForApproval } from "@/lib/roles";
+import { canDirectCreate, canSubmitForApproval, isLeadership } from "@/lib/roles";
+import { slugOnEvent } from "@/lib/entity-access";
 import { cn } from "@/lib/utils";
 
 const TABS = ["All Events", "Workshops", "Talks", "Hackathons", "Externals"] as const;
@@ -55,8 +56,16 @@ export function EventsExplorer({
 }) {
   const router = useRouter();
   const { session } = useAuth();
-  const canEdit =
+  const canCreate =
     !!session && (canDirectCreate(session.level) || canSubmitForApproval(session.level));
+  const canEditThis = (e: AriesEvent) => {
+    if (!session) return false;
+    if (isLeadership(session.level)) return true;
+    if (session.level === "coordinator" || session.level === "executive") {
+      return slugOnEvent(e, session.memberSlug);
+    }
+    return false;
+  };
   const [tab, setTab] = useState<(typeof TABS)[number]>("All Events");
   const [sortAsc, setSortAsc] = useState(true);
   const [upcoming, setUpcoming] = useState(initialUpcoming);
@@ -117,7 +126,7 @@ export function EventsExplorer({
             className="w-full bg-transparent text-sm text-[#11154a] placeholder-[#8a8daa] outline-none"
           />
         </label>
-        {canEdit && (
+        {canCreate && (
           <button
             type="button"
             onClick={openNew}
@@ -133,7 +142,7 @@ export function EventsExplorer({
         )}
       </div>
 
-      {editing !== null && canEdit && (
+      {editing !== null && canCreate && (
         <div className="mt-6 rounded-2xl border border-purple/20 bg-white/90 p-4 shadow-card-sm">
           <div className="mb-3 flex items-center justify-between">
             <p className="text-sm font-bold text-ink">
@@ -212,7 +221,7 @@ export function EventsExplorer({
             {filteredUpcoming.map((e) => (
               <div key={e.slug} className="relative">
                 <EventCard event={e} />
-                {canEdit && (
+                {canEditThis(e) && (
                   <button
                     type="button"
                     onClick={() => openEdit(e.slug)}
@@ -249,7 +258,7 @@ export function EventsExplorer({
             {filteredPast.map((e) => (
               <div key={e.slug} className="relative">
                 <EventCard event={e} variant="past" />
-                {canEdit && (
+                {canEditThis(e) && (
                   <button
                     type="button"
                     onClick={() => openEdit(e.slug)}

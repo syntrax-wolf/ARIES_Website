@@ -9,7 +9,7 @@ function bustTag(tag: string) {
 export function revalidateContent(kind?: string, slug?: string) {
   revalidatePath("/", "layout");
   revalidatePath("/(site)", "layout");
-  revalidatePath("/profile");
+  revalidatePath("/account");
   revalidatePath("/admin/editor");
 
   if (!kind || kind === "projects" || kind === "project") {

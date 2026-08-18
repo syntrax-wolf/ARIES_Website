@@ -21,6 +21,9 @@ export const metadata: Metadata = {
   },
   description:
     "ARIES, the official AI & ML club of IIT Delhi. Research. Build. Deploy. Impact.",
+  icons: {
+    apple: "/images/brand/logo-navy.svg",
+  },
 };
 
 export default function RootLayout({

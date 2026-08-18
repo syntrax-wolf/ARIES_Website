@@ -26,7 +26,6 @@ async function apiFetch<T>(
 
 export const login = (entryNumber: string, password: string) =>
   apiFetch<{
-    token: string;
     memberSlug: string;
     level: string;
     name: string;
@@ -36,7 +35,6 @@ export const login = (entryNumber: string, password: string) =>
 
 export const me = () =>
   apiFetch<{
-    token: string;
     memberSlug: string;
     level: string;
     name: string;

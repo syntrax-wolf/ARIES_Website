@@ -47,7 +47,7 @@ export function ResourcesExplorer({ resources }: { resources: Resource[] }) {
       {/* Heading + search */}
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div>
-          <h1 className="text-4xl font-black text-ink md:text-5xl">Byte Sized blogs</h1>
+          <h1 className="text-4xl font-black text-ink md:text-5xl">Learning Resources</h1>
           <p className="mt-4 max-w-sm text-sm leading-6 text-ink/70">
             Curated blogs, tutorials, courses and featured finds from the ARIES community.
           </p>
@@ -89,7 +89,7 @@ export function ResourcesExplorer({ resources }: { resources: Resource[] }) {
       {!activeType && !query && featured.length > 0 && (
         <section className="mt-10">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold text-ink">✦ Byte Sized blogs</h2>
+            <h2 className="text-lg font-bold text-ink">✦ Featured Resources</h2>
           </div>
           <div className="no-scrollbar mt-5 flex gap-5 overflow-x-auto pb-2">
             {featured.map((r) => (
@@ -98,9 +98,20 @@ export function ResourcesExplorer({ resources }: { resources: Resource[] }) {
                 href={`/resources/${r.slug}`}
                 className="group w-60 shrink-0 rounded-2xl bg-white p-4 shadow-card-sm transition-transform hover:-translate-y-1"
               >
-                <div className="grid h-28 place-items-center rounded-xl bg-[linear-gradient(135deg,#ece5f8,#d9ccf4)] text-purple">
-                  <FeaturedIcon type={r.type} />
-                </div>
+                {r.coverImage ? (
+                  <div className="h-28 overflow-hidden rounded-xl">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={r.coverImage}
+                      alt=""
+                      className="size-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
+                ) : (
+                  <div className="grid h-28 place-items-center rounded-xl bg-[linear-gradient(135deg,#ece5f8,#d9ccf4)] text-purple">
+                    <FeaturedIcon type={r.type} />
+                  </div>
+                )}
                 <div className="mt-4">
                   <CategoryBadge>{r.type}</CategoryBadge>
                 </div>

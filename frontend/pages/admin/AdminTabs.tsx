@@ -23,18 +23,20 @@ import { MemberForm } from "./MemberForm";
 import { AlumniForm } from "./AlumniForm";
 import { TeamPhotoForm } from "./TeamPhotoForm";
 import { ApprovalsPanel } from "./ApprovalsPanel";
+import { ChangePasswordForm } from "frontend/pages/profile/ChangePasswordForm";
 import { useAuth } from "@/context/AuthContext";
 import { canApprove, canManageTeamContent, canPublishResource } from "@/lib/roles";
+import { listedOnly, slugOnEvent, slugOnProject, slugOnResource } from "@/lib/entity-access";
 import { isVisitor } from "@/lib/supabase/env";
-import { cn } from "@/lib/utils";
+import { cn, memberProfileSlug } from "@/lib/utils";
 
 const BASE_TABS = [
-  { id: "members", label: "Members", icon: Users },
+  { id: "members", label: "Members", icon: Users, leadershipOnly: true },
   { id: "team", label: "Team", icon: ImageIcon, adminOnly: true },
   { id: "projects", label: "Projects", icon: FolderPlus },
   { id: "events", label: "Events", icon: CalendarPlus },
   { id: "resources", label: "Resources", icon: BookOpen, publisherOnly: true },
-  { id: "profile", label: "My profile", icon: UserRound },
+  { id: "profile", label: "Account", icon: UserRound },
   { id: "approvals", label: "Approvals", icon: ClipboardList, adminOnly: true },
 ] as const;
 
@@ -67,6 +69,7 @@ export function AdminTabs({
   const TABS = useMemo(
     () =>
       BASE_TABS.filter((t) => {
+        if ("leadershipOnly" in t && t.leadershipOnly) return isAdmin;
         if ("adminOnly" in t && t.adminOnly) return isAdmin;
         if ("publisherOnly" in t && t.publisherOnly) return canUseResources;
         if (isBlogger) return t.id === "resources" || t.id === "profile";
@@ -108,8 +111,98 @@ export function AdminTabs({
     return members.find((m) => m.slug === slug);
   }, [members, session?.memberSlug]);
 
-  const selectedMember = members.find((m) => m.slug === editMember);
-  const selectedProject = projects.find((p) => p.slug === editProject);
+  const editorMembers = useMemo(() => {
+    const bySlug = new Map(members.map((m) => [m.slug, m]));
+    const extra: Member[] = [];
+
+    for (const a of teamData.alumni ?? []) {
+      const slug = memberProfileSlug(a);
+      if (!slug || bySlug.has(slug)) continue;
+      extra.push({
+        slug,
+        name: a.name,
+        role: a.role || "Alumni",
+        tagline: a.org ? `${a.role} · ${a.org}` : a.role || "",
+        socials: [],
+        blocks: [],
+        avatar: a.photo,
+        level: "alumni",
+      });
+      bySlug.set(slug, extra[extra.length - 1]);
+    }
+
+    for (const y of teamData.years ?? []) {
+      for (const p of y.coreTeam ?? []) {
+        if (!/panel/i.test(p.role)) continue;
+        const slug = memberProfileSlug(p);
+        if (!slug || bySlug.has(slug)) continue;
+        extra.push({
+          slug,
+          name: p.name,
+          role: p.role || "Panelist",
+          tagline: "",
+          socials: [],
+          blocks: [],
+          avatar: p.photo,
+          level: "member",
+        });
+        bySlug.set(slug, extra[extra.length - 1]);
+      }
+    }
+
+    return extra.length ? [...members, ...extra] : members;
+  }, [members, teamData]);
+
+  const memberGroups = useMemo(() => {
+    const alumniSlugs = new Set(
+      (teamData.alumni ?? []).map((a) => memberProfileSlug(a)).filter(Boolean) as string[],
+    );
+    const panelSlugs = new Set(
+      (teamData.years ?? [])
+        .flatMap((y) => y.coreTeam ?? [])
+        .filter((p) => /panel/i.test(p.role))
+        .map((p) => memberProfileSlug(p))
+        .filter(Boolean) as string[],
+    );
+
+    const current: Member[] = [];
+    const panelists: Member[] = [];
+    const alumni: Member[] = [];
+    const other: Member[] = [];
+
+    for (const m of editorMembers) {
+      if (m.slug === "blogger") continue;
+      const isAlum =
+        m.level === "alumni" || alumniSlugs.has(m.slug) || /alumni/i.test(m.role);
+      const isPanel = panelSlugs.has(m.slug) || /panel/i.test(m.role);
+      if (isAlum) alumni.push(m);
+      else if (isPanel) panelists.push(m);
+      else if (isVisitor(m.level)) other.push(m);
+      else current.push(m);
+    }
+
+    const byName = (a: Member, b: Member) => a.name.localeCompare(b.name);
+    current.sort(byName);
+    panelists.sort(byName);
+    alumni.sort(byName);
+    other.sort(byName);
+    return { current, panelists, alumni, other };
+  }, [editorMembers, teamData]);
+
+  const selectedMember = editorMembers.find((m) => m.slug === editMember);
+  const editableProjects = useMemo(
+    () => listedOnly(projects, session?.level, session?.memberSlug, slugOnProject),
+    [projects, session?.level, session?.memberSlug],
+  );
+  const editableEvents = useMemo(
+    () => listedOnly(events, session?.level, session?.memberSlug, slugOnEvent),
+    [events, session?.level, session?.memberSlug],
+  );
+  const editableResources = useMemo(
+    () => listedOnly(resources, session?.level, session?.memberSlug, slugOnResource),
+    [resources, session?.level, session?.memberSlug],
+  );
+  const selectedProject = editableProjects.find((p) => p.slug === editProject);
   const knownTags = useMemo(() => {
     const set = new Set<string>();
     for (const p of projects) {
@@ -117,8 +210,8 @@ export function AdminTabs({
     }
     return [...set].sort((a, b) => a.localeCompare(b));
   }, [projects]);
-  const selectedEvent = events.find((e) => e.slug === editEvent);
-  const selectedResource = resources.find((r) => r.slug === editResource);
+  const selectedEvent = editableEvents.find((e) => e.slug === editEvent);
+  const selectedResource = editableResources.find((r) => r.slug === editResource);
 
   return (
     <div>
@@ -166,27 +259,57 @@ export function AdminTabs({
       </div>
 
       <div className="mt-8 space-y-6">
-        {tab === "members" && (
+        {tab === "members" && isAdmin && (
           <>
             <label className="block max-w-md text-xs font-semibold text-ink">
-              Edit existing member
+              Edit roster entry
               <select
                 value={editMember}
                 onChange={(e) => setEditMember(e.target.value)}
                 className="mt-1.5 w-full rounded-lg bg-white px-3 py-2.5 text-sm shadow-card-sm"
               >
-                <option value="">— create new —</option>
-                {members.map((m) => (
-                  <option key={m.slug} value={m.slug}>
-                    {m.name} ({m.slug})
-                    {isVisitor(m.level) ? " — Non-ARIES" : ""}
-                  </option>
-                ))}
+                <option value="">— create new roster row —</option>
+                {memberGroups.current.length > 0 && (
+                  <optgroup label="Current team">
+                    {memberGroups.current.map((m) => (
+                      <option key={m.slug} value={m.slug}>
+                        {m.name} ({m.slug})
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
+                {memberGroups.panelists.length > 0 && (
+                  <optgroup label="Panelists">
+                    {memberGroups.panelists.map((m) => (
+                      <option key={m.slug} value={m.slug}>
+                        {m.name} ({m.slug}) — Panelist
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
+                {memberGroups.alumni.length > 0 && (
+                  <optgroup label="Alumni">
+                    {memberGroups.alumni.map((m) => (
+                      <option key={m.slug} value={m.slug}>
+                        {m.name} ({m.slug}) — Alumni
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
+                {memberGroups.other.length > 0 && (
+                  <optgroup label="Other">
+                    {memberGroups.other.map((m) => (
+                      <option key={m.slug} value={m.slug}>
+                        {m.name} ({m.slug})
+                        {isVisitor(m.level) ? " — Non-ARIES" : ""}
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
               </select>
             </label>
             <MemberForm
               key={editMember || "new-member"}
-              canSetKerberos={isAdmin}
               initial={
                 selectedMember
                   ? {
@@ -199,10 +322,7 @@ export function AdminTabs({
                       photo: selectedMember.avatar,
                       entryNumber: selectedMember.entryNumber,
                       email: selectedMember.email,
-                      about:
-                        typeof selectedMember.blocks.find((b) => b.type === "text")?.data === "string"
-                          ? (selectedMember.blocks.find((b) => b.type === "text")?.data as string)
-                          : "",
+                      level: selectedMember.level,
                     }
                   : undefined
               }
@@ -250,7 +370,7 @@ export function AdminTabs({
                 className="mt-1.5 w-full rounded-lg bg-white px-3 py-2.5 text-sm shadow-card-sm"
               >
                 <option value="">— create new —</option>
-                {projects.map((p) => (
+                {editableProjects.map((p) => (
                   <option key={p.slug} value={p.slug}>
                     {p.name}
                   </option>
@@ -303,7 +423,7 @@ export function AdminTabs({
                 className="mt-1.5 w-full rounded-lg bg-white px-3 py-2.5 text-sm shadow-card-sm"
               >
                 <option value="">— create new —</option>
-                {events.map((ev) => (
+                {editableEvents.map((ev) => (
                   <option key={ev.slug} value={ev.slug}>
                     {ev.title}
                   </option>
@@ -312,6 +432,7 @@ export function AdminTabs({
             </label>
             <EventForm
               key={`${editEvent || "new-event"}-${eventFormKey}`}
+              members={members}
               initial={
                 selectedEvent
                   ? {
@@ -361,7 +482,7 @@ export function AdminTabs({
                 className="mt-1.5 w-full rounded-lg bg-white px-3 py-2.5 text-sm shadow-card-sm"
               >
                 <option value="">— create new —</option>
-                {resources.map((r) => (
+                {editableResources.map((r) => (
                   <option key={r.slug} value={r.slug}>
                     {r.title}
                   </option>
@@ -401,23 +522,29 @@ export function AdminTabs({
         )}
 
         {tab === "profile" && member && (
-          <ProfileEditor
-            member={member}
-            onSaved={(updated) => {
-              setMembers((prev) => prev.map((m) => (m.slug === updated.slug ? updated : m)));
-              void refreshSession();
-              router.refresh();
-            }}
-          />
+          <div className="space-y-6">
+            <ProfileEditor
+              member={member}
+              onSaved={(updated) => {
+                setMembers((prev) => prev.map((m) => (m.slug === updated.slug ? updated : m)));
+                void refreshSession();
+                router.refresh();
+              }}
+            />
+            <ChangePasswordForm />
+          </div>
         )}
         {tab === "profile" && !member && (
-          <div className="max-w-2xl rounded-2xl bg-white p-6 shadow-card-sm">
-            <p className="text-sm font-bold text-ink">No public profile for this login</p>
-            <p className="mt-2 text-sm leading-6 text-ink/60">
-              The <code className="text-xs">admin</code> account is a CMS-only login, so it has no
-              member page to edit. Use the Members tab to edit someone&rsquo;s profile, or sign in
-              with a personal Kerberos account to edit your own.
-            </p>
+          <div className="max-w-2xl space-y-6">
+            <div className="rounded-2xl bg-white p-6 shadow-card-sm">
+              <p className="text-sm font-bold text-ink">No public profile for this login</p>
+              <p className="mt-2 text-sm leading-6 text-ink/60">
+                The <code className="text-xs">admin</code> account is a CMS-only login, so it has no
+                member page to edit. Use the Members tab to edit someone&rsquo;s profile, or sign in
+                with a personal Kerberos account to edit your own.
+              </p>
+            </div>
+            <ChangePasswordForm />
           </div>
         )}
 

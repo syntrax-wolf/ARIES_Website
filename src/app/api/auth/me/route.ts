@@ -1,31 +1,18 @@
 import { NextResponse } from "next/server";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { resolveMemberDisplay } from "@/lib/auth-profile";
+import { getSessionInfo } from "@/lib/auth-session";
 
 export async function GET() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
+  const session = await getSessionInfo();
+  if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const metaSlug = String(user.app_metadata?.member_slug ?? "");
-  const metaLevel = String(user.app_metadata?.level ?? "");
-  const display = await resolveMemberDisplay(supabase, {
-    userId: user.id,
-    memberSlug: metaSlug,
-    fallbackName: String(user.user_metadata?.name || metaSlug || "Member"),
-  });
-
   return NextResponse.json({
-    token: "",
-    memberSlug: display.memberSlug || metaSlug,
-    level: display.level || metaLevel,
-    name: display.name,
-    avatar: display.avatar ?? "",
-    email: user.email ?? "",
-    role: display.level || metaLevel,
+    memberSlug: session.memberSlug,
+    level: session.level,
+    name: session.name,
+    avatar: session.avatar ?? "",
+    email: session.email,
+    role: session.level,
   });
 }

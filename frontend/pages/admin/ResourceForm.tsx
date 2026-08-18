@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Save, Trash2 } from "lucide-react";
 import type { Member, Resource, ResourceAuthor } from "@/lib/types";
 import { Input, TextArea } from "./ProjectForm";
@@ -27,6 +27,11 @@ export function ResourceForm({
   const [featured, setFeatured] = useState(!!initial?.featured);
   const [authors, setAuthors] = useState<Resource["authors"]>(initial?.authors ?? []);
   const [type, setType] = useState<Resource["type"]>(initial?.type ?? "Blog");
+  const [people, setPeople] = useState(members);
+
+  useEffect(() => {
+    setPeople(members);
+  }, [members]);
 
   const ensureMember = async (slug: string, name: string) => {
     const res = await fetch("/api/admin/ensure-member", {
@@ -158,8 +163,9 @@ export function ResourceForm({
         label="Authors"
         value={authors ?? []}
         onChange={setAuthors}
-        members={members}
+        members={people}
         onEnsureMember={ensureMember}
+        onMemberCreated={(m) => setPeople((prev) => (prev.some((x) => x.slug === m.slug) ? prev : [...prev, m]))}
         factory={(name, slug): ResourceAuthor => ({ name, slug, kind: "member" })}
         placeholder="Search by name or slug…"
       />

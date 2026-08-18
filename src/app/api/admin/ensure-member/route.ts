@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { createSupabaseServerClient, createSupabaseServiceClient } from "@/lib/supabase/server";
+import { createSupabaseServiceClient } from "@/lib/supabase/server";
+import { getSessionInfo } from "@/lib/auth-session";
 import { canDirectPublish, canPublishResource, canSubmitForApproval } from "@/lib/roles";
 import { slugifyName } from "@/lib/utils";
 import type { Member } from "@/lib/types";
@@ -11,15 +12,12 @@ const SLUG_RE = /^[a-z0-9][a-z0-9-]*$/;
  * Only authenticated members who can edit projects/events may create visitors.
  */
 export async function POST(req: Request) {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
+  const session = await getSessionInfo();
+  if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const level = String(user.app_metadata?.level ?? "");
+  const level = session.level;
   if (!canDirectPublish(level) && !canSubmitForApproval(level) && !canPublishResource(level)) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
@@ -75,6 +73,16 @@ export async function POST(req: Request) {
   });
 
   if (error) {
+    const msg = error.message || "";
+    if (/members_level_check|violates check constraint/i.test(msg)) {
+      return NextResponse.json(
+        {
+          error:
+            "Database is missing the visitor role. Run supabase/migrations/20260802000000_add_visitor_level.sql in the Supabase SQL editor, then try again.",
+        },
+        { status: 400 },
+      );
+    }
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
 

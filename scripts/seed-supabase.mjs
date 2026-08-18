@@ -27,12 +27,20 @@ const CONTENT = path.join(ROOT, "content");
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const adminUser = (process.env.ADMIN_USER || "admin").toLowerCase();
-const adminPass = process.env.ADMIN_PASSWORD || "password";
+const adminPass = process.env.ADMIN_PASSWORD;
 const bloggerUser = (process.env.BLOGGER_USER || "blogger").toLowerCase();
-const bloggerPass = process.env.BLOGGER_PASSWORD || "blog1234";
+const bloggerPass = process.env.BLOGGER_PASSWORD;
 
 if (!url || !serviceKey) {
   console.error("Need NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env.local");
+  process.exit(1);
+}
+if (!adminPass || adminPass === "password") {
+  console.error("Set a strong ADMIN_PASSWORD in .env.local (do not use the default 'password').");
+  process.exit(1);
+}
+if (!bloggerPass || bloggerPass === "blog1234") {
+  console.error("Set a strong BLOGGER_PASSWORD in .env.local.");
   process.exit(1);
 }
 

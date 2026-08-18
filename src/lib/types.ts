@@ -44,6 +44,14 @@ export type ProfileProject = {
 export type CourseworkItem = { name: string; topics: string };
 export type InternshipItem = { role: string; org?: string; description: string };
 
+export type SocialLinkKind = "linkedin" | "github" | "website" | "custom";
+
+export type SocialLink = {
+  label: string;
+  url: string;
+  kind?: SocialLinkKind;
+};
+
 export type Member = {
   slug: string;
   name: string;
@@ -53,7 +61,7 @@ export type Member = {
   location?: string; // e.g. "IIT Delhi"
   avatar?: string; // image path; falls back to initials
   resumeUrl?: string;
-  socials: { label: string; url: string }[];
+  socials: SocialLink[];
   blocks: ProfileBlock[];
   /** Club tier from the members table (e.g. visitor, executive). Backup JSON omits this. */
   level?: MemberLevel;
@@ -114,6 +122,8 @@ export type AriesEvent = {
   images?: string[];
   video?: string; // short clip URL (mp4/webm)
   links: { label: string; url: string }[];
+  /** Organizers / people listed on the event (same shape as project contributors). */
+  contributors?: Array<string | ProjectContributor>;
 };
 
 /* ---------- Resources ---------- */
@@ -135,6 +145,16 @@ export type Resource = {
   body?: string; // long-form markdown content
   featured?: boolean;
   coverImage?: string;
+  /** True when the resource originates from Sanity CMS. */
+  _sanity?: boolean;
+};
+
+/** A Sanity blog post surfaced as a Resource with its Portable Text body. */
+export type SanityBlogResource = Resource & {
+  _sanity: true;
+  _sanitySlug: string;
+  _portableTextBody?: any[];
+  _mainImage?: any;
 };
 
 /* ---------- Team ---------- */

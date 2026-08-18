@@ -1,42 +1,34 @@
 import { NextResponse } from "next/server";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServerClient, createSupabaseServiceClient } from "@/lib/supabase/server";
 import { canApprove, isLeadership } from "@/lib/roles";
 import { revalidateContent } from "@/lib/revalidate";
+import { getSessionInfo } from "@/lib/auth-session";
 
 async function requireApprover() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return { error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
-
-  const { data: member } = await supabase
-    .from("members")
-    .select("slug, level")
-    .eq("auth_user_id", user.id)
-    .maybeSingle();
-
-  const level = String(member?.level || user.app_metadata?.level || "");
-  if (!canApprove(level) && !isLeadership(level)) {
+  const session = await getSessionInfo();
+  if (!session) return { error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
+  if (!canApprove(session.level) && !isLeadership(session.level)) {
     return { error: NextResponse.json({ error: "Forbidden" }, { status: 403 }) };
   }
-  return { supabase, user, level };
+  const supabase = await createSupabaseServerClient();
+  const db = createSupabaseServiceClient();
+  return { supabase, db, session };
 }
 
 export async function GET() {
   const gate = await requireApprover();
   if ("error" in gate && gate.error) return gate.error;
-  const { supabase } = gate as Awaited<ReturnType<typeof requireApprover>> & {
-    supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>;
+  const { db } = gate as Awaited<ReturnType<typeof requireApprover>> & {
+    db: ReturnType<typeof createSupabaseServiceClient>;
   };
 
   const [{ data: requests }, { data: log }] = await Promise.all([
-    supabase
+    db
       .from("change_requests")
       .select("*")
       .eq("status", "pending")
       .order("created_at", { ascending: false }),
-    supabase
+    db
       .from("change_log")
       .select("*")
       .order("created_at", { ascending: false })
@@ -49,8 +41,9 @@ export async function GET() {
 export async function POST(req: Request) {
   const gate = await requireApprover();
   if ("error" in gate && gate.error) return gate.error;
-  const { supabase } = gate as Awaited<ReturnType<typeof requireApprover>> & {
+  const { supabase, db } = gate as Awaited<ReturnType<typeof requireApprover>> & {
     supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>;
+    db: ReturnType<typeof createSupabaseServiceClient>;
   };
 
   const body = (await req.json()) as {
@@ -62,7 +55,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
 
-  const { data: pending } = await supabase
+  const { data: pending } = await db
     .from("change_requests")
     .select("entity_type, entity_slug")
     .eq("id", body.requestId)

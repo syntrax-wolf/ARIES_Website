@@ -2,20 +2,33 @@
 
 import { useState } from "react";
 import { Save } from "lucide-react";
-import { Input, TextArea } from "./ProjectForm";
+import { Input } from "./ProjectForm";
 import { ImageField } from "./ImageField";
+import type { MemberLevel } from "@/lib/supabase/env";
 
 const MEMBER_ROLES = [
   "Research Coordinator",
   "Coordinator",
   "Executive",
   "Research Executive",
+  "Panelist",
+  "Alumni",
 ] as const;
 
-/** Create / update a member profile JSON (+ optional Kerberos for leadership). */
+const CLUB_LEVELS: { value: MemberLevel; label: string }[] = [
+  { value: "oc", label: "OC" },
+  { value: "co_overall_coordinator", label: "Co-Overall Coordinator" },
+  { value: "research_lead", label: "Research Lead" },
+  { value: "coordinator", label: "Coordinator" },
+  { value: "executive", label: "Executive" },
+  { value: "member", label: "Member" },
+  { value: "alumni", label: "Alumni" },
+  { value: "visitor", label: "Visitor" },
+];
+
+/** Leadership roster tools — identity only. Never overwrites another member's profile blocks. */
 export function MemberForm({
   initial,
-  canSetKerberos = false,
   onSaved,
 }: {
   initial?: {
@@ -26,12 +39,10 @@ export function MemberForm({
     year?: string;
     location?: string;
     photo?: string;
-    about?: string;
     entryNumber?: string;
     email?: string;
+    level?: MemberLevel;
   };
-  /** OC / Co-OC / Research Lead can set Kerberos so the person can sign up. */
-  canSetKerberos?: boolean;
   onSaved?: (slug: string) => void;
 }) {
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
@@ -45,23 +56,9 @@ export function MemberForm({
     const slug =
       String(f.get("slug") ?? "").trim() ||
       name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-    const about = String(f.get("about") ?? "").trim();
     const entryNumber = String(f.get("entryNumber") ?? "").trim().toLowerCase();
     const email = String(f.get("email") ?? "").trim().toLowerCase();
-
-    const data = {
-      slug,
-      name,
-      role: String(f.get("role") ?? ""),
-      tagline: String(f.get("tagline") ?? ""),
-      year: String(f.get("year") ?? "") || undefined,
-      location: String(f.get("location") ?? "") || "IIT Delhi",
-      avatar: photo || undefined,
-      socials: [],
-      blocks: about
-        ? [{ id: "about", type: "text" as const, span: "full" as const, title: "About", data: about }]
-        : [],
-    };
+    const clubLevel = String(f.get("clubLevel") ?? "member");
 
     setStatus("saving");
     setErrorMsg(null);
@@ -71,14 +68,20 @@ export function MemberForm({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         kind: "members",
+        action: "roster",
         slug,
-        data,
-        ...(canSetKerberos
-          ? {
-              entryNumber: entryNumber || null,
-              email: email || null,
-            }
-          : {}),
+        entryNumber: entryNumber || null,
+        email: email || null,
+        data: {
+          slug,
+          name,
+          role: String(f.get("role") ?? ""),
+          tagline: String(f.get("tagline") ?? ""),
+          year: String(f.get("year") ?? "") || undefined,
+          location: String(f.get("location") ?? "") || "IIT Delhi",
+          avatar: photo || undefined,
+          clubLevel,
+        },
       }),
     });
     const body = await res.json().catch(() => ({}));
@@ -96,13 +99,17 @@ export function MemberForm({
   return (
     <form onSubmit={submit} className="max-w-2xl space-y-4 rounded-2xl bg-white p-6 shadow-card-sm">
       <h2 className="text-base font-bold text-ink">
-        {initial?.slug ? `Edit member · ${initial.slug}` : "New member"}
+        {initial?.slug ? `Roster · ${initial.slug}` : "New roster entry"}
       </h2>
+      <p className="text-xs leading-5 text-ink/55">
+        Updates name, role, Kerberos, and club level. Does not replace the person&rsquo;s public
+        profile sections — they edit those themselves.
+      </p>
       <div className="grid gap-4 sm:grid-cols-2">
         <Input name="name" label="Name *" required defaultValue={initial?.name} />
         <Input name="slug" label="Slug" placeholder="auto from name" defaultValue={initial?.slug} />
         <label className="block">
-          <span className="text-xs font-semibold text-ink">Role *</span>
+          <span className="text-xs font-semibold text-ink">Display role *</span>
           <select
             name="role"
             required
@@ -112,13 +119,27 @@ export function MemberForm({
             <option value="" disabled>
               Select role…
             </option>
-            {initial?.role &&
-              !(MEMBER_ROLES as readonly string[]).includes(initial.role) && (
-                <option value={initial.role}>{initial.role}</option>
-              )}
+            {initial?.role && !(MEMBER_ROLES as readonly string[]).includes(initial.role) && (
+              <option value={initial.role}>{initial.role}</option>
+            )}
             {MEMBER_ROLES.map((r) => (
               <option key={r} value={r}>
                 {r}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="block">
+          <span className="text-xs font-semibold text-ink">Club level *</span>
+          <select
+            name="clubLevel"
+            required
+            defaultValue={initial?.level ?? "member"}
+            className="mt-1.5 w-full rounded-lg bg-[#f3eef8] px-3.5 py-2.5 text-sm outline-none focus:ring-2 focus:ring-purple/40"
+          >
+            {CLUB_LEVELS.map((l) => (
+              <option key={l.value} value={l.value}>
+                {l.label}
               </option>
             ))}
           </select>
@@ -127,34 +148,30 @@ export function MemberForm({
         <Input name="location" label="Location" defaultValue={initial?.location ?? "IIT Delhi"} />
         <Input name="tagline" label="Tagline" defaultValue={initial?.tagline} />
       </div>
-      {canSetKerberos && (
-        <div className="grid gap-4 rounded-xl border border-[#eee4d6] bg-[#fbf8ff] p-4 sm:grid-cols-2">
-          <Input
-            name="entryNumber"
-            label="Kerberos / entry number (signup ID)"
-            placeholder="cs1240559"
-            defaultValue={initial?.entryNumber}
-          />
-          <Input
-            name="email"
-            label="IITD email"
-            placeholder="cs1240559@iitd.ac.in"
-            defaultValue={initial?.email}
-          />
-          <p className="sm:col-span-2 text-[11px] text-ink/55">
-            Required for signup. Use the part before @ in their IITD mail (e.g.{" "}
-            <code>cs1240559</code>). Without this, signup shows “not on the roster”.
-          </p>
-        </div>
-      )}
+      <div className="grid gap-4 rounded-xl border border-[#eee4d6] bg-[#fbf8ff] p-4 sm:grid-cols-2">
+        <Input
+          name="entryNumber"
+          label="Kerberos (DevClub mapping)"
+          placeholder="cs1240559"
+          defaultValue={initial?.entryNumber}
+        />
+        <Input
+          name="email"
+          label="IITD email"
+          placeholder="cs1240559@iitd.ac.in"
+          defaultValue={initial?.email}
+        />
+        <p className="sm:col-span-2 text-[11px] text-ink/55">
+          Used to match IIT Delhi sign-in to this roster row. Members edit their own profile page.
+        </p>
+      </div>
       <ImageField label="Profile photo" kind="members" value={photo} onChange={setPhoto} />
-      <TextArea name="about" label="About" rows={4} defaultValue={initial?.about} />
       <button
         disabled={status === "saving"}
         className="flex items-center gap-2 rounded-lg bg-purple px-5 py-2.5 text-sm font-bold text-white disabled:opacity-50"
       >
         <Save size={15} />
-        {status === "saving" ? "Saving…" : status === "saved" ? "Saved ✓" : status === "error" ? "Failed" : "Save member"}
+        {status === "saving" ? "Saving…" : status === "saved" ? "Saved ✓" : status === "error" ? "Failed" : "Save roster"}
       </button>
       {errorMsg && <p className="text-xs font-semibold text-red-600">{errorMsg}</p>}
     </form>

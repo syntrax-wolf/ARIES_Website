@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowLeft, CalendarDays, ExternalLink, Link2 } from "lucide-react";
-import { getResource, getResources } from "@/lib/content";
+import { getResource, getResources, getSanityBlog, getSanityBlogs } from "@/lib/content";
 import { CategoryBadge } from "frontend/shared/ui/CategoryBadge";
 import { Markdown } from "frontend/shared/ui/Markdown";
+import { SanityBody } from "frontend/shared/ui/SanityBody";
 import { authorLabel } from "@/lib/contributors";
+import type { SanityBlogResource } from "@/lib/types";
 
 export async function generateStaticParams() {
-  const resources = await getResources();
-  return resources.filter((r) => r.slug).map((r) => ({ slug: r.slug }));
+  const [resources, blogs] = await Promise.all([getResources(), getSanityBlogs()]);
+  return [...resources, ...blogs].filter((r) => r.slug).map((r) => ({ slug: r.slug }));
 }
 
 export async function generateMetadata({
@@ -18,8 +21,21 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const resource = await getResource(slug);
+  const resource = await resolveResource(slug);
   return { title: resource?.title ?? "Resource" };
+}
+
+async function resolveResource(slug: string) {
+  const supabase = await getResource(slug);
+  if (supabase) return supabase;
+  if (slug.startsWith("blog-")) {
+    return getSanityBlog(slug.replace(/^blog-/, ""));
+  }
+  return undefined;
+}
+
+function isSanityResource(r: any): r is SanityBlogResource {
+  return r?._sanity === true;
 }
 
 export default async function ResourceDetailPage({
@@ -28,7 +44,7 @@ export default async function ResourceDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const resource = await getResource(slug);
+  const resource = await resolveResource(slug);
   if (!resource) notFound();
 
   const d = new Date(resource.addedOn + "T00:00:00");
@@ -40,7 +56,10 @@ export default async function ResourceDetailPage({
   });
 
   const authors = resource.authors ?? [];
-  const hasBody = (resource.body ?? "").trim().length > 0;
+  const sanity = isSanityResource(resource);
+  const hasBody = sanity
+    ? (resource._portableTextBody?.length ?? 0) > 0
+    : (resource.body ?? "").trim().length > 0;
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[linear-gradient(160deg,#f6f1fb_0%,#ece2f7_55%,#e0d2f3_100%)]">
@@ -82,7 +101,11 @@ export default async function ResourceDetailPage({
 
         <div className="mt-8 max-w-3xl text-[17px] leading-8 text-[#1c1633]">
           {hasBody ? (
-            <Markdown source={resource.body || ""} />
+            sanity ? (
+              <SanityBody value={resource._portableTextBody!} />
+            ) : (
+              <Markdown source={resource.body || ""} />
+            )
           ) : (
             <p>{resource.description}</p>
           )}

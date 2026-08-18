@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { TeamData, TeamYear } from "@/lib/types";
+import { sortTeamYears } from "@/lib/team-years";
 import { yearPhotos, withYearPhotos } from "@/lib/team-photos";
 import { MultiImageField } from "./MultiImageField";
 
@@ -36,7 +37,7 @@ export function TeamPhotoForm({
   };
 
   const persist = async (years: TeamYear[]) => {
-    const next: TeamData = { ...team, years };
+    const next: TeamData = { ...team, years: sortTeamYears(years) };
     const res = await fetch("/api/admin/save", {
       method: "POST",
       credentials: "include",
@@ -88,7 +89,7 @@ export function TeamPhotoForm({
         coordinators: [],
         executives: [],
       };
-      await persist([blank, ...team.years]);
+      await persist([...team.years, blank]);
       setNewYear("");
       selectYear(label);
       setStatus("saved");
@@ -104,8 +105,8 @@ export function TeamPhotoForm({
     <div className="max-w-2xl space-y-4 rounded-2xl bg-white p-6 shadow-card-sm">
       <h2 className="text-base font-bold text-ink">Full team photos</h2>
       <p className="text-xs text-ink/55">
-        Upload one or more group shots for the selected year. They appear in the Team page
-        carousel. Roster for each year is unchanged.
+        Upload one or more group shots for the selected year. Years sort automatically
+        (newest left in the carousel). Only the newest year&apos;s roster is shown on /team.
       </p>
 
       <label className="block text-xs font-semibold text-ink">
@@ -153,7 +154,9 @@ export function TeamPhotoForm({
       </div>
 
       <div className="border-t border-[#eee4d6] pt-4">
-        <p className="text-xs font-semibold text-ink">Add a year (empty roster + photo slots)</p>
+        <p className="text-xs font-semibold text-ink">
+          Add a year (e.g. 2027-28 — sorts to the front when it&apos;s the newest)
+        </p>
         <div className="mt-2 flex flex-wrap gap-2">
           <input
             value={newYear}

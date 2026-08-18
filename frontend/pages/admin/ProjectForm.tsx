@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Save, Trash2 } from "lucide-react";
 import type { Member, Project, ProjectContributor } from "@/lib/types";
 import { normalizeContributors } from "@/lib/contributors";
@@ -36,6 +36,11 @@ export function ProjectForm({
   const [contributors, setContributors] = useState<ProjectContributor[]>(() =>
     normalizeContributors(initial?.contributors, members),
   );
+  const [people, setPeople] = useState(members);
+
+  useEffect(() => {
+    setPeople(members);
+  }, [members]);
 
   const ensureMember = async (slug: string, name: string) => {
     const res = await fetch("/api/admin/ensure-member", {
@@ -183,8 +188,9 @@ export function ProjectForm({
           label="Contributors"
           value={contributors}
           onChange={setContributors}
-          members={members}
+          members={people}
           onEnsureMember={ensureMember}
+          onMemberCreated={(m) => setPeople((prev) => (prev.some((x) => x.slug === m.slug) ? prev : [...prev, m]))}
           factory={(name, slug): ProjectContributor => ({ name, slug, kind: "member" })}
           placeholder="Search by name or slug…"
         />

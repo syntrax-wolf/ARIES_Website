@@ -27,7 +27,6 @@ export const sidebarLinks: NavLink[] = [
   { label: "Projects", href: "/projects", icon: FolderKanban },
   { label: "Team", href: "/team", icon: Users },
   { label: "Resources", href: "/resources", icon: Library },
-  { label: "Blogs", href: "/blog", icon: Library },
   { label: "Contact", href: "/contact", icon: Mail },
 ];
 
