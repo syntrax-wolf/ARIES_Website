@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
         hostname: "lkhansubwrevcvsatcuc.supabase.co",
         pathname: "/storage/v1/object/public/**",
       },
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+      },
     ],
   },
 };
