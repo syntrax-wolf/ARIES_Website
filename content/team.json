@@ -1,0 +1,43 @@
+{
+  "years": [
+    {
+      "year": "2026-27",
+      "coreTeam": [
+        {
+          "name": "Ada Lovelace",
+          "role": "Overall Coordinator",
+          "slug": "ada-lovelace"
+        }
+      ],
+      "coordinators": [
+        {
+          "name": "Grace Hopper",
+          "role": "Coordinator",
+          "slug": "grace-hopper"
+        }
+      ],
+      "executives": [
+        {
+          "group": "BRAIN",
+          "members": [
+            { "name": "Alan Turing", "role": "Executive", "slug": "alan-turing" }
+          ]
+        },
+        {
+          "group": "CANVAS",
+          "members": [
+            { "name": "Katherine Johnson", "role": "Executive", "slug": "katherine-johnson" }
+          ]
+        }
+      ]
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Former Member",
+      "role": "Research Engineer",
+      "org": "Acme Labs",
+      "slug": "former-member"
+    }
+  ]
+}

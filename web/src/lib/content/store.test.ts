@@ -38,6 +38,30 @@ test("a missing Project slug is empty", () => {
   assert.equal(store.getProject("missing"), undefined);
 });
 
+test("a Team Year with one core Member is returned by the reader", () => {
+  const store = createContentStore({
+    team: {
+      years: [
+        {
+          year: "2026-27",
+          coreTeam: [
+            { name: "Ada Lovelace", role: "Overall Coordinator", slug: "ada-lovelace" },
+          ],
+          coordinators: [],
+          executives: [],
+        },
+      ],
+      alumni: [{ name: "Former Member", role: "Engineer", org: "Acme", slug: "former-member" }],
+    },
+  });
+
+  const team = store.getTeam();
+  assert.equal(team.years[0]?.year, "2026-27");
+  assert.equal(team.years[0]?.coreTeam[0]?.name, "Ada Lovelace");
+  assert.equal(team.years[0]?.coreTeam[0]?.slug, "ada-lovelace");
+  assert.equal(team.alumni[0]?.name, "Former Member");
+});
+
 test("a past Event and a future Event land in the right lists", () => {
   const store = createContentStore({
     events: [

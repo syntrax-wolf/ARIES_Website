@@ -1,0 +1,19 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { TopNav } from "../../components/landing/TopNav";
+import { TeamExplorer } from "../../components/team/TeamExplorer";
+import { AlumniSection } from "../../components/team/AlumniSection";
+import { loadJsonBackupStore } from "../../lib/content/store";
+
+const team = loadJsonBackupStore().getTeam();
+---
+
+<Layout title="Team | ARIES IIT Delhi">
+  <TopNav client:load />
+  <div class="min-h-screen bg-[linear-gradient(180deg,#efe9f7_0%,#e6ddf5_45%,#f8f1e7_46%,#fbf4ec_100%)] pt-24">
+    <div class="mx-auto max-w-[1360px] px-6 pt-14 md:px-14">
+      <TeamExplorer client:load team={team} />
+      <AlumniSection client:load alumni={team.alumni} />
+    </div>
+  </div>
+</Layout>

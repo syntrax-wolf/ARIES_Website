@@ -1,6 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { AriesEvent, Project } from "../../../../src/lib/types.ts";
+import type { AriesEvent, Project, TeamData } from "../../../../src/lib/types.ts";
+
+const EMPTY_TEAM: TeamData = { years: [], alumni: [] };
 
 export type ContentStore = {
   listProjects(): Project[];
@@ -8,14 +10,20 @@ export type ContentStore = {
   listEvents(): AriesEvent[];
   getEvent(slug: string): AriesEvent | undefined;
   splitEvents(now?: Date): { upcoming: AriesEvent[]; past: AriesEvent[] };
+  getTeam(): TeamData;
 };
 
 export function createContentStore(seed: {
   projects?: Project[];
   events?: AriesEvent[];
+  team?: TeamData;
 }): ContentStore {
   const projects = [...(seed.projects ?? [])];
   const events = [...(seed.events ?? [])];
+  const team: TeamData = {
+    years: [...(seed.team?.years ?? [])].sort((a, b) => b.year.localeCompare(a.year)),
+    alumni: [...(seed.team?.alumni ?? [])],
+  };
   const projectsBySlug = new Map(projects.map((p) => [p.slug, p]));
   const eventsBySlug = new Map(events.map((e) => [e.slug, e]));
   return {
@@ -32,6 +40,7 @@ export function createContentStore(seed: {
         past: events.filter((e) => e.date < today),
       };
     },
+    getTeam: () => team,
   };
 }
 
@@ -52,18 +61,25 @@ export function loadEventsFromJsonDir(dir: string): AriesEvent[] {
   return readJsonDir<AriesEvent>(dir);
 }
 
-function jsonDir(kind: "projects" | "events"): string {
+function contentRoot(): string {
   const candidates = [
-    path.join(process.cwd(), "content", kind),
-    path.join(process.cwd(), "..", "content", kind),
+    path.join(process.cwd(), "content"),
+    path.join(process.cwd(), "..", "content"),
   ];
   return candidates.find((dir) => fs.existsSync(dir)) ?? candidates[0];
 }
 
+export function loadTeamFromJsonFile(file: string): TeamData {
+  if (!fs.existsSync(file)) return EMPTY_TEAM;
+  return JSON.parse(fs.readFileSync(file, "utf8")) as TeamData;
+}
+
 /** Public reader over the JSON backup in `content/`. */
 export function loadJsonBackupStore(): ContentStore {
+  const root = contentRoot();
   return createContentStore({
-    projects: loadProjectsFromJsonDir(jsonDir("projects")),
-    events: loadEventsFromJsonDir(jsonDir("events")),
+    projects: loadProjectsFromJsonDir(path.join(root, "projects")),
+    events: loadEventsFromJsonDir(path.join(root, "events")),
+    team: loadTeamFromJsonFile(path.join(root, "team.json")),
   });
 }
