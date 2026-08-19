@@ -25,7 +25,7 @@ export async function resolveActor(
 
 export function projectsEditableBy(actor: Actor, projects: Project[]): Project[] {
   if (actor.session.kind === "admin" || isLeadership(actor.level)) return projects;
-  if (actor.level === "coordinator") {
+  if (actor.level === "coordinator" || actor.level === "executive") {
     return projects.filter((p) => isListedOnProject(p, actor.memberSlug));
   }
   return [];
@@ -33,7 +33,7 @@ export function projectsEditableBy(actor: Actor, projects: Project[]): Project[]
 
 export function eventsEditableBy(actor: Actor, events: AriesEvent[]): AriesEvent[] {
   if (actor.session.kind === "admin" || isLeadership(actor.level)) return events;
-  if (actor.level === "coordinator") {
+  if (actor.level === "coordinator" || actor.level === "executive") {
     return events.filter((e) => isListedOnEvent(e, actor.memberSlug));
   }
   return [];

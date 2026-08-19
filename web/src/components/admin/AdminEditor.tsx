@@ -1,11 +1,12 @@
 import { useMemo, useState } from "react";
-import { BookOpen, CalendarPlus, FolderPlus, LogOut } from "lucide-react";
+import { BookOpen, CalendarPlus, ClipboardList, FolderPlus, LogOut } from "lucide-react";
 import type { AriesEvent, Project, Resource } from "../../../../src/lib/types";
 import { ProjectForm } from "./ProjectForm";
 import { EventForm } from "./EventForm";
 import { ResourceForm } from "./ResourceForm";
+import { ApprovalsPanel } from "./ApprovalsPanel";
 
-type TabId = "projects" | "events" | "resources";
+type TabId = "projects" | "events" | "resources" | "approvals";
 
 export function AdminEditor({
   projects: initialProjects,
@@ -49,6 +50,7 @@ export function AdminEditor({
     projects: { label: "Projects", icon: FolderPlus },
     events: { label: "Events", icon: CalendarPlus },
     resources: { label: "Resources", icon: BookOpen },
+    approvals: { label: "Approvals", icon: ClipboardList },
   };
 
   return (
@@ -214,6 +216,8 @@ export function AdminEditor({
             />
           </>
         )}
+
+        {tab === "approvals" && <ApprovalsPanel />}
       </div>
     </div>
   );

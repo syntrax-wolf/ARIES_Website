@@ -1,4 +1,4 @@
-import { canDirectPublish, canPublishResource } from "../../../../src/lib/permissions.ts";
+import { canDirectPublish, canEnqueueChangeRequest, canPublishResource } from "../../../../src/lib/permissions.ts";
 import type { AriesEvent, Project, ProjectContributor, Resource } from "../../../../src/lib/types.ts";
 import type { GateSession } from "../gate/gate.ts";
 import type { WritableContentStore } from "./d1.ts";
@@ -10,7 +10,7 @@ export type Actor = {
 };
 
 export type PublishResult =
-  | { ok: true; mode: "direct" }
+  | { ok: true; mode: "direct" | "pending" }
   | { ok: false; error: string };
 
 export function isListedOnProject(project: Project, memberSlug: string): boolean {
@@ -52,19 +52,29 @@ export async function publishProject(
   actor: Actor,
   project: Project,
 ): Promise<PublishResult> {
-  const listed = isListedOnProject(project, actor.memberSlug);
-  if (!actorMayDirectPublish(actor, listed)) {
-    return { ok: false, error: "Not allowed to direct-publish this Project" };
+  const existing = await store.getProject(project.slug);
+  const listed = isListedOnProject(existing ?? project, actor.memberSlug);
+  if (actorMayDirectPublish(actor, listed)) {
+    const before = existing;
+    await store.saveProject(project);
+    await store.appendChangeLog({
+      kind: "projects",
+      slug: project.slug,
+      actor: logActor(actor),
+      summary: before ? "Updated Project" : "Created Project",
+    });
+    return { ok: true, mode: "direct" };
   }
-  const before = await store.getProject(project.slug);
-  await store.saveProject(project);
-  await store.appendChangeLog({
-    kind: "projects",
-    slug: project.slug,
-    actor: logActor(actor),
-    summary: before ? "Updated Project" : "Created Project",
-  });
-  return { ok: true, mode: "direct" };
+  if (canEnqueueChangeRequest(actor.level, listed)) {
+    await store.enqueueChangeRequest({
+      kind: "projects",
+      slug: project.slug,
+      payload: { ...project, __kind: "edit" },
+      submittedBy: actor.memberSlug,
+    });
+    return { ok: true, mode: "pending" };
+  }
+  return { ok: false, error: "Not allowed to direct-publish this Project" };
 }
 
 export async function publishEvent(
@@ -72,19 +82,29 @@ export async function publishEvent(
   actor: Actor,
   event: AriesEvent,
 ): Promise<PublishResult> {
-  const listed = isListedOnEvent(event, actor.memberSlug);
-  if (!actorMayDirectPublish(actor, listed)) {
-    return { ok: false, error: "Not allowed to direct-publish this Event" };
+  const existing = await store.getEvent(event.slug);
+  const listed = isListedOnEvent(existing ?? event, actor.memberSlug);
+  if (actorMayDirectPublish(actor, listed)) {
+    const before = existing;
+    await store.saveEvent(event);
+    await store.appendChangeLog({
+      kind: "events",
+      slug: event.slug,
+      actor: logActor(actor),
+      summary: before ? "Updated Event" : "Created Event",
+    });
+    return { ok: true, mode: "direct" };
   }
-  const before = await store.getEvent(event.slug);
-  await store.saveEvent(event);
-  await store.appendChangeLog({
-    kind: "events",
-    slug: event.slug,
-    actor: logActor(actor),
-    summary: before ? "Updated Event" : "Created Event",
-  });
-  return { ok: true, mode: "direct" };
+  if (canEnqueueChangeRequest(actor.level, listed)) {
+    await store.enqueueChangeRequest({
+      kind: "events",
+      slug: event.slug,
+      payload: { ...event, __kind: "edit" },
+      submittedBy: actor.memberSlug,
+    });
+    return { ok: true, mode: "pending" };
+  }
+  return { ok: false, error: "Not allowed to direct-publish this Event" };
 }
 
 export async function publishResource(

@@ -13,7 +13,7 @@ import {
 } from "../../lib/content/actor";
 import { documentDbFromLocals } from "../../lib/gate/runtime";
 import { sessionFromRequest } from "../../lib/gate/request";
-import { canPublishResource, isLeadership } from "../../../../src/lib/permissions";
+import { canApprove, canPublishResource, isLeadership } from "../../../../src/lib/permissions";
 
 const session = sessionFromRequest(Astro.request);
 if (!session) {
@@ -29,12 +29,20 @@ const resources = resourcesEditableBy(actor, await store.listResources());
 const label =
   session.kind === "admin" ? "Bootstrap Admin" : `Kerberos ${session.kerberos ?? ""}`;
 
-const tabs: Array<"projects" | "events" | "resources"> = [];
-if (actor.session.kind === "admin" || isLeadership(actor.level) || actor.level === "coordinator") {
+const tabs: Array<"projects" | "events" | "resources" | "approvals"> = [];
+if (
+  actor.session.kind === "admin" ||
+  isLeadership(actor.level) ||
+  actor.level === "coordinator" ||
+  actor.level === "executive"
+) {
   tabs.push("projects", "events");
 }
 if (actor.session.kind === "admin" || canPublishResource(actor.level)) {
   tabs.push("resources");
+}
+if (actor.session.kind === "admin" || canApprove(actor.level)) {
+  tabs.push("approvals");
 }
 ---
 

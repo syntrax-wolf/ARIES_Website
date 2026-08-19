@@ -23,6 +23,15 @@ CREATE TABLE IF NOT EXISTS change_log (
   summary TEXT NOT NULL,
   at TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS change_requests (
+  id TEXT PRIMARY KEY,
+  kind TEXT NOT NULL,
+  slug TEXT NOT NULL,
+  payload TEXT NOT NULL,
+  submitted_by TEXT NOT NULL,
+  created_at TEXT NOT NULL
+);
 `;
 
 export type DocumentKind = "projects" | "events" | "resources" | "members" | "team";
@@ -35,6 +44,15 @@ export type ChangeLogEntry = {
   at?: string;
 };
 
+export type ChangeRequest = {
+  id: string;
+  kind: DocumentKind;
+  slug: string;
+  payload: Record<string, unknown>;
+  submittedBy: string;
+  createdAt: string;
+};
+
 export type DocumentDb = {
   get(kind: DocumentKind, slug: string): Promise<string | undefined>;
   list(kind: DocumentKind): Promise<{ slug: string; data: string }[]>;
@@ -44,6 +62,10 @@ export type DocumentDb = {
   removeAllowlist(kerberos: string): Promise<void>;
   appendChangeLog(entry: ChangeLogEntry): Promise<void>;
   listChangeLog(kind?: string, slug?: string): Promise<ChangeLogEntry[]>;
+  enqueueChangeRequest(entry: Omit<ChangeRequest, "id" | "createdAt"> & { id?: string }): Promise<ChangeRequest>;
+  listChangeRequests(): Promise<ChangeRequest[]>;
+  getChangeRequest(id: string): Promise<ChangeRequest | undefined>;
+  deleteChangeRequest(id: string): Promise<void>;
 };
 
 export type ContentSeed = {
@@ -76,12 +98,17 @@ export type WritableContentStore = {
   removeAllowlist(kerberos: string): Promise<void>;
   appendChangeLog(entry: ChangeLogEntry): Promise<void>;
   listChangeLog(kind?: string, slug?: string): Promise<ChangeLogEntry[]>;
+  enqueueChangeRequest(entry: Omit<ChangeRequest, "id" | "createdAt"> & { id?: string }): Promise<ChangeRequest>;
+  listChangeRequests(): Promise<ChangeRequest[]>;
+  getChangeRequest(id: string): Promise<ChangeRequest | undefined>;
+  deleteChangeRequest(id: string): Promise<void>;
 };
 
 export function createMemoryDocumentDb(): DocumentDb {
   const docs = new Map<string, string>();
   const allow = new Set<string>();
   const log: ChangeLogEntry[] = [];
+  const requests: ChangeRequest[] = [];
   const key = (kind: DocumentKind, slug: string) => `${kind}:${slug}`;
   return {
     async get(kind, slug) {
@@ -113,6 +140,28 @@ export function createMemoryDocumentDb(): DocumentDb {
       return log.filter(
         (e) => (!kind || e.kind === kind) && (!slug || e.slug === slug),
       );
+    },
+    async enqueueChangeRequest(entry) {
+      const row: ChangeRequest = {
+        id: entry.id ?? crypto.randomUUID(),
+        kind: entry.kind,
+        slug: entry.slug,
+        payload: entry.payload,
+        submittedBy: entry.submittedBy,
+        createdAt: new Date().toISOString(),
+      };
+      requests.push(row);
+      return row;
+    },
+    async listChangeRequests() {
+      return [...requests].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    },
+    async getChangeRequest(id) {
+      return requests.find((r) => r.id === id);
+    },
+    async deleteChangeRequest(id) {
+      const i = requests.findIndex((r) => r.id === id);
+      if (i >= 0) requests.splice(i, 1);
     },
   };
 }
@@ -207,6 +256,18 @@ export function createWritableStore(db: DocumentDb): WritableContentStore {
     async listChangeLog(kind, slug) {
       return db.listChangeLog(kind, slug);
     },
+    async enqueueChangeRequest(entry) {
+      return db.enqueueChangeRequest(entry);
+    },
+    async listChangeRequests() {
+      return db.listChangeRequests();
+    },
+    async getChangeRequest(id) {
+      return db.getChangeRequest(id);
+    },
+    async deleteChangeRequest(id) {
+      await db.deleteChangeRequest(id);
+    },
   };
 }
 
@@ -300,6 +361,72 @@ export function createD1DocumentDb(d1: D1Like): DocumentDb {
         .bind(...(kind && slug ? [kind, slug] : []))
         .all<ChangeLogEntry>();
       return results ?? [];
+    },
+    async enqueueChangeRequest(entry) {
+      const row: ChangeRequest = {
+        id: entry.id ?? crypto.randomUUID(),
+        kind: entry.kind,
+        slug: entry.slug,
+        payload: entry.payload,
+        submittedBy: entry.submittedBy,
+        createdAt: new Date().toISOString(),
+      };
+      await d1
+        .prepare(
+          "INSERT INTO change_requests (id, kind, slug, payload, submitted_by, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+        )
+        .bind(row.id, row.kind, row.slug, JSON.stringify(row.payload), row.submittedBy, row.createdAt)
+        .run();
+      return row;
+    },
+    async listChangeRequests() {
+      const { results } = await d1
+        .prepare(
+          "SELECT id, kind, slug, payload, submitted_by, created_at FROM change_requests ORDER BY created_at DESC",
+        )
+        .all<{
+          id: string;
+          kind: DocumentKind;
+          slug: string;
+          payload: string;
+          submitted_by: string;
+          created_at: string;
+        }>();
+      return (results ?? []).map((row) => ({
+        id: row.id,
+        kind: row.kind,
+        slug: row.slug,
+        payload: JSON.parse(row.payload) as Record<string, unknown>,
+        submittedBy: row.submitted_by,
+        createdAt: row.created_at,
+      }));
+    },
+    async getChangeRequest(id) {
+      const row = await d1
+        .prepare(
+          "SELECT id, kind, slug, payload, submitted_by, created_at FROM change_requests WHERE id = ?",
+        )
+        .bind(id)
+        .first<{
+          id: string;
+          kind: DocumentKind;
+          slug: string;
+          payload: string;
+          submitted_by: string;
+          created_at: string;
+        }>();
+      if (!row) return undefined;
+      return {
+        id: row.id,
+        kind: row.kind,
+        slug: row.slug,
+        payload: JSON.parse(row.payload) as Record<string, unknown>,
+        submittedBy: row.submitted_by,
+        createdAt: row.created_at,
+      };
+    },
+    async deleteChangeRequest(id) {
+      await d1.prepare("DELETE FROM change_requests WHERE id = ?").bind(id).run();
     },
   };
 }
