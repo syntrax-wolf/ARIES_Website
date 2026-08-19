@@ -1,0 +1,90 @@
+---
+import { ArrowLeft, CalendarDays, ExternalLink, Link2 } from "lucide-react";
+import Layout from "../../layouts/Layout.astro";
+import { TopNav } from "../../components/landing/TopNav";
+import { CategoryBadge } from "../../components/ui/CategoryBadge";
+import { Markdown } from "../../components/ui/Markdown";
+import { loadJsonBackupStore } from "../../lib/content/store";
+
+export function getStaticPaths() {
+  return loadJsonBackupStore()
+    .listResources()
+    .map((r) => ({ params: { slug: r.slug } }));
+}
+
+const { slug } = Astro.params;
+const resource = loadJsonBackupStore().getResource(slug!);
+if (!resource) {
+  return new Response(null, { status: 404, statusText: "Not Found" });
+}
+
+const d = new Date(resource.addedOn + "T00:00:00");
+const dateLabel = d.toLocaleDateString("en-IN", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+const authors = resource.authors ?? [];
+const hasBody = (resource.body ?? "").trim().length > 0;
+---
+
+<Layout title={`${resource.title} | ARIES IIT Delhi`}>
+  <TopNav client:load />
+  <div class="relative min-h-screen overflow-hidden bg-[linear-gradient(160deg,#f6f1fb_0%,#ece2f7_55%,#e0d2f3_100%)] pt-24">
+    <div class="glow-circle absolute -right-24 top-40 size-96"></div>
+    <div class="relative mx-auto max-w-[1000px] px-6 pb-20 pt-14 md:px-10">
+      <a href="/resources" class="inline-flex items-center gap-2 text-sm font-semibold text-purple hover:underline">
+        <ArrowLeft size={15} /> All resources
+      </a>
+
+      <h1 class="mt-6 text-4xl font-bold text-[#2b1e6b] md:text-5xl">{resource.title}</h1>
+
+      <div class="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-ink">
+        <span class="flex items-center gap-2">
+          <CalendarDays size={16} class="text-purple" /> {dateLabel}
+        </span>
+        <CategoryBadge>{resource.type}</CategoryBadge>
+      </div>
+
+      {
+        authors.length > 0 && (
+          <div class="mt-5 text-sm text-ink/70">
+            By{" "}
+            <span class="font-semibold text-ink">
+              {authors.map((a) => a.name?.trim() || a.slug || "Unknown").join(", ")}
+            </span>
+          </div>
+        )
+      }
+
+      {
+        resource.coverImage && (
+          <div class="relative mt-8 aspect-[21/9] w-full overflow-hidden rounded-2xl bg-[#d9d9d9]">
+            <img src={resource.coverImage} alt="" class="size-full object-cover" />
+          </div>
+        )
+      }
+
+      <div class="mt-8 max-w-3xl text-[17px] leading-8 text-[#1c1633]">
+        {hasBody ? <Markdown source={resource.body || ""} /> : <p>{resource.description}</p>}
+      </div>
+
+      {
+        resource.url && (
+          <div class="mt-10 flex flex-wrap gap-3">
+            <a
+              href={resource.url}
+              target="_blank"
+              rel="noreferrer"
+              class="flex items-center gap-2 rounded-full bg-navy-2 px-6 py-3 text-sm font-bold text-white shadow-cta transition-transform hover:scale-105"
+            >
+              {resource.type === "Featured" ? <Link2 size={16} /> : <ExternalLink size={16} />}
+              {resource.type === "Featured" ? "Featured link" : "Open resource"}
+            </a>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</Layout>

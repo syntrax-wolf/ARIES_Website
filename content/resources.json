@@ -1,0 +1,20 @@
+[
+  {
+    "slug": "intro-to-transformers-notes",
+    "title": "Intro to Transformers",
+    "description": "Club notes from the talk: attention, positional encodings, and why scaling works.",
+    "type": "Blog",
+    "addedOn": "2024-03-12",
+    "featured": true,
+    "authors": [{ "name": "Ada Lovelace", "slug": "ada-lovelace", "kind": "member" }],
+    "body": "## Why transformers\n\nSelf-attention lets every token look at every other token. That is the idea behind the club's intro talk.\n\n## Try it\n\nStart with a tiny encoder, then add positional encodings."
+  },
+  {
+    "slug": "huggingface-course",
+    "title": "Hugging Face NLP Course",
+    "description": "Free course covering tokenizers, fine-tuning, and inference.",
+    "type": "Course",
+    "addedOn": "2024-01-08",
+    "url": "https://huggingface.co/learn/nlp-course"
+  }
+]

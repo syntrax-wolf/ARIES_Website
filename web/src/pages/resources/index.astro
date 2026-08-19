@@ -1,0 +1,19 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { TopNav } from "../../components/landing/TopNav";
+import { ResourcesExplorer } from "../../components/resources/ResourcesExplorer";
+import { loadJsonBackupStore } from "../../lib/content/store";
+
+const resources = loadJsonBackupStore().listResources();
+---
+
+<Layout title="Resources | ARIES IIT Delhi">
+  <TopNav client:load />
+  <div class="relative min-h-screen overflow-hidden bg-[#fbf4ec] pt-24">
+    <div class="glow-circle absolute -left-24 top-4 size-72"></div>
+    <div class="glow-circle absolute -right-28 top-60 size-96"></div>
+    <div class="relative mx-auto max-w-[1240px] px-6 pt-14 md:px-12">
+      <ResourcesExplorer client:load resources={resources} />
+    </div>
+  </div>
+</Layout>

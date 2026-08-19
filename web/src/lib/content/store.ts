@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { AriesEvent, Project, TeamData } from "../../../../src/lib/types.ts";
+import type { AriesEvent, Project, Resource, TeamData } from "../../../../src/lib/types.ts";
 
 const EMPTY_TEAM: TeamData = { years: [], alumni: [] };
 
@@ -11,21 +11,26 @@ export type ContentStore = {
   getEvent(slug: string): AriesEvent | undefined;
   splitEvents(now?: Date): { upcoming: AriesEvent[]; past: AriesEvent[] };
   getTeam(): TeamData;
+  listResources(): Resource[];
+  getResource(slug: string): Resource | undefined;
 };
 
 export function createContentStore(seed: {
   projects?: Project[];
   events?: AriesEvent[];
   team?: TeamData;
+  resources?: Resource[];
 }): ContentStore {
   const projects = [...(seed.projects ?? [])];
   const events = [...(seed.events ?? [])];
+  const resources = [...(seed.resources ?? [])];
   const team: TeamData = {
     years: [...(seed.team?.years ?? [])].sort((a, b) => b.year.localeCompare(a.year)),
     alumni: [...(seed.team?.alumni ?? [])],
   };
   const projectsBySlug = new Map(projects.map((p) => [p.slug, p]));
   const eventsBySlug = new Map(events.map((e) => [e.slug, e]));
+  const resourcesBySlug = new Map(resources.map((r) => [r.slug, r]));
   return {
     listProjects: () => projects,
     getProject: (slug) => projectsBySlug.get(slug),
@@ -41,6 +46,8 @@ export function createContentStore(seed: {
       };
     },
     getTeam: () => team,
+    listResources: () => resources,
+    getResource: (slug) => resourcesBySlug.get(slug),
   };
 }
 
@@ -74,6 +81,12 @@ export function loadTeamFromJsonFile(file: string): TeamData {
   return JSON.parse(fs.readFileSync(file, "utf8")) as TeamData;
 }
 
+export function loadResourcesFromJsonFile(file: string): Resource[] {
+  if (!fs.existsSync(file)) return [];
+  const parsed = JSON.parse(fs.readFileSync(file, "utf8"));
+  return Array.isArray(parsed) ? (parsed as Resource[]) : [];
+}
+
 /** Public reader over the JSON backup in `content/`. */
 export function loadJsonBackupStore(): ContentStore {
   const root = contentRoot();
@@ -81,5 +94,6 @@ export function loadJsonBackupStore(): ContentStore {
     projects: loadProjectsFromJsonDir(path.join(root, "projects")),
     events: loadEventsFromJsonDir(path.join(root, "events")),
     team: loadTeamFromJsonFile(path.join(root, "team.json")),
+    resources: loadResourcesFromJsonFile(path.join(root, "resources.json")),
   });
 }

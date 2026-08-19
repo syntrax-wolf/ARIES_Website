@@ -97,3 +97,23 @@ test("a past Event and a future Event land in the right lists", () => {
   assert.equal(store.getEvent("old-talk")?.type, "Talk");
   assert.equal(store.getEvent("missing"), undefined);
 });
+
+test("a fixture Resource is retrievable by slug", () => {
+  const store = createContentStore({
+    resources: [
+      {
+        slug: "intro-to-transformers-notes",
+        title: "Intro to Transformers",
+        description: "Club notes from the talk.",
+        type: "Blog",
+        addedOn: "2024-03-12",
+        body: "Attention is all you need, in practice.",
+      },
+    ],
+  });
+
+  const resource = store.getResource("intro-to-transformers-notes");
+  assert.equal(resource?.title, "Intro to Transformers");
+  assert.equal(resource?.type, "Blog");
+  assert.equal(store.getResource("missing"), undefined);
+});
