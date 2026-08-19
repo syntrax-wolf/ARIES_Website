@@ -1,29 +1,31 @@
 # ARIES Website
 
-Next.js (App Router) + TypeScript + Tailwind v4 site for the ARIES club at IIT Delhi.
+Astro + Cloudflare Workers site for the ARIES club at IIT Delhi. Public pages are
+prerendered static assets. The club editor is behind an Allowlist Gate.
 
 ## Stack
 
-- **Framework:** Next.js 16 + React 19 + TypeScript
+- **Framework:** Astro 7 + React 19 islands + TypeScript
+- **Host:** Cloudflare Workers (`web/wrangler.jsonc`), not Pages
 - **Styling:** Tailwind CSS v4 + CSS variables (`src/app/globals.css`)
-- **CMS / Database:** Supabase (Postgres + Auth + Storage)
-- **Content backup:** `content/*.json` (refresh with `npm run content:export`)
+- **Records:** D1 (`aries-content`)
+- **Media:** R2 (`aries-media`), resized to WebP in the browser
+- **Content backup:** `content/*.json` (seed with `npm run db:seed`)
 - **Icons:** `lucide-react`
 
 ## Development
 
-Copy `.env.example` to `.env.local` and fill in Supabase plus DevClub OAuth:
+Copy `web/.env.example` to `web/.env` and fill in Gate secrets plus DevClub OAuth:
 
 ```bash
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
+SESSION_SECRET=
+ADMIN_PASSWORD=
 DEVCLUB_CLIENT_ID=
 DEVCLUB_CLIENT_SECRET=
-DEVCLUB_REDIRECT_URI=http://localhost:3000/api/auth/callback/devclub
+DEVCLUB_REDIRECT_URI=http://localhost:4321/api/auth/callback/devclub
 ```
 
-Register the redirect URI at [auth.devclub.in](https://auth.devclub.in/docs). Members sign in with IIT Delhi; staff password login remains as a dual-run fallback.
+Register the redirect URI at [auth.devclub.in](https://auth.devclub.in/docs). Allowlisted Kerberos ids sign in with IIT Delhi; the Admin password is the only email/password login.
 
 Run the dev server:
 
@@ -31,26 +33,26 @@ Run the dev server:
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:4321](http://localhost:4321).
 
 ## Common scripts
 
 | Script | Purpose |
 | --- | --- |
-| `npm run db:seed:supabase` | Seed Supabase from `content/*.json` (needs `SUPABASE_SERVICE_ROLE_KEY`) |
-| `npm run content:export` | Export Supabase tables back to `content/*.json` |
-| `npm run auth:import-credentials -- file.csv` | Import member login credentials from a form CSV |
-| `npm run import:excel -- <file.xlsx>` | Import members from Excel + download Drive photos |
-| `npm run lint` | Run ESLint |
-| `npm run build` | Production build |
+| `npm run dev` | Astro dev server |
+| `npm run build` | Prerender public HTML + Worker bundle |
+| `npm run db:seed` | Seed local D1 from `content/*.json` |
+| `npm test` | Seam tests (Permissions, Gate, Content store, Upload policy) |
 
 ## Project layout
 
-- `src/app/(site)/` — public pages (events, projects, team, resources, contact)
-- `src/app/[slug]/` — member profile pages (short URLs)
-- `src/app/admin/` — login + editor for members, projects, events, team
-- `src/lib/content.ts` — public content readers (Supabase)
-- `src/app/api/admin/` — Next.js API routes for saves, uploads, and approvals
-- `content/` — JSON backup of Supabase data
+- `web/src/pages/` — Astro routes (public prerender + Gate/editor SSR)
+- `web/src/components/` — React islands
+- `web/src/lib/content/` — D1 content store and publish/queue
+- `web/src/lib/gate/` — Allowlist Gate
+- `web/src/lib/media/` — R2 upload policy
+- `src/lib/permissions.ts` — Level / Listed rules
+- `src/lib/types.ts` — content schemas
+- `content/` — JSON backup used to seed D1
 
-See `AGENTS.md` for the file-to-change map.
+See `AGENTS.md` for the file-to-change map. Glossary: `CONTEXT.md`.

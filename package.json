@@ -6,60 +6,19 @@
     "web"
   ],
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint",
+    "dev": "npm run dev -w aries-website-web",
+    "build": "npm run build -w aries-website-web",
+    "preview": "npm run preview -w aries-website-web",
     "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test src/**/*.test.ts web/src/**/*.test.ts",
-    "dev:web": "npm run dev -w aries-website-web",
-    "build:web": "npm run build -w aries-website-web",
-    "db:seed:supabase": "node scripts/seed-supabase.mjs",
-    "content:export": "node scripts/export-content.mjs",
-    "auth:import-credentials": "node scripts/import-credentials.mjs",
-    "db:seed:kerberos": "node scripts/seed-kerberos-from-excel.mjs",
-    "import:excel": "node scripts/import-from-excel.mjs"
-  },
-  "dependencies": {
-    "@dnd-kit/core": "^6.3.1",
-    "@dnd-kit/sortable": "^10.0.0",
-    "@dnd-kit/utilities": "^3.2.2",
-    "@portabletext/react": "^7.0.1",
-    "@sanity/image-url": "^2.1.1",
-    "@sanity/vision": "^5.31.1",
-    "@supabase/ssr": "^0.12.4",
-    "@supabase/supabase-js": "^2.111.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "lucide-react": "^1.25.0",
-    "motion": "^12.42.2",
-    "next": "16.2.11",
-    "next-sanity": "^13.3.3",
-    "openid-client": "^6.8.5",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "react-markdown": "^10.0.0",
-    "remark-gfm": "^4.0.0",
-    "sanity": "^5.31.1",
-    "styled-components": "^6.5.1"
+    "db:seed": "npm run db:seed -w aries-website-web"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@tailwindcss/typography": "^0.5.20",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.11",
-    "tailwindcss": "^4",
-    "typescript": "^5",
-    "xlsx": "^0.18.5"
+    "typescript": "^5"
   },
   "allowScripts": {
-    "sharp@0.35.2": true,
     "sharp@0.34.5": true,
-    "sharp@0.35.3": true,
     "esbuild@0.28.1": true,
-    "workerd@1.20260815.1": true,
-    "unrs-resolver@1.12.2": true
+    "workerd@1.20260815.1": true
   }
 }
