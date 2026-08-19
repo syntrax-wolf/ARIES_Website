@@ -13,7 +13,7 @@ import {
 } from "../../lib/content/actor";
 import { documentDbFromLocals } from "../../lib/gate/runtime";
 import { sessionFromRequest } from "../../lib/gate/request";
-import { canApprove, canPublishResource, isLeadership } from "../../../../src/lib/permissions";
+import { canApprove, canManageRoster, canPublishResource, isLeadership } from "../../../../src/lib/permissions";
 
 const session = sessionFromRequest(Astro.request);
 if (!session) {
@@ -26,10 +26,15 @@ const actor = await resolveActor(store, session);
 const projects = projectsEditableBy(actor, await store.listProjects());
 const events = eventsEditableBy(actor, await store.listEvents());
 const resources = resourcesEditableBy(actor, await store.listResources());
+const members = await store.listMembers();
+const team = await store.getTeam();
 const label =
   session.kind === "admin" ? "Bootstrap Admin" : `Kerberos ${session.kerberos ?? ""}`;
 
-const tabs: Array<"projects" | "events" | "resources" | "approvals"> = [];
+const tabs: Array<"members" | "team" | "projects" | "events" | "resources" | "profile" | "approvals"> = [];
+if (actor.session.kind === "admin" || canManageRoster(actor.level)) {
+  tabs.push("members", "team");
+}
 if (
   actor.session.kind === "admin" ||
   isLeadership(actor.level) ||
@@ -41,6 +46,7 @@ if (
 if (actor.session.kind === "admin" || canPublishResource(actor.level)) {
   tabs.push("resources");
 }
+tabs.push("profile");
 if (actor.session.kind === "admin" || canApprove(actor.level)) {
   tabs.push("approvals");
 }
@@ -55,6 +61,9 @@ if (actor.session.kind === "admin" || canApprove(actor.level)) {
         projects={projects}
         events={events}
         resources={resources}
+        members={members}
+        team={team}
+        profileSlug={actor.memberSlug === "admin" ? "" : actor.memberSlug}
         label={label}
         tabs={tabs}
       />

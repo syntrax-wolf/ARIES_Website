@@ -1,23 +1,32 @@
 import { useMemo, useState } from "react";
-import { BookOpen, CalendarPlus, ClipboardList, FolderPlus, LogOut } from "lucide-react";
-import type { AriesEvent, Project, Resource } from "../../../../src/lib/types";
+import { BookOpen, CalendarPlus, ClipboardList, FolderPlus, Image as ImageIcon, LogOut, UserRound, Users } from "lucide-react";
+import type { AriesEvent, Member, Project, Resource, TeamData } from "../../../../src/lib/types";
 import { ProjectForm } from "./ProjectForm";
 import { EventForm } from "./EventForm";
 import { ResourceForm } from "./ResourceForm";
 import { ApprovalsPanel } from "./ApprovalsPanel";
+import { MemberForm } from "./MemberForm";
+import { ProfileForm } from "./ProfileForm";
+import { TeamForm } from "./TeamForm";
 
-type TabId = "projects" | "events" | "resources" | "approvals";
+type TabId = "members" | "team" | "projects" | "events" | "resources" | "profile" | "approvals";
 
 export function AdminEditor({
   projects: initialProjects,
   events: initialEvents,
   resources: initialResources,
+  members: initialMembers,
+  team: initialTeam,
+  profileSlug,
   label,
   tabs,
 }: {
   projects: Project[];
   events: AriesEvent[];
   resources: Resource[];
+  members: Member[];
+  team: TeamData;
+  profileSlug: string;
   label: string;
   tabs: TabId[];
 }) {
@@ -26,6 +35,9 @@ export function AdminEditor({
   const [projects, setProjects] = useState(initialProjects);
   const [events, setEvents] = useState(initialEvents);
   const [resources, setResources] = useState(initialResources);
+  const [members, setMembers] = useState(initialMembers);
+  const [team, setTeam] = useState(initialTeam);
+  const [editMember, setEditMember] = useState("");
   const [editProject, setEditProject] = useState("");
   const [editEvent, setEditEvent] = useState("");
   const [editResource, setEditResource] = useState("");
@@ -47,9 +59,12 @@ export function AdminEditor({
   );
 
   const tabMeta: Record<TabId, { label: string; icon: typeof FolderPlus }> = {
+    members: { label: "Members", icon: Users },
+    team: { label: "Team", icon: ImageIcon },
     projects: { label: "Projects", icon: FolderPlus },
     events: { label: "Events", icon: CalendarPlus },
     resources: { label: "Resources", icon: BookOpen },
+    profile: { label: "Account", icon: UserRound },
     approvals: { label: "Approvals", icon: ClipboardList },
   };
 
@@ -91,6 +106,65 @@ export function AdminEditor({
       </div>
 
       <div className="mt-8 space-y-6">
+        {tab === "members" && (
+          <>
+            <label className="block max-w-md text-xs font-semibold text-ink">
+              Edit roster entry
+              <select
+                value={editMember}
+                onChange={(e) => setEditMember(e.target.value)}
+                className="mt-1.5 w-full rounded-lg bg-white px-3 py-2.5 text-sm shadow-card-sm"
+              >
+                <option value="">— create new roster row —</option>
+                {members.map((m) => (
+                  <option key={m.slug} value={m.slug}>
+                    {m.name} ({m.slug})
+                  </option>
+                ))}
+              </select>
+            </label>
+            <MemberForm
+              key={editMember || "new-member"}
+              initial={
+                members.find((m) => m.slug === editMember)
+                  ? {
+                      slug: members.find((m) => m.slug === editMember)?.slug,
+                      name: members.find((m) => m.slug === editMember)?.name,
+                      role: members.find((m) => m.slug === editMember)?.role,
+                      tagline: members.find((m) => m.slug === editMember)?.tagline,
+                      year: members.find((m) => m.slug === editMember)?.year,
+                      location: members.find((m) => m.slug === editMember)?.location,
+                      photo: members.find((m) => m.slug === editMember)?.avatar,
+                      entryNumber: members.find((m) => m.slug === editMember)?.entryNumber,
+                      email: members.find((m) => m.slug === editMember)?.email,
+                      level: members.find((m) => m.slug === editMember)?.level,
+                    }
+                  : undefined
+              }
+              onSaved={(slug) => setEditMember(slug)}
+            />
+          </>
+        )}
+
+        {tab === "team" && <TeamForm team={team} onSaved={setTeam} />}
+
+        {tab === "profile" && profileSlug && members.find((m) => m.slug === profileSlug) && (
+          <ProfileForm
+            member={members.find((m) => m.slug === profileSlug)!}
+            onSaved={(updated) =>
+              setMembers((prev) => prev.map((m) => (m.slug === updated.slug ? updated : m)))
+            }
+          />
+        )}
+        {tab === "profile" && !profileSlug && (
+          <div className="max-w-2xl rounded-2xl bg-white p-6 shadow-card-sm">
+            <p className="text-sm font-bold text-ink">No public profile for this login</p>
+            <p className="mt-2 text-sm text-ink/60">
+              The Admin account is CMS-only. Use Members to edit someone else, or sign in with Kerberos.
+            </p>
+          </div>
+        )}
+
         {tab === "projects" && (
           <>
             <label className="block max-w-md text-xs font-semibold text-ink">
