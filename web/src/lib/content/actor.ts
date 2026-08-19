@@ -1,8 +1,8 @@
-import { isLeadership } from "../../../../src/lib/permissions.ts";
+import { canPublishResource, isLeadership } from "../../../../src/lib/permissions.ts";
+import type { AriesEvent, Project, Resource } from "../../../../src/lib/types.ts";
 import type { GateSession } from "../gate/gate.ts";
 import type { WritableContentStore } from "./d1.ts";
-import { isListedOnProject, type Actor } from "./publish.ts";
-import type { Project } from "../../../../src/lib/types.ts";
+import { isListedOnEvent, isListedOnProject, type Actor } from "./publish.ts";
 
 export async function resolveActor(
   store: WritableContentStore,
@@ -28,5 +28,18 @@ export function projectsEditableBy(actor: Actor, projects: Project[]): Project[]
   if (actor.level === "coordinator") {
     return projects.filter((p) => isListedOnProject(p, actor.memberSlug));
   }
+  return [];
+}
+
+export function eventsEditableBy(actor: Actor, events: AriesEvent[]): AriesEvent[] {
+  if (actor.session.kind === "admin" || isLeadership(actor.level)) return events;
+  if (actor.level === "coordinator") {
+    return events.filter((e) => isListedOnEvent(e, actor.memberSlug));
+  }
+  return [];
+}
+
+export function resourcesEditableBy(actor: Actor, resources: Resource[]): Resource[] {
+  if (actor.session.kind === "admin" || canPublishResource(actor.level)) return resources;
   return [];
 }

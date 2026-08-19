@@ -5,9 +5,15 @@ import Layout from "../../layouts/Layout.astro";
 import { TopNav } from "../../components/landing/TopNav";
 import { AdminEditor } from "../../components/admin/AdminEditor";
 import { createWritableStore } from "../../lib/content/d1";
-import { projectsEditableBy, resolveActor } from "../../lib/content/actor";
+import {
+  eventsEditableBy,
+  projectsEditableBy,
+  resolveActor,
+  resourcesEditableBy,
+} from "../../lib/content/actor";
 import { documentDbFromLocals } from "../../lib/gate/runtime";
 import { sessionFromRequest } from "../../lib/gate/request";
+import { canPublishResource, isLeadership } from "../../../../src/lib/permissions";
 
 const session = sessionFromRequest(Astro.request);
 if (!session) {
@@ -18,15 +24,32 @@ const db = await documentDbFromLocals(Astro.locals);
 const store = createWritableStore(db);
 const actor = await resolveActor(store, session);
 const projects = projectsEditableBy(actor, await store.listProjects());
+const events = eventsEditableBy(actor, await store.listEvents());
+const resources = resourcesEditableBy(actor, await store.listResources());
 const label =
   session.kind === "admin" ? "Bootstrap Admin" : `Kerberos ${session.kerberos ?? ""}`;
+
+const tabs: Array<"projects" | "events" | "resources"> = [];
+if (actor.session.kind === "admin" || isLeadership(actor.level) || actor.level === "coordinator") {
+  tabs.push("projects", "events");
+}
+if (actor.session.kind === "admin" || canPublishResource(actor.level)) {
+  tabs.push("resources");
+}
 ---
 
 <Layout title="Editor | ARIES IIT Delhi">
   <TopNav client:load />
   <div class="min-h-screen bg-[#fbf4ec] px-6 pt-32 pb-16">
     <div class="mx-auto max-w-5xl">
-      <AdminEditor client:load projects={projects} label={label} />
+      <AdminEditor
+        client:load
+        projects={projects}
+        events={events}
+        resources={resources}
+        label={label}
+        tabs={tabs}
+      />
     </div>
   </div>
 </Layout>
