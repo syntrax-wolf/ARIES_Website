@@ -37,3 +37,39 @@ test("a missing Project slug is empty", () => {
 
   assert.equal(store.getProject("missing"), undefined);
 });
+
+test("a past Event and a future Event land in the right lists", () => {
+  const store = createContentStore({
+    events: [
+      {
+        slug: "old-talk",
+        title: "Old Talk",
+        type: "Talk",
+        date: "2024-01-15",
+        description: "Already happened.",
+        links: [],
+      },
+      {
+        slug: "future-workshop",
+        title: "Future Workshop",
+        type: "Workshop",
+        date: "2027-12-01",
+        description: "Has not happened yet.",
+        links: [],
+      },
+    ],
+  });
+
+  const { upcoming, past } = store.splitEvents(new Date("2026-08-19T12:00:00Z"));
+  assert.deepEqual(
+    upcoming.map((e) => e.slug),
+    ["future-workshop"],
+  );
+  assert.deepEqual(
+    past.map((e) => e.slug),
+    ["old-talk"],
+  );
+  assert.equal(store.getEvent("old-talk")?.title, "Old Talk");
+  assert.equal(store.getEvent("old-talk")?.type, "Talk");
+  assert.equal(store.getEvent("missing"), undefined);
+});

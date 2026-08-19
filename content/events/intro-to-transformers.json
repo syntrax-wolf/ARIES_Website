@@ -1,0 +1,10 @@
+{
+  "slug": "intro-to-transformers",
+  "title": "Intro to Transformers",
+  "type": "Talk",
+  "date": "2024-03-12",
+  "venue": "LH 108, IIT Delhi",
+  "description": "A club talk on attention, tokens, and why transformers took over NLP.",
+  "body": "We walked through self-attention, positional encodings, and a small demo on campus text.",
+  "links": []
+}
