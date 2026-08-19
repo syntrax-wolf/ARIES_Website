@@ -1,5 +1,5 @@
 import type { AriesEvent, Member, Project, ProjectContributor, Resource } from "@/lib/types";
-import { isLeadership } from "@/lib/roles";
+import { canDirectPublish, canEnqueueChangeRequest, isLeadership } from "@/lib/permissions";
 import { isVisitor } from "@/lib/supabase/env";
 import { normalizeContributors } from "@/lib/contributors";
 
@@ -76,9 +76,7 @@ export function reviewerSlugsForResource(
 
 /** Leadership: any entity. Coordinators/executives: only ones they are listed on. */
 export function canEditEntity(level: string | null | undefined, onEntity: boolean): boolean {
-  if (isLeadership(level)) return true;
-  if (level === "coordinator" || level === "executive") return onEntity;
-  return false;
+  return canDirectPublish(level, onEntity) || canEnqueueChangeRequest(level, onEntity);
 }
 
 export function listedOnly<T>(

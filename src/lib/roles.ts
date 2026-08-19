@@ -1,24 +1,22 @@
 import type { MemberLevel } from "@/lib/supabase/env";
+import {
+  canApprove,
+  canDirectPublish as canDirectPublishWhenListed,
+  canEnqueueChangeRequest,
+  canPublishResource,
+  isLeadership,
+} from "./permissions";
+
+export { canApprove, canPublishResource, isLeadership };
 
 export type UiRole = "admin" | "coordinator" | "member" | "blogger" | "viewer";
 
 export function levelToUiRole(level: string | null | undefined): UiRole {
-  if (level === "oc" || level === "co_overall_coordinator" || level === "research_lead") {
-    return "admin";
-  }
+  if (isLeadership(level)) return "admin";
   if (level === "coordinator") return "coordinator";
   if (level === "blogger") return "blogger";
   if (level === "executive" || level === "member") return "member";
   return "viewer";
-}
-
-/** OC / Co-Overall Coordinator / Research Lead */
-export function isLeadership(level: string | null | undefined) {
-  return (
-    level === "oc" ||
-    level === "co_overall_coordinator" ||
-    level === "research_lead"
-  );
 }
 
 /**
@@ -26,16 +24,11 @@ export function isLeadership(level: string | null | undefined) {
  * Executives submit change_requests instead.
  */
 export function canDirectPublish(level: string | null | undefined) {
-  return isLeadership(level) || level === "coordinator";
+  return canDirectPublishWhenListed(level, true);
 }
 
 export function canDirectCreate(level: string | null | undefined) {
   return canDirectPublish(level);
-}
-
-/** Approve/reject pending requests — leadership only. */
-export function canApprove(level: string | null | undefined) {
-  return isLeadership(level);
 }
 
 /** Alumni roster + full team photos — leadership (admin UI role) only. */
@@ -45,12 +38,7 @@ export function canManageTeamContent(level: string | null | undefined) {
 
 /** May submit project/event/team changes into the approval queue. */
 export function canSubmitForApproval(level: string | null | undefined) {
-  return level === "executive";
-}
-
-/** Can publish/edit resources (blogs, tutorials, courses, featured links). */
-export function canPublishResource(level: string | null | undefined) {
-  return canDirectPublish(level) || level === "blogger";
+  return canEnqueueChangeRequest(level, true);
 }
 
 export function canAccessEditor(level: string | null | undefined) {

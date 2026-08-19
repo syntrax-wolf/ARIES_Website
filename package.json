@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test src/**/*.test.ts",
     "db:seed:supabase": "node scripts/seed-supabase.mjs",
     "content:export": "node scripts/export-content.mjs",
     "auth:import-credentials": "node scripts/import-credentials.mjs",
