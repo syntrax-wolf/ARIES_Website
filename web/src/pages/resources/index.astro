@@ -2,7 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import { TopNav } from "../../components/landing/TopNav";
 import { ResourcesExplorer } from "../../components/resources/ResourcesExplorer";
-import { loadBuildStore } from "../../lib/content/store";
+import { loadBuildStore } from "../../lib/content/build-store";
 
 const resources = (await loadBuildStore()).listResources();
 ---

@@ -3,7 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import { TopNav } from "../../components/landing/TopNav";
 import { PageHero } from "../../components/ui/PageHero";
 import { EventsExplorer } from "../../components/events/EventsExplorer";
-import { loadBuildStore } from "../../lib/content/store";
+import { loadBuildStore } from "../../lib/content/build-store";
 
 const { upcoming, past } = (await loadBuildStore()).splitEvents();
 ---

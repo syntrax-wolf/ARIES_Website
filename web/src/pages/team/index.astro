@@ -3,7 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import { TopNav } from "../../components/landing/TopNav";
 import { TeamExplorer } from "../../components/team/TeamExplorer";
 import { AlumniSection } from "../../components/team/AlumniSection";
-import { loadBuildStore } from "../../lib/content/store";
+import { loadBuildStore } from "../../lib/content/build-store";
 
 const team = (await loadBuildStore()).getTeam();
 ---

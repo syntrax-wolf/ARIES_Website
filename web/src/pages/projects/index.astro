@@ -3,7 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import { TopNav } from "../../components/landing/TopNav";
 import { Eyebrow } from "../../components/ui/Eyebrow";
 import { ProjectsExplorer } from "../../components/projects/ProjectsExplorer";
-import { loadBuildStore } from "../../lib/content/store";
+import { loadBuildStore } from "../../lib/content/build-store";
 
 const store = await loadBuildStore();
 const projects = store.listProjects();

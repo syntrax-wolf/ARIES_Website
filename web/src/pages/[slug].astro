@@ -2,11 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 import { TopNav } from "../components/landing/TopNav";
 import { MemberProfile } from "../components/profile/MemberProfile";
-import {
-  isPublicMember,
-  loadBuildStore,
-  RESERVED_MEMBER_SLUGS,
-} from "../lib/content/store";
+import { loadBuildStore } from "../lib/content/build-store";
+import { isPublicMember, RESERVED_MEMBER_SLUGS } from "../lib/content/store";
 import type { ProjectContributor } from "../../../src/lib/types";
 
 function listedSlug(entry: string | ProjectContributor | { slug?: string }, slug: string) {

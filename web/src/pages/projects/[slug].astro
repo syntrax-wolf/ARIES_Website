@@ -3,7 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import { TopNav } from "../../components/landing/TopNav";
 import { CategoryBadge } from "../../components/ui/CategoryBadge";
 import { Tag } from "../../components/ui/Tag";
-import { loadBuildStore } from "../../lib/content/store";
+import { loadBuildStore } from "../../lib/content/build-store";
 
 export async function getStaticPaths() {
   const store = await loadBuildStore();
