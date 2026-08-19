@@ -117,3 +117,53 @@ test("a fixture Resource is retrievable by slug", () => {
   assert.equal(resource?.type, "Blog");
   assert.equal(store.getResource("missing"), undefined);
 });
+
+test("a Member with a text Block is retrievable and hidden Levels stay off the public list", () => {
+  const store = createContentStore({
+    members: [
+      {
+        slug: "ada-lovelace",
+        name: "Ada Lovelace",
+        role: "Overall Coordinator",
+        tagline: "Notes on computing.",
+        socials: [],
+        blocks: [{ id: "about", type: "text", span: "full", title: "About", data: "I write programs." }],
+        level: "oc",
+      },
+      {
+        slug: "admin",
+        name: "Bootstrap Admin",
+        role: "Admin",
+        tagline: "",
+        socials: [],
+        blocks: [],
+      },
+      {
+        slug: "blogger",
+        name: "Club Blogger",
+        role: "Blogger",
+        tagline: "",
+        socials: [],
+        blocks: [],
+        level: "blogger",
+      },
+      {
+        slug: "guest-speaker",
+        name: "Guest Speaker",
+        role: "Visitor",
+        tagline: "",
+        socials: [],
+        blocks: [],
+        level: "visitor",
+      },
+    ],
+  });
+
+  const member = store.getMember("ada-lovelace");
+  assert.equal(member?.name, "Ada Lovelace");
+  assert.equal(member?.blocks[0]?.type, "text");
+  assert.deepEqual(
+    store.listPublicMembers().map((m) => m.slug),
+    ["ada-lovelace"],
+  );
+});

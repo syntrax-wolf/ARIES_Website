@@ -1,0 +1,17 @@
+{
+  "slug": "former-member",
+  "name": "Former Member",
+  "role": "Alumni, ARIES",
+  "tagline": "Research Engineer at Acme Labs",
+  "socials": [],
+  "level": "alumni",
+  "blocks": [
+    {
+      "id": "about",
+      "type": "text",
+      "span": "half",
+      "title": "About",
+      "data": "I was on the core team and now work on applied ML."
+    }
+  ]
+}

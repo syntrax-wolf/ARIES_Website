@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { AriesEvent, Project, Resource, TeamData } from "../../../../src/lib/types.ts";
+import type { AriesEvent, Member, Project, Resource, TeamData } from "../../../../src/lib/types.ts";
 
 const EMPTY_TEAM: TeamData = { years: [], alumni: [] };
 
@@ -13,6 +13,8 @@ export type ContentStore = {
   getTeam(): TeamData;
   listResources(): Resource[];
   getResource(slug: string): Resource | undefined;
+  listPublicMembers(): Member[];
+  getMember(slug: string): Member | undefined;
 };
 
 export function createContentStore(seed: {
@@ -20,10 +22,12 @@ export function createContentStore(seed: {
   events?: AriesEvent[];
   team?: TeamData;
   resources?: Resource[];
+  members?: Member[];
 }): ContentStore {
   const projects = [...(seed.projects ?? [])];
   const events = [...(seed.events ?? [])];
   const resources = [...(seed.resources ?? [])];
+  const members = [...(seed.members ?? [])];
   const team: TeamData = {
     years: [...(seed.team?.years ?? [])].sort((a, b) => b.year.localeCompare(a.year)),
     alumni: [...(seed.team?.alumni ?? [])],
@@ -31,6 +35,7 @@ export function createContentStore(seed: {
   const projectsBySlug = new Map(projects.map((p) => [p.slug, p]));
   const eventsBySlug = new Map(events.map((e) => [e.slug, e]));
   const resourcesBySlug = new Map(resources.map((r) => [r.slug, r]));
+  const membersBySlug = new Map(members.map((m) => [m.slug, m]));
   return {
     listProjects: () => projects,
     getProject: (slug) => projectsBySlug.get(slug),
@@ -48,7 +53,27 @@ export function createContentStore(seed: {
     getTeam: () => team,
     listResources: () => resources,
     getResource: (slug) => resourcesBySlug.get(slug),
+    listPublicMembers: () => members.filter(isPublicMember),
+    getMember: (slug) => membersBySlug.get(slug),
   };
+}
+
+export const RESERVED_MEMBER_SLUGS = new Set([
+  "events",
+  "projects",
+  "team",
+  "resources",
+  "contact",
+  "admin",
+  "account",
+  "studio",
+  "blog",
+  "api",
+]);
+
+export function isPublicMember(member: Member): boolean {
+  if (member.slug === "admin" || member.slug === "blogger") return false;
+  return member.level !== "visitor";
 }
 
 function readJsonDir<T>(dir: string): T[] {
@@ -87,6 +112,10 @@ export function loadResourcesFromJsonFile(file: string): Resource[] {
   return Array.isArray(parsed) ? (parsed as Resource[]) : [];
 }
 
+export function loadMembersFromJsonDir(dir: string): Member[] {
+  return readJsonDir<Member>(dir);
+}
+
 /** Public reader over the JSON backup in `content/`. */
 export function loadJsonBackupStore(): ContentStore {
   const root = contentRoot();
@@ -95,5 +124,6 @@ export function loadJsonBackupStore(): ContentStore {
     events: loadEventsFromJsonDir(path.join(root, "events")),
     team: loadTeamFromJsonFile(path.join(root, "team.json")),
     resources: loadResourcesFromJsonFile(path.join(root, "resources.json")),
+    members: loadMembersFromJsonDir(path.join(root, "members")),
   });
 }

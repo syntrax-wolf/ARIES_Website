@@ -1,0 +1,47 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { TopNav } from "../components/landing/TopNav";
+import { MemberProfile } from "../components/profile/MemberProfile";
+import {
+  isPublicMember,
+  loadJsonBackupStore,
+  RESERVED_MEMBER_SLUGS,
+} from "../lib/content/store";
+import type { ProjectContributor } from "../../../src/lib/types";
+
+function listedSlug(entry: string | ProjectContributor | { slug?: string }, slug: string) {
+  if (typeof entry === "string") return entry === slug;
+  return entry.slug === slug;
+}
+
+export function getStaticPaths() {
+  return loadJsonBackupStore()
+    .listPublicMembers()
+    .filter((m) => !RESERVED_MEMBER_SLUGS.has(m.slug))
+    .map((m) => ({ params: { slug: m.slug } }));
+}
+
+const { slug } = Astro.params;
+const store = loadJsonBackupStore();
+const member = store.getMember(slug!);
+if (!member || !isPublicMember(member) || RESERVED_MEMBER_SLUGS.has(member.slug)) {
+  return new Response(null, { status: 404, statusText: "Not Found" });
+}
+
+const projectNames = Object.fromEntries(store.listProjects().map((p) => [p.slug, p.name]));
+const contributions = {
+  projects: store.listProjects().filter((p) => (p.contributors ?? []).some((c) => listedSlug(c, member.slug))),
+  events: store.listEvents().filter((e) => (e.contributors ?? []).some((c) => listedSlug(c, member.slug))),
+  resources: store.listResources().filter((r) => (r.authors ?? []).some((a) => a.slug === member.slug)),
+};
+---
+
+<Layout title={`${member.name} | ARIES IIT Delhi`}>
+  <TopNav client:load />
+  <MemberProfile
+    client:load
+    member={member}
+    projectNames={projectNames}
+    contributions={contributions}
+  />
+</Layout>
