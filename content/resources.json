@@ -16,5 +16,13 @@
     "type": "Course",
     "addedOn": "2024-01-08",
     "url": "https://huggingface.co/learn/nlp-course"
+  },
+  {
+    "slug": "blog-attention-is-all-you-need",
+    "title": "Attention is all you need (club notes)",
+    "description": "Folded from the old Studio post: transformers on campus.",
+    "type": "Blog",
+    "addedOn": "2023-11-02",
+    "body": "The transformer paper, rewritten as club notes after the talk."
   }
 ]
