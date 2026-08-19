@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { BookOpen, CalendarPlus, ClipboardList, FolderPlus, Image as ImageIcon, LogOut, UserRound, Users } from "lucide-react";
+import { BookOpen, CalendarPlus, ClipboardList, FolderPlus, Image as ImageIcon, LogOut, Shield, UserRound, Users } from "lucide-react";
 import type { AriesEvent, Member, Project, Resource, TeamData } from "../../../../src/lib/types";
 import { ProjectForm } from "./ProjectForm";
 import { EventForm } from "./EventForm";
@@ -9,7 +9,9 @@ import { MemberForm } from "./MemberForm";
 import { ProfileForm } from "./ProfileForm";
 import { TeamForm } from "./TeamForm";
 
-type TabId = "members" | "team" | "projects" | "events" | "resources" | "profile" | "approvals";
+import { AllowlistForm } from "./AllowlistForm";
+
+type TabId = "members" | "team" | "projects" | "events" | "resources" | "profile" | "approvals" | "allowlist";
 
 export function AdminEditor({
   projects: initialProjects,
@@ -66,6 +68,7 @@ export function AdminEditor({
     resources: { label: "Resources", icon: BookOpen },
     profile: { label: "Account", icon: UserRound },
     approvals: { label: "Approvals", icon: ClipboardList },
+    allowlist: { label: "Allowlist", icon: Shield },
   };
 
   return (
@@ -292,6 +295,7 @@ export function AdminEditor({
         )}
 
         {tab === "approvals" && <ApprovalsPanel />}
+        {tab === "allowlist" && <AllowlistForm />}
       </div>
     </div>
   );
