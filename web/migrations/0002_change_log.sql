@@ -1,0 +1,10 @@
+-- Migration number: 0002 	 2026-08-19T16:45:00.000Z
+
+CREATE TABLE IF NOT EXISTS change_log (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  kind TEXT NOT NULL,
+  slug TEXT NOT NULL,
+  actor TEXT NOT NULL,
+  summary TEXT NOT NULL,
+  at TEXT NOT NULL
+);

@@ -3,16 +3,9 @@ export const prerender = false;
 
 import Layout from "../layouts/Layout.astro";
 import { TopNav } from "../components/landing/TopNav";
-import { readSessionCookie, SESSION_COOKIE } from "../lib/gate/gate";
+import { sessionFromRequest } from "../lib/gate/request";
 
-function readCookie(header: string | null, name: string) {
-  if (!header) return undefined;
-  const match = header.match(new RegExp(`(?:^|;\\s*)${name}=([^;]+)`));
-  return match ? decodeURIComponent(match[1]) : undefined;
-}
-
-const signing = process.env.SESSION_SECRET ?? process.env.ADMIN_PASSWORD ?? "";
-const session = readSessionCookie(readCookie(Astro.request.headers.get("cookie"), SESSION_COOKIE), signing);
+const session = sessionFromRequest(Astro.request);
 if (!session) {
   return Astro.redirect("/admin");
 }
@@ -30,11 +23,19 @@ if (!session) {
             : `Kerberos ${session.kerberos} passed the Allowlist Gate.`
         }
       </p>
-      <form method="post" action="/api/auth/logout" class="mt-6">
-        <button class="rounded-xl bg-navy px-5 py-2.5 text-sm font-bold text-white" type="submit">
-          Sign out
-        </button>
-      </form>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a
+          href="/admin/editor"
+          class="rounded-xl bg-purple px-5 py-2.5 text-sm font-bold text-white"
+        >
+          Open editor
+        </a>
+        <form method="post" action="/api/auth/logout">
+          <button class="rounded-xl bg-navy px-5 py-2.5 text-sm font-bold text-white" type="submit">
+            Sign out
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 </Layout>

@@ -14,9 +14,26 @@ CREATE TABLE IF NOT EXISTS documents (
 CREATE TABLE IF NOT EXISTS allowlist (
   kerberos TEXT PRIMARY KEY
 );
+
+CREATE TABLE IF NOT EXISTS change_log (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  kind TEXT NOT NULL,
+  slug TEXT NOT NULL,
+  actor TEXT NOT NULL,
+  summary TEXT NOT NULL,
+  at TEXT NOT NULL
+);
 `;
 
 export type DocumentKind = "projects" | "events" | "resources" | "members" | "team";
+
+export type ChangeLogEntry = {
+  kind: string;
+  slug: string;
+  actor: string;
+  summary: string;
+  at?: string;
+};
 
 export type DocumentDb = {
   get(kind: DocumentKind, slug: string): Promise<string | undefined>;
@@ -25,6 +42,8 @@ export type DocumentDb = {
   listAllowlist(): Promise<string[]>;
   addAllowlist(kerberos: string): Promise<void>;
   removeAllowlist(kerberos: string): Promise<void>;
+  appendChangeLog(entry: ChangeLogEntry): Promise<void>;
+  listChangeLog(kind?: string, slug?: string): Promise<ChangeLogEntry[]>;
 };
 
 export type ContentSeed = {
@@ -47,6 +66,7 @@ export type WritableContentStore = {
   getResource(slug: string): Promise<Resource | undefined>;
   saveResource(resource: Resource): Promise<void>;
   listPublicMembers(): Promise<Member[]>;
+  listMembers(): Promise<Member[]>;
   getMember(slug: string): Promise<Member | undefined>;
   saveMember(member: Member): Promise<void>;
   getTeam(): Promise<TeamData>;
@@ -54,11 +74,14 @@ export type WritableContentStore = {
   listAllowlist(): Promise<string[]>;
   addAllowlist(kerberos: string): Promise<void>;
   removeAllowlist(kerberos: string): Promise<void>;
+  appendChangeLog(entry: ChangeLogEntry): Promise<void>;
+  listChangeLog(kind?: string, slug?: string): Promise<ChangeLogEntry[]>;
 };
 
 export function createMemoryDocumentDb(): DocumentDb {
   const docs = new Map<string, string>();
   const allow = new Set<string>();
+  const log: ChangeLogEntry[] = [];
   const key = (kind: DocumentKind, slug: string) => `${kind}:${slug}`;
   return {
     async get(kind, slug) {
@@ -82,6 +105,14 @@ export function createMemoryDocumentDb(): DocumentDb {
     },
     async removeAllowlist(kerberos) {
       allow.delete(kerberos.trim().toLowerCase());
+    },
+    async appendChangeLog(entry) {
+      log.push({ ...entry, at: entry.at ?? new Date().toISOString() });
+    },
+    async listChangeLog(kind, slug) {
+      return log.filter(
+        (e) => (!kind || e.kind === kind) && (!slug || e.slug === slug),
+      );
     },
   };
 }
@@ -142,9 +173,10 @@ export function createWritableStore(db: DocumentDb): WritableContentStore {
       await db.put("resources", resource.slug, JSON.stringify(resource));
     },
     async listPublicMembers() {
-      return (await db.list("members"))
-        .map((row) => JSON.parse(row.data) as Member)
-        .filter(isPublicMember);
+      return (await this.listMembers()).filter(isPublicMember);
+    },
+    async listMembers() {
+      return (await db.list("members")).map((row) => JSON.parse(row.data) as Member);
     },
     async getMember(slug) {
       return parse<Member>(await db.get("members", slug));
@@ -168,6 +200,12 @@ export function createWritableStore(db: DocumentDb): WritableContentStore {
     },
     async removeAllowlist(kerberos) {
       await db.removeAllowlist(kerberos);
+    },
+    async appendChangeLog(entry) {
+      await db.appendChangeLog(entry);
+    },
+    async listChangeLog(kind, slug) {
+      return db.listChangeLog(kind, slug);
     },
   };
 }
@@ -237,6 +275,31 @@ export function createD1DocumentDb(d1: D1Like): DocumentDb {
         .prepare("DELETE FROM allowlist WHERE kerberos = ?")
         .bind(kerberos.trim().toLowerCase())
         .run();
+    },
+    async appendChangeLog(entry) {
+      await d1
+        .prepare(
+          "INSERT INTO change_log (kind, slug, actor, summary, at) VALUES (?, ?, ?, ?, ?)",
+        )
+        .bind(
+          entry.kind,
+          entry.slug,
+          entry.actor,
+          entry.summary,
+          entry.at ?? new Date().toISOString(),
+        )
+        .run();
+    },
+    async listChangeLog(kind, slug) {
+      const { results } = await d1
+        .prepare(
+          kind && slug
+            ? "SELECT kind, slug, actor, summary, at FROM change_log WHERE kind = ? AND slug = ? ORDER BY at"
+            : "SELECT kind, slug, actor, summary, at FROM change_log ORDER BY at",
+        )
+        .bind(...(kind && slug ? [kind, slug] : []))
+        .all<ChangeLogEntry>();
+      return results ?? [];
     },
   };
 }

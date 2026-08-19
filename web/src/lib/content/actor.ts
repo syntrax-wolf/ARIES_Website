@@ -1,0 +1,32 @@
+import { isLeadership } from "../../../../src/lib/permissions.ts";
+import type { GateSession } from "../gate/gate.ts";
+import type { WritableContentStore } from "./d1.ts";
+import { isListedOnProject, type Actor } from "./publish.ts";
+import type { Project } from "../../../../src/lib/types.ts";
+
+export async function resolveActor(
+  store: WritableContentStore,
+  session: GateSession,
+): Promise<Actor> {
+  if (session.kind === "admin") {
+    return { session, level: "oc", memberSlug: "admin" };
+  }
+  const kerberos = (session.kerberos ?? "").trim().toLowerCase();
+  const members = await store.listMembers();
+  const member = members.find(
+    (m) => m.entryNumber?.trim().toLowerCase() === kerberos || m.slug === kerberos,
+  );
+  return {
+    session,
+    level: member?.level ?? "visitor",
+    memberSlug: member?.slug ?? "",
+  };
+}
+
+export function projectsEditableBy(actor: Actor, projects: Project[]): Project[] {
+  if (actor.session.kind === "admin" || isLeadership(actor.level)) return projects;
+  if (actor.level === "coordinator") {
+    return projects.filter((p) => isListedOnProject(p, actor.memberSlug));
+  }
+  return [];
+}
