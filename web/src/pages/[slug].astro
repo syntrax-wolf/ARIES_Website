@@ -4,7 +4,7 @@ import { TopNav } from "../components/landing/TopNav";
 import { MemberProfile } from "../components/profile/MemberProfile";
 import {
   isPublicMember,
-  loadJsonBackupStore,
+  loadBuildStore,
   RESERVED_MEMBER_SLUGS,
 } from "../lib/content/store";
 import type { ProjectContributor } from "../../../src/lib/types";
@@ -14,15 +14,16 @@ function listedSlug(entry: string | ProjectContributor | { slug?: string }, slug
   return entry.slug === slug;
 }
 
-export function getStaticPaths() {
-  return loadJsonBackupStore()
+export async function getStaticPaths() {
+  const store = await loadBuildStore();
+  return store
     .listPublicMembers()
     .filter((m) => !RESERVED_MEMBER_SLUGS.has(m.slug))
     .map((m) => ({ params: { slug: m.slug } }));
 }
 
 const { slug } = Astro.params;
-const store = loadJsonBackupStore();
+const store = await loadBuildStore();
 const member = store.getMember(slug!);
 if (!member || !isPublicMember(member) || RESERVED_MEMBER_SLUGS.has(member.slug)) {
   return new Response(null, { status: 404, statusText: "Not Found" });

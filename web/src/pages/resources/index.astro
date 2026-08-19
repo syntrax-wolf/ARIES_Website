@@ -2,9 +2,9 @@
 import Layout from "../../layouts/Layout.astro";
 import { TopNav } from "../../components/landing/TopNav";
 import { ResourcesExplorer } from "../../components/resources/ResourcesExplorer";
-import { loadJsonBackupStore } from "../../lib/content/store";
+import { loadBuildStore } from "../../lib/content/store";
 
-const resources = loadJsonBackupStore().listResources();
+const resources = (await loadBuildStore()).listResources();
 ---
 
 <Layout title="Resources | ARIES IIT Delhi">

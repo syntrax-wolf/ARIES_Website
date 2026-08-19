@@ -4,16 +4,15 @@ import Layout from "../../layouts/Layout.astro";
 import { TopNav } from "../../components/landing/TopNav";
 import { CategoryBadge } from "../../components/ui/CategoryBadge";
 import { Markdown } from "../../components/ui/Markdown";
-import { loadJsonBackupStore } from "../../lib/content/store";
+import { loadBuildStore } from "../../lib/content/store";
 
-export function getStaticPaths() {
-  return loadJsonBackupStore()
-    .listResources()
-    .map((r) => ({ params: { slug: r.slug } }));
+export async function getStaticPaths() {
+  const store = await loadBuildStore();
+  return store.listResources().map((r) => ({ params: { slug: r.slug } }));
 }
 
 const { slug } = Astro.params;
-const resource = loadJsonBackupStore().getResource(slug!);
+const resource = (await loadBuildStore()).getResource(slug!);
 if (!resource) {
   return new Response(null, { status: 404, statusText: "Not Found" });
 }

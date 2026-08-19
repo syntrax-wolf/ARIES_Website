@@ -3,16 +3,15 @@ import Layout from "../../layouts/Layout.astro";
 import { TopNav } from "../../components/landing/TopNav";
 import { CategoryBadge } from "../../components/ui/CategoryBadge";
 import { Tag } from "../../components/ui/Tag";
-import { loadJsonBackupStore } from "../../lib/content/store";
+import { loadBuildStore } from "../../lib/content/store";
 
-export function getStaticPaths() {
-  return loadJsonBackupStore()
-    .listProjects()
-    .map((p) => ({ params: { slug: p.slug } }));
+export async function getStaticPaths() {
+  const store = await loadBuildStore();
+  return store.listProjects().map((p) => ({ params: { slug: p.slug } }));
 }
 
 const { slug } = Astro.params;
-const project = loadJsonBackupStore().getProject(slug!);
+const project = (await loadBuildStore()).getProject(slug!);
 if (!project) {
   return new Response(null, { status: 404, statusText: "Not Found" });
 }

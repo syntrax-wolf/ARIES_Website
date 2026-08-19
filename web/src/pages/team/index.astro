@@ -3,9 +3,9 @@ import Layout from "../../layouts/Layout.astro";
 import { TopNav } from "../../components/landing/TopNav";
 import { TeamExplorer } from "../../components/team/TeamExplorer";
 import { AlumniSection } from "../../components/team/AlumniSection";
-import { loadJsonBackupStore } from "../../lib/content/store";
+import { loadBuildStore } from "../../lib/content/store";
 
-const team = loadJsonBackupStore().getTeam();
+const team = (await loadBuildStore()).getTeam();
 ---
 
 <Layout title="Team | ARIES IIT Delhi">

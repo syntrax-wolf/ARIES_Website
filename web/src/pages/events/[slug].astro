@@ -2,16 +2,15 @@
 import { CalendarDays, Clock, MapPin, ArrowLeft } from "lucide-react";
 import Layout from "../../layouts/Layout.astro";
 import { TopNav } from "../../components/landing/TopNav";
-import { loadJsonBackupStore } from "../../lib/content/store";
+import { loadBuildStore } from "../../lib/content/store";
 
-export function getStaticPaths() {
-  return loadJsonBackupStore()
-    .listEvents()
-    .map((e) => ({ params: { slug: e.slug } }));
+export async function getStaticPaths() {
+  const store = await loadBuildStore();
+  return store.listEvents().map((e) => ({ params: { slug: e.slug } }));
 }
 
 const { slug } = Astro.params;
-const event = loadJsonBackupStore().getEvent(slug!);
+const event = (await loadBuildStore()).getEvent(slug!);
 if (!event) {
   return new Response(null, { status: 404, statusText: "Not Found" });
 }

@@ -3,9 +3,10 @@ import Layout from "../../layouts/Layout.astro";
 import { TopNav } from "../../components/landing/TopNav";
 import { Eyebrow } from "../../components/ui/Eyebrow";
 import { ProjectsExplorer } from "../../components/projects/ProjectsExplorer";
-import { loadJsonBackupStore } from "../../lib/content/store";
+import { loadBuildStore } from "../../lib/content/store";
 
-const projects = loadJsonBackupStore().listProjects();
+const store = await loadBuildStore();
+const projects = store.listProjects();
 ---
 
 <Layout title="Projects | ARIES IIT Delhi">
