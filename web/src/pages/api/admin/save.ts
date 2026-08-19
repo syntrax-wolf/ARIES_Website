@@ -6,9 +6,20 @@ import { mergeRoster, saveProfile, saveTeamData } from "../../../lib/content/ros
 import { resolveActor } from "../../../lib/content/actor";
 import { documentDbFromLocals } from "../../../lib/gate/runtime";
 import { sessionFromRequest } from "../../../lib/gate/request";
+import { triggerRebuild } from "../../../lib/content/rebuild";
 import type { AriesEvent, Member, Project, Resource, TeamData } from "../../../../../src/lib/types";
 
 const SLUG_RE = /^[a-z0-9][a-z0-9-]*$/;
+
+async function ok(mode: string) {
+  const rebuild = await triggerRebuild(process.env.REBUILD_HOOK_URL);
+  return Response.json({
+    ok: true,
+    mode,
+    rebuild: rebuild.ok ? (rebuild.skipped ? "skipped" : "ok") : "failed",
+    rebuildError: rebuild.ok ? undefined : rebuild.error,
+  });
+}
 
 export async function POST({
   request,
@@ -42,7 +53,7 @@ export async function POST({
     if (!SLUG_RE.test(slug)) return Response.json({ error: "Invalid slug" }, { status: 400 });
     const result = await publishProject(store, actor, { ...project, slug });
     if (!result.ok) return Response.json({ error: result.error }, { status: 403 });
-    return Response.json({ ok: true, mode: result.mode });
+    return ok(result.mode);
   }
 
   if (body.kind === "events") {
@@ -54,7 +65,7 @@ export async function POST({
     if (!SLUG_RE.test(slug)) return Response.json({ error: "Invalid slug" }, { status: 400 });
     const result = await publishEvent(store, actor, { ...event, slug });
     if (!result.ok) return Response.json({ error: result.error }, { status: 403 });
-    return Response.json({ ok: true, mode: result.mode });
+    return ok(result.mode);
   }
 
   if (body.kind === "resources") {
@@ -66,7 +77,7 @@ export async function POST({
     if (!SLUG_RE.test(slug)) return Response.json({ error: "Invalid slug" }, { status: 400 });
     const result = await publishResource(store, actor, { ...resource, slug });
     if (!result.ok) return Response.json({ error: result.error }, { status: 403 });
-    return Response.json({ ok: true, mode: result.mode });
+    return ok(result.mode);
   }
 
   if (body.kind === "members") {
@@ -87,7 +98,7 @@ export async function POST({
         level: String(data.clubLevel ?? data.level ?? "") || undefined,
       });
       if (!result.ok) return Response.json({ error: result.error }, { status: 403 });
-      return Response.json({ ok: true, mode: result.mode });
+      return ok(result.mode);
     }
     const member = body.data as Member | undefined;
     if (!member || typeof member !== "object") {
@@ -97,7 +108,7 @@ export async function POST({
     if (!SLUG_RE.test(slug)) return Response.json({ error: "Invalid slug" }, { status: 400 });
     const result = await saveProfile(store, actor, { ...member, slug });
     if (!result.ok) return Response.json({ error: result.error }, { status: 403 });
-    return Response.json({ ok: true, mode: result.mode });
+    return ok(result.mode);
   }
 
   if (body.kind === "team") {
@@ -107,7 +118,7 @@ export async function POST({
     }
     const result = await saveTeamData(store, actor, team);
     if (!result.ok) return Response.json({ error: result.error }, { status: 403 });
-    return Response.json({ ok: true, mode: result.mode });
+    return ok(result.mode);
   }
 
   return Response.json({ error: "Invalid kind" }, { status: 400 });

@@ -10,6 +10,7 @@ import {
 } from "../../../lib/content/queue";
 import { documentDbFromLocals } from "../../../lib/gate/runtime";
 import { sessionFromRequest } from "../../../lib/gate/request";
+import { triggerRebuild } from "../../../lib/content/rebuild";
 
 async function context(request: Request, locals: unknown) {
   const session = sessionFromRequest(request);
@@ -74,7 +75,15 @@ export async function POST({
     if (!result.ok) {
       return Response.json({ error: result.error }, { status: 403 });
     }
-    return Response.json({ ok: true, approved: body.approve });
+    const rebuild = body.approve
+      ? await triggerRebuild(process.env.REBUILD_HOOK_URL)
+      : { ok: true as const, skipped: true };
+    return Response.json({
+      ok: true,
+      approved: body.approve,
+      rebuild: rebuild.ok ? (rebuild.skipped ? "skipped" : "ok") : "failed",
+      rebuildError: rebuild.ok ? undefined : "error" in rebuild ? rebuild.error : undefined,
+    });
   }
 
   if (body.action === "join") {
