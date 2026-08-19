@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Save } from "lucide-react";
 import type { Project, ProjectContributor } from "../../../../src/lib/types";
+import { MediaField } from "./MediaField";
 
 export function ProjectForm({
   initial,
@@ -12,6 +13,8 @@ export function ProjectForm({
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [featured, setFeatured] = useState(!!initial?.featured);
+  const [image, setImage] = useState(initial?.image ?? "");
+  const [video, setVideo] = useState(initial?.video ?? "");
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,9 +52,9 @@ export function ProjectForm({
       features: initial?.features,
       highlights: initial?.highlights,
       screenshots: initial?.screenshots,
-      image: String(f.get("image") ?? "").trim() || undefined,
+      image: image || undefined,
       images: initial?.images,
-      video: String(f.get("video") ?? "").trim() || undefined,
+      video: video || undefined,
       featured,
       links: [
         github && { label: "GitHub", url: github },
@@ -131,8 +134,10 @@ export function ProjectForm({
         />
         <Input name="github" label="GitHub URL" defaultValue={linkUrl("git")} />
         <Input name="demo" label="Demo / paper URL" defaultValue={linkUrl("demo") || linkUrl("arxiv")} />
-        <Input name="image" label="Cover image URL" defaultValue={initial?.image} />
-        <Input name="video" label="Short video URL" defaultValue={initial?.video} />
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <MediaField label="Cover image" kind="projects" value={image} onChange={setImage} accept="image" />
+        <MediaField label="Short video" kind="projects" value={video} onChange={setVideo} accept="video" />
       </div>
       <label className="flex items-center gap-2 text-sm font-semibold text-ink">
         <input type="checkbox" checked={featured} onChange={(e) => setFeatured(e.target.checked)} />

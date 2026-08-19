@@ -35,3 +35,13 @@ export function canManageRoster(level: string | null | undefined) {
 export function canManageAllowlist(level: string | null | undefined) {
   return isLeadership(level);
 }
+
+/** Upload Media for a given editor kind. */
+export function canUploadKind(level: string | null | undefined, kind: string) {
+  if (kind === "team") return isLeadership(level);
+  if (kind === "projects" || kind === "events") {
+    return canDirectPublish(level, true) || canEnqueueChangeRequest(level, true);
+  }
+  if (kind === "members" || kind === "misc") return Boolean(level);
+  return false;
+}

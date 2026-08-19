@@ -6,6 +6,7 @@ import {
   canManageAllowlist,
   canManageRoster,
   canPublishResource,
+  canUploadKind,
 } from "./permissions.ts";
 
 const LEADERSHIP = ["oc", "co_overall_coordinator", "research_lead"] as const;
@@ -44,4 +45,13 @@ test("Leadership may manage the Roster and Allowlist; others may not", () => {
     assert.equal(canManageRoster(level), false);
     assert.equal(canManageAllowlist(level), false);
   }
+});
+
+test("upload kind follows Level", () => {
+  assert.equal(canUploadKind("oc", "team"), true);
+  assert.equal(canUploadKind("coordinator", "team"), false);
+  assert.equal(canUploadKind("coordinator", "projects"), true);
+  assert.equal(canUploadKind("executive", "events"), true);
+  assert.equal(canUploadKind("blogger", "projects"), false);
+  assert.equal(canUploadKind("blogger", "misc"), true);
 });
