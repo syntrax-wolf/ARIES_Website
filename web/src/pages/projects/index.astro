@@ -1,0 +1,58 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { TopNav } from "../../components/landing/TopNav";
+import { Eyebrow } from "../../components/ui/Eyebrow";
+import { ProjectsExplorer } from "../../components/projects/ProjectsExplorer";
+import { loadJsonBackupStore } from "../../lib/content/store";
+
+const projects = loadJsonBackupStore().listProjects();
+---
+
+<Layout title="Projects | ARIES IIT Delhi">
+  <TopNav client:load />
+  <div class="min-h-screen bg-[linear-gradient(180deg,#fbf7f0_35%,#b5a0ea_130%)] pt-24">
+    <section class="relative overflow-hidden">
+      <img
+        src="/images/projects/hero-deer.jpg"
+        alt=""
+        width="1600"
+        height="800"
+        class="pointer-events-none absolute -top-4 right-0 hidden h-[420px] w-auto max-w-[65%] object-contain object-right lg:block"
+      />
+      <div class="relative mx-auto max-w-[1360px] px-6 pb-6 pt-12 md:px-14">
+        <Eyebrow>Projects</Eyebrow>
+        <div class="mt-8 grid gap-10 lg:grid-cols-[1.4fr_1fr]">
+          <div>
+            <h1 class="text-4xl font-bold leading-[1.1] tracking-tight text-[#080b46] md:text-5xl">
+              Explore. Learn.
+              <br />
+              Build the Future.
+            </h1>
+            <p class="mt-8 max-w-xl text-sm leading-6 text-[#626276] md:text-[15px]">
+              From hands-on workshops to thought-provoking talks and intense hackathons — there&rsquo;s
+              something for every AI enthusiast.
+            </p>
+          </div>
+          <aside
+            class="relative ml-auto w-full max-w-[240px] self-start rounded-2xl bg-[rgba(255,251,246,0.96)] p-6 shadow-[0px_23px_40px_rgba(35,24,100,0.22)]"
+          >
+            <p class="text-lg text-[#080b46]">▣</p>
+            <h2 class="mt-3 text-lg font-bold text-[#080b46]">Our Mission</h2>
+            <p class="mt-3 text-sm leading-6 text-[#36364d]">
+              To foster a community passionate about AI/ML and empower students to build impactful
+              solutions.
+            </p>
+            <a href="/#what-we-do" class="mt-5 block text-sm font-bold text-[#080b46]">
+              Learn more about us →
+            </a>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <div class="mx-auto max-w-[1360px] px-6 md:px-14">
+      <Eyebrow className="mb-2 mt-4">Projects</Eyebrow>
+      <ProjectsExplorer client:load projects={projects} />
+    </div>
+  </div>
+</Layout>
