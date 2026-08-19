@@ -1,0 +1,32 @@
+{
+  "name": "aries-website-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "preview": "astro preview",
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test src/**/*.test.ts"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^14.2.3",
+    "@astrojs/react": "^6.0.4",
+    "astro": "^7.2.4",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.25.0",
+    "prismjs": "^1.30.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.20",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "sharp": "^0.34.5",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5",
+    "wrangler": "^4.124.0"
+  }
+}

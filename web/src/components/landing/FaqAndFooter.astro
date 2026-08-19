@@ -1,0 +1,48 @@
+---
+import { Picture } from "astro:assets";
+import { FaqList } from "./FaqList";
+import footerArt from "../../assets/chrome/footer-overlay.png";
+---
+
+<section class="landing-frame flex flex-col overflow-hidden bg-gradient-to-b from-mist via-lilac to-[#3a2d78]">
+  <div
+    class="relative mx-auto grid w-full max-w-[1400px] flex-1 content-center gap-10 px-6 py-16 lg:grid-cols-[1fr_1.6fr] lg:gap-16 lg:px-12 lg:py-20"
+  >
+    <div>
+      <p class="text-sm font-black uppercase tracking-[0.06em] text-purple-2">
+        <span class="mr-2 inline-block h-[3px] w-9 translate-y-[-4px] bg-purple-2" aria-hidden></span>
+        FAQs
+      </p>
+      <h2 class="mt-5 text-4xl font-black leading-[1.15] text-ink md:text-[46px]">
+        Frequently Asked <span class="text-purple-2">Questions</span>
+      </h2>
+      <p class="mt-8 max-w-xs text-lg leading-9 text-ink/80 md:text-[20px]">
+        Everything you need to know about Aries and how to get involved.
+      </p>
+    </div>
+
+    <FaqList client:load />
+  </div>
+
+  <footer class="relative mt-auto aspect-[672/384] w-full min-h-[200px] max-h-[420px] overflow-hidden">
+    <Picture
+      src={footerArt}
+      alt=""
+      formats={["avif", "webp"]}
+      widths={[640, 960, 1280, 1600]}
+      sizes="100vw"
+      class="absolute inset-0 h-full w-full object-cover object-center"
+    />
+    <div class="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[#3a2d78]/70 to-transparent"></div>
+    <div class="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#2a1f5c]/45 to-transparent"></div>
+
+    <div class="absolute inset-x-0 bottom-0 z-10 flex items-end justify-between gap-4 px-6 pb-5 md:px-12 md:pb-6">
+      <p class="text-xs font-semibold tracking-wide text-white drop-shadow-[0_2px_10px_rgba(20,10,60,0.65)] md:text-sm">
+        © 2026 ARIES, IIT Delhi
+      </p>
+      <p class="font-mono text-xs font-semibold tracking-wide text-white drop-shadow-[0_2px_10px_rgba(20,10,60,0.65)] md:text-sm">
+        while(alive)&nbsp;learn();
+      </p>
+    </div>
+  </footer>
+</section>

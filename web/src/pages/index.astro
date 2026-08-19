@@ -1,0 +1,16 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { TopNav } from "../components/landing/TopNav";
+import Hero from "../components/landing/Hero.astro";
+import { WhatWeDo } from "../components/landing/WhatWeDo";
+import FaqAndFooter from "../components/landing/FaqAndFooter.astro";
+---
+
+<Layout>
+  <div class="relative bg-night">
+    <TopNav client:load />
+    <Hero />
+    <WhatWeDo />
+    <FaqAndFooter />
+  </div>
+</Layout>
