@@ -1,5 +1,5 @@
-import { canPublishResource, isLeadership } from "../../../../src/lib/permissions.ts";
-import type { AriesEvent, Project, Resource } from "../../../../src/lib/types.ts";
+import { canPublishResource, isLeadership } from "../permissions.ts";
+import type { AriesEvent, Project, Resource } from "../types.ts";
 import type { GateSession } from "../gate/gate.ts";
 import type { WritableContentStore } from "./d1.ts";
 import { isListedOnEvent, isListedOnProject, type Actor } from "./publish.ts";

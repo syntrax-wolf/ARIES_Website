@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Save } from "lucide-react";
-import type { AriesEvent, ProjectContributor } from "../../../../src/lib/types";
+import type { AriesEvent, ProjectContributor } from "../../lib/types";
 import { Input, TextArea } from "./ProjectForm";
 
 export function EventForm({

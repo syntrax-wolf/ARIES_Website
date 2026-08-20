@@ -1,4 +1,4 @@
-import type { Project } from "../../../../src/lib/types";
+import type { Project } from "../../lib/types";
 import { CategoryBadge } from "../ui/CategoryBadge";
 import { Tag } from "../ui/Tag";
 
@@ -37,7 +37,7 @@ export function ProjectCard({ project }: { project: Project }) {
       </div>
       <div className="flex flex-1 flex-col gap-2 px-5 py-5">
         <div>
-          <CategoryBadge>{project.category}</CategoryBadge>
+          <CategoryBadge label={project.category} />
         </div>
         <h3 className="text-base font-semibold text-[#11154a]">
           {project.name}

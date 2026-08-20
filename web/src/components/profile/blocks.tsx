@@ -15,7 +15,7 @@ import type {
   InternshipItem,
   ProfileBlock,
   ProfileProject,
-} from "../../../../src/lib/types";
+} from "../../lib/types";
 import { Tag } from "../ui/Tag";
 
 export function ProfileBlockView({ block }: { block: ProfileBlock }) {

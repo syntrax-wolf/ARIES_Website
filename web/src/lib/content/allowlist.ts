@@ -1,4 +1,4 @@
-import { canManageAllowlist } from "../../../../src/lib/permissions.ts";
+import { canManageAllowlist } from "../permissions.ts";
 import { decideKerberosGate } from "../gate/gate.ts";
 import type { WritableContentStore } from "./d1.ts";
 import type { Actor, PublishResult } from "./publish.ts";

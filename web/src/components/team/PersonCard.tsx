@@ -1,5 +1,5 @@
-import type { TeamMemberRef } from "../../../../src/lib/types";
-import { memberProfileSlug } from "../../../../src/lib/utils";
+import type { TeamMemberRef } from "../../lib/types";
+import { memberProfileSlug } from "../../lib/utils";
 
 export function initialsOf(name: string) {
   return name

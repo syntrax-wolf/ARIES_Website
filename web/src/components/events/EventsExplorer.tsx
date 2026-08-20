@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { ChevronDown, Search } from "lucide-react";
-import type { AriesEvent } from "../../../../src/lib/types";
-import { cn } from "../../../../src/lib/utils";
+import type { AriesEvent } from "../../lib/types";
+import { cn } from "../../lib/utils";
 import { EventCard } from "./EventCard";
 
 const TABS = ["All Events", "Workshops", "Talks", "Hackathons", "Externals"] as const;

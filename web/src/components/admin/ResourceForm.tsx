@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Save } from "lucide-react";
-import type { Resource, ResourceAuthor } from "../../../../src/lib/types";
+import type { Resource, ResourceAuthor } from "../../lib/types";
 import { Input, TextArea } from "./ProjectForm";
 
 const RESOURCE_TYPES: Resource["type"][] = ["Blog", "Tutorial", "Course", "Featured"];

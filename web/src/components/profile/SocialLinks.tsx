@@ -1,4 +1,4 @@
-import type { SocialLink, SocialLinkKind } from "../../../../src/lib/types";
+import type { SocialLink, SocialLinkKind } from "../../lib/types";
 
 function inferSocialKind(link: SocialLink): SocialLinkKind {
   if (link.kind) return link.kind;

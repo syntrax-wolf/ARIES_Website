@@ -1,4 +1,4 @@
-import type { AriesEvent, Member, Project, Resource, TeamData } from "../../../../src/lib/types.ts";
+import type { AriesEvent, Member, Project, Resource, TeamData } from "../types.ts";
 import { createContentStore, isPublicMember, type ContentStore } from "./store.ts";
 
 export const TEAM_SLUG = "_";

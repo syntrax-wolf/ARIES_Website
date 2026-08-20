@@ -1,5 +1,5 @@
 import { Download, GraduationCap, MapPin } from "lucide-react";
-import type { AriesEvent, Member, Project, Resource } from "../../../../src/lib/types";
+import type { AriesEvent, Member, Project, Resource } from "../../lib/types";
 import { BlockGrid } from "./BlockGrid";
 import { BackToSource } from "./BackToSource";
 import { SocialLinksDisplay } from "./SocialLinks";

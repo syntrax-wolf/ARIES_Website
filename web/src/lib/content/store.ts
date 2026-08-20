@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { AriesEvent, Member, Project, Resource, TeamData } from "../../../../src/lib/types.ts";
+import { fileURLToPath } from "node:url";
+import type { AriesEvent, Member, Project, Resource, TeamData } from "../types.ts";
 
 const EMPTY_TEAM: TeamData = { years: [], alumni: [] };
 
@@ -94,7 +95,9 @@ export function loadEventsFromJsonDir(dir: string): AriesEvent[] {
 }
 
 function contentRoot(): string {
+  const here = path.dirname(fileURLToPath(import.meta.url));
   const candidates = [
+    path.resolve(here, "../../../../content"),
     path.join(process.cwd(), "content"),
     path.join(process.cwd(), "..", "content"),
   ];

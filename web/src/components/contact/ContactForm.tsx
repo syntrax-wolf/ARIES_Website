@@ -1,5 +1,5 @@
 import { MessageSquare, Send } from "lucide-react";
-import { clubEmail } from "../../../../src/config/socials";
+import { clubEmail } from "../../config/socials";
 
 export function ContactForm() {
   return (

@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { BookOpen, CalendarPlus, ClipboardList, FolderPlus, Image as ImageIcon, LogOut, Shield, UserRound, Users } from "lucide-react";
-import type { AriesEvent, Member, Project, Resource, TeamData } from "../../../../src/lib/types";
+import type { AriesEvent, Member, Project, Resource, TeamData } from "../../lib/types";
 import { ProjectForm } from "./ProjectForm";
 import { EventForm } from "./EventForm";
 import { ResourceForm } from "./ResourceForm";

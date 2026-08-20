@@ -1,0 +1,154 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/*
+ * ARIES design tokens.
+ * Source of truth for hex values: `web/src/config/colors.ts`.
+ * Keep these CSS vars in sync when changing the palette.
+ */
+:root {
+  --aries-navy: #03085f;
+  --aries-ink: #03085f;
+  --aries-purple: #602bf1;
+  --aries-purple-2: #4711d9;
+  --aries-purple-3: #7a50ff;
+  --aries-cream: #fbf4ec;
+  --aries-mist: #f3ebf8;
+  --aries-lilac: #f0e6fa;
+  --aries-lilac-2: #eadcf7;
+  --aries-night: #0e1239;
+  --aries-night-2: #171743;
+  --aries-night-3: #0b1035;
+  --aries-teal: #36d8c7;
+  --aries-sky: #9eccfa;
+  --aries-muted: #5b5e82;
+
+  --background: var(--aries-cream);
+  --foreground: var(--aries-ink);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-navy: var(--aries-navy);
+  --color-navy-2: var(--aries-navy); /* alias — same as navy */
+  --color-ink: var(--aries-ink);
+  --color-night: var(--aries-night);
+  --color-night-2: var(--aries-night-2);
+  --color-night-3: var(--aries-night-3);
+  --color-purple: var(--aries-purple);
+  --color-purple-2: var(--aries-purple-2);
+  --color-purple-3: var(--aries-purple-3);
+  --color-lilac: var(--aries-lilac);
+  --color-lilac-2: var(--aries-lilac-2);
+  --color-cream: var(--aries-cream);
+  --color-cream-2: var(--aries-mist); /* alias — cool mist, not warm peach */
+  --color-mist: var(--aries-mist);
+  --color-teal: var(--aries-teal);
+  --color-sky: var(--aries-sky);
+  --color-muted: var(--aries-muted);
+
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-cormorant);
+
+  --shadow-card: 0px 13px 33px 0px rgba(63, 37, 93, 0.1);
+  --shadow-card-sm: 0px 12px 24px 0px rgba(63, 37, 93, 0.08);
+  --shadow-stat: 0px 18px 41px 0px rgba(66, 41, 105, 0.11);
+  --shadow-cta: 0px 11px 12px rgba(3, 8, 95, 0.22);
+
+  --radius-card: 15px;
+  --radius-card-lg: 27px;
+  --radius-pill: 24px;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Full-viewport landing frames */
+.landing-frame {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  min-height: 100dvh;
+}
+
+.glow-circle {
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle at center,
+    rgba(117, 70, 242, 0.28) 0%,
+    rgba(196, 170, 248, 0.17) 45%,
+    rgba(98, 85, 124, 0.085) 58.5%,
+    transparent 72%
+  );
+  pointer-events: none;
+}
+
+.decor-ring {
+  border-radius: 9999px;
+  border: 1.2px solid rgba(95, 43, 225, 0.15);
+  pointer-events: none;
+}
+
+.purple-icon-gradient {
+  background: radial-gradient(
+    140% 140% at 30% 35%,
+    #be9cff 0%,
+    #9975e9 25%,
+    #734ed3 50%,
+    #4d27bd 75%,
+    #2700a7 100%
+  );
+  box-shadow: inset 0px 1.5px 21px 0px rgba(255, 255, 255, 0.18);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Team page — continuously sliding executive rows */
+@keyframes marquee-ltr {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes marquee-rtl {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-ltr {
+  animation: marquee-ltr 45s linear infinite;
+}
+
+.animate-marquee-rtl {
+  animation: marquee-rtl 45s linear infinite;
+}
+
+.marquee-mask:hover .animate-marquee-ltr,
+.marquee-mask:hover .animate-marquee-rtl {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-ltr,
+  .animate-marquee-rtl {
+    animation: none;
+  }
+}

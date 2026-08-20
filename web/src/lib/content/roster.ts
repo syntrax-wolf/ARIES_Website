@@ -1,5 +1,5 @@
-import { canDirectPublish, canEnqueueChangeRequest, canManageRoster, canPublishResource, isLeadership } from "../../../../src/lib/permissions.ts";
-import type { Member, ProjectContributor, TeamData } from "../../../../src/lib/types.ts";
+import { canDirectPublish, canEnqueueChangeRequest, canManageRoster, canPublishResource, isLeadership } from "../permissions.ts";
+import type { Member, ProjectContributor, TeamData } from "../types.ts";
 import type { WritableContentStore } from "./d1.ts";
 import type { Actor, PublishResult } from "./publish.ts";
 

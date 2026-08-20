@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import type { Project } from "../../../../src/lib/types";
+import type { Project } from "../../lib/types";
 import { ProjectCard } from "./ProjectCard";
 
 function blob(p: Project): string {

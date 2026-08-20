@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Save } from "lucide-react";
-import type { Project, ProjectContributor } from "../../../../src/lib/types";
+import type { Project, ProjectContributor } from "../../lib/types";
 import { MediaField } from "./MediaField";
 
 export function ProjectForm({

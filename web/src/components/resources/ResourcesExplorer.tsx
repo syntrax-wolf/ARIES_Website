@@ -9,9 +9,9 @@ import {
   Bookmark,
   ChevronDown,
 } from "lucide-react";
-import type { Resource } from "../../../../src/lib/types";
+import type { Resource } from "../../lib/types";
 import { CategoryBadge } from "../ui/CategoryBadge";
-import { cn } from "../../../../src/lib/utils";
+import { cn } from "../../lib/utils";
 
 function authorLabel(a: { name?: string; slug?: string }) {
   return a.name?.trim() || a.slug || "Unknown";
@@ -110,7 +110,7 @@ export function ResourcesExplorer({ resources }: { resources: Resource[] }) {
                   </div>
                 )}
                 <div className="mt-4">
-                  <CategoryBadge>{r.type}</CategoryBadge>
+                  <CategoryBadge label={r.type} />
                 </div>
                 <h3 className="mt-2 text-sm font-bold text-ink">{r.title}</h3>
                 <p className="mt-1.5 line-clamp-3 text-xs leading-5 text-ink/70">{r.description}</p>
@@ -164,7 +164,7 @@ export function ResourcesExplorer({ resources }: { resources: Resource[] }) {
                   </p>
                 </div>
                 <span>
-                  <CategoryBadge>{r.type}</CategoryBadge>
+                  <CategoryBadge label={r.type} />
                 </span>
                 <span className="text-xs text-ink/60">
                   {new Date(r.addedOn + "T00:00:00").toLocaleDateString("en-IN", {

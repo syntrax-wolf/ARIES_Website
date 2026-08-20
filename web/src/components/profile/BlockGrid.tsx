@@ -1,4 +1,4 @@
-import type { ProfileBlock } from "../../../../src/lib/types";
+import type { ProfileBlock } from "../../lib/types";
 import { ProfileBlockView } from "./blocks";
 
 export function BlockGrid({ blocks }: { blocks: ProfileBlock[] }) {

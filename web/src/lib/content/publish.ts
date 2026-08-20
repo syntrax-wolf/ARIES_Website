@@ -1,5 +1,5 @@
-import { canDirectPublish, canEnqueueChangeRequest, canPublishResource } from "../../../../src/lib/permissions.ts";
-import type { AriesEvent, Project, ProjectContributor, Resource } from "../../../../src/lib/types.ts";
+import { canDirectPublish, canEnqueueChangeRequest, canPublishResource } from "../permissions.ts";
+import type { AriesEvent, Project, ProjectContributor, Resource } from "../types.ts";
 import type { GateSession } from "../gate/gate.ts";
 import type { WritableContentStore } from "./d1.ts";
 

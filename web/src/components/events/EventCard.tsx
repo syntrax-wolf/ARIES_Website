@@ -1,5 +1,5 @@
 import { Clock, MapPin, ArrowRight } from "lucide-react";
-import type { AriesEvent } from "../../../../src/lib/types";
+import type { AriesEvent } from "../../lib/types";
 
 const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 const DAYS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];

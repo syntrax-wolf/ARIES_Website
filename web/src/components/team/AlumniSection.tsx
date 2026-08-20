@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import type { Alumnus } from "../../../../src/lib/types";
+import type { Alumnus } from "../../lib/types";
 import { initialsOf } from "./PersonCard";
-import { memberProfileSlug } from "../../../../src/lib/utils";
+import { memberProfileSlug } from "../../lib/utils";
 
 export function AlumniSection({ alumni }: { alumni: Alumnus[] }) {
   const [query, setQuery] = useState("");

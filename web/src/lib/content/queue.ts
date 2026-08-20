@@ -1,5 +1,5 @@
-import { canApprove } from "../../../../src/lib/permissions.ts";
-import type { AriesEvent, Project, Resource } from "../../../../src/lib/types.ts";
+import { canApprove } from "../permissions.ts";
+import type { AriesEvent, Project, Resource } from "../types.ts";
 import type { ChangeRequest, WritableContentStore } from "./d1.ts";
 import {
   isListedOnEvent,

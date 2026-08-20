@@ -1,4 +1,4 @@
-import type { TeamMemberRef } from "../../../../src/lib/types";
+import type { TeamMemberRef } from "../../lib/types";
 import { PersonCard } from "./PersonCard";
 
 export function ExecutiveMarquee({

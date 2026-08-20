@@ -1,5 +1,5 @@
-import { cn } from "../../../../src/lib/utils";
-import { colors } from "../../../../src/config/colors";
+import { cn } from "../../lib/utils";
+import { colors } from "../../config/colors";
 
 const { chip } = colors;
 
@@ -18,14 +18,14 @@ const palette: Record<string, { bg: string; fg: string }> = {
   event: chip.blue,
 };
 
+/** Pass `label` from `.astro` files — Astro children of React components are not always strings. */
 export function CategoryBadge({
-  children,
+  label,
   className,
 }: {
-  children: string;
+  label: string;
   className?: string;
 }) {
-  const label = typeof children === "string" ? children : String(children ?? "");
   const c = palette[label.toLowerCase()] ?? chip.neutral;
   return (
     <span

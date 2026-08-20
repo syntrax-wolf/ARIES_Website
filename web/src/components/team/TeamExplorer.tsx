@@ -1,4 +1,4 @@
-import type { TeamData } from "../../../../src/lib/types";
+import type { TeamData } from "../../lib/types";
 import { PersonCard } from "./PersonCard";
 import { ExecutiveMarquee } from "./ExecutiveMarquee";
 import { TeamPhotoCarousel } from "./TeamPhotoCarousel";

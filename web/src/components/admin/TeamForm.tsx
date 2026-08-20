@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Save } from "lucide-react";
-import type { TeamData } from "../../../../src/lib/types";
+import type { TeamData } from "../../lib/types";
 import { Input, TextArea } from "./ProjectForm";
 
 export function TeamForm({

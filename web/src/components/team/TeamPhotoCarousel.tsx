@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
-import type { TeamYear } from "../../../../src/lib/types";
+import type { TeamYear } from "../../lib/types";
 
 function yearPhotos(year: Pick<TeamYear, "photo" | "photos">): string[] {
   const list = [...(year.photos ?? [])];

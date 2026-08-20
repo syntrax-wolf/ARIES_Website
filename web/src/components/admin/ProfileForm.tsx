@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ArrowDown, ArrowUp, Plus, Save, Trash2 } from "lucide-react";
-import type { Member, ProfileBlock } from "../../../../src/lib/types";
+import type { Member, ProfileBlock } from "../../lib/types";
 import { Input, TextArea } from "./ProjectForm";
 
 export function ProfileForm({
