@@ -1,6 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { TopNav } from "../../components/landing/TopNav";
+import InnerChrome from "../../layouts/InnerChrome.astro";
 import { CategoryBadge } from "../../components/ui/CategoryBadge";
 import { Tag } from "../../components/ui/Tag";
 import { loadBuildStore } from "../../lib/content/build-store";
@@ -10,6 +10,8 @@ export async function getStaticPaths() {
   return store.listProjects().map((p) => ({ params: { slug: p.slug } }));
 }
 
+export const prerender = true;
+
 const { slug } = Astro.params;
 const project = (await loadBuildStore()).getProject(slug!);
 if (!project) {
@@ -17,9 +19,19 @@ if (!project) {
 }
 ---
 
-<Layout title={`${project.name}${project.accent ? ` ${project.accent}` : ""} | ARIES IIT Delhi`}>
-  <TopNav client:load />
-  <div class="min-h-screen bg-[#fdf6ee] pt-24">
+<Layout
+  title={`${project.name}${project.accent ? ` ${project.accent}` : ""} | ARIES IIT Delhi`}
+  description={project.tagline || project.description}
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: `${project.name}${project.accent ? ` ${project.accent}` : ""}`,
+    description: project.description,
+    url: Astro.url.href,
+  }}
+>
+  <InnerChrome>
+  <div class="min-h-screen bg-[#fdf6ee] pt-16 lg:pt-0">
     <div class="mx-auto max-w-[1240px] px-6 pb-20 pt-14 md:px-12">
       <div class="grid items-center gap-10 lg:grid-cols-[1.15fr_1fr]">
         <div>
@@ -84,8 +96,9 @@ if (!project) {
       }
 
       <div class="mt-14">
-        <CategoryBadge>{project.category}</CategoryBadge>
+        <CategoryBadge label={project.category} />
       </div>
     </div>
   </div>
+  </InnerChrome>
 </Layout>

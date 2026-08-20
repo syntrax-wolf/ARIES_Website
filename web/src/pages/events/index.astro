@@ -1,6 +1,8 @@
 ---
+export const prerender = true;
+
 import Layout from "../../layouts/Layout.astro";
-import { TopNav } from "../../components/landing/TopNav";
+import InnerChrome from "../../layouts/InnerChrome.astro";
 import { PageHero } from "../../components/ui/PageHero";
 import { EventsExplorer } from "../../components/events/EventsExplorer";
 import { loadBuildStore } from "../../lib/content/build-store";
@@ -8,9 +10,12 @@ import { loadBuildStore } from "../../lib/content/build-store";
 const { upcoming, past } = (await loadBuildStore()).splitEvents();
 ---
 
-<Layout title="Events | ARIES IIT Delhi">
-  <TopNav client:load />
-  <div class="relative min-h-screen overflow-hidden bg-[linear-gradient(178deg,#fffaf3_1%,#fbf5ec_64%,#8378ff_140%)] pt-16">
+<Layout
+  title="Events | ARIES IIT Delhi"
+  description="Talks, workshops, hackathons, and industry events from ARIES at IIT Delhi."
+>
+  <InnerChrome>
+  <div class="relative min-h-screen overflow-hidden bg-[linear-gradient(178deg,#fffaf3_1%,#fbf5ec_64%,#8378ff_140%)] pt-16 lg:pt-0">
     <div class="glow-circle absolute -right-24 top-16 size-[380px]"></div>
     <div class="mx-auto max-w-[1360px] px-6 md:px-16">
       <PageHero
@@ -20,7 +25,8 @@ const { upcoming, past } = (await loadBuildStore()).splitEvents();
         titleSuffix="follows."
         subtitle="Explore conversations, collaborations and creations that move the ARIES community forward."
       />
-      <EventsExplorer client:load upcoming={upcoming} past={past} />
+      <EventsExplorer client:visible upcoming={upcoming} past={past} />
     </div>
   </div>
+  </InnerChrome>
 </Layout>

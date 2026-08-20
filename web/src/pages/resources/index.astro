@@ -1,19 +1,25 @@
 ---
+export const prerender = true;
+
 import Layout from "../../layouts/Layout.astro";
-import { TopNav } from "../../components/landing/TopNav";
+import InnerChrome from "../../layouts/InnerChrome.astro";
 import { ResourcesExplorer } from "../../components/resources/ResourcesExplorer";
 import { loadBuildStore } from "../../lib/content/build-store";
 
 const resources = (await loadBuildStore()).listResources();
 ---
 
-<Layout title="Resources | ARIES IIT Delhi">
-  <TopNav client:load />
-  <div class="relative min-h-screen overflow-hidden bg-[#fbf4ec] pt-24">
+<Layout
+  title="Resources | ARIES IIT Delhi"
+  description="Blogs, tutorials, courses, and featured links from ARIES at IIT Delhi."
+>
+  <InnerChrome>
+  <div class="relative min-h-screen overflow-hidden bg-[#fbf4ec] pt-16 lg:pt-0">
     <div class="glow-circle absolute -left-24 top-4 size-72"></div>
     <div class="glow-circle absolute -right-28 top-60 size-96"></div>
     <div class="relative mx-auto max-w-[1240px] px-6 pt-14 md:px-12">
-      <ResourcesExplorer client:load resources={resources} />
+      <ResourcesExplorer client:visible resources={resources} />
     </div>
   </div>
+  </InnerChrome>
 </Layout>

@@ -1,13 +1,15 @@
 ---
 import { CalendarDays, Clock, MapPin, ArrowLeft } from "lucide-react";
 import Layout from "../../layouts/Layout.astro";
-import { TopNav } from "../../components/landing/TopNav";
+import InnerChrome from "../../layouts/InnerChrome.astro";
 import { loadBuildStore } from "../../lib/content/build-store";
 
 export async function getStaticPaths() {
   const store = await loadBuildStore();
   return store.listEvents().map((e) => ({ params: { slug: e.slug } }));
 }
+
+export const prerender = true;
 
 const { slug } = Astro.params;
 const event = (await loadBuildStore()).getEvent(slug!);
@@ -26,9 +28,24 @@ const dateLabel = d.toLocaleDateString("en-IN", {
 });
 ---
 
-<Layout title={`${event.title} | ARIES IIT Delhi`}>
-  <TopNav client:load />
-  <div class="relative min-h-screen overflow-hidden bg-[linear-gradient(160deg,#f6f1fb_0%,#ece2f7_55%,#e0d2f3_100%)] pt-24">
+<Layout
+  title={`${event.title} | ARIES IIT Delhi`}
+  description={event.description}
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: event.title,
+    description: event.description,
+    startDate: event.date,
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    location: event.venue
+      ? { "@type": "Place", name: event.venue }
+      : { "@type": "Place", name: "IIT Delhi" },
+    organizer: { "@type": "Organization", name: "ARIES IIT Delhi" },
+  }}
+>
+  <InnerChrome>
+  <div class="relative min-h-screen overflow-hidden bg-[linear-gradient(160deg,#f6f1fb_0%,#ece2f7_55%,#e0d2f3_100%)] pt-16 lg:pt-0">
     <div class="glow-circle absolute -right-24 top-40 size-96"></div>
     <div class="relative mx-auto max-w-[1000px] px-6 pb-20 pt-14 md:px-10">
       <a href="/events" class="inline-flex items-center gap-2 text-sm font-semibold text-purple hover:underline">
@@ -71,4 +88,5 @@ const dateLabel = d.toLocaleDateString("en-IN", {
       <p class="mt-10 text-[15px] leading-8 text-ink">{event.body || event.description}</p>
     </div>
   </div>
+  </InnerChrome>
 </Layout>

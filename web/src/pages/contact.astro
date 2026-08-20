@@ -1,9 +1,11 @@
 ---
+export const prerender = true;
+
 import { Mail, MapPin, ExternalLink } from "lucide-react";
 import Layout from "../layouts/Layout.astro";
-import { TopNav } from "../components/landing/TopNav";
+import InnerChrome from "../layouts/InnerChrome.astro";
 import { ContactForm } from "../components/contact/ContactForm";
-import { clubSocials, clubEmail, clubLocation } from "../../../src/config/socials";
+import { clubSocials, clubEmail, clubLocation } from "../config/socials";
 
 const socialGlyphs: Record<string, string> = {
   LinkedIn: "in",
@@ -11,9 +13,12 @@ const socialGlyphs: Record<string, string> = {
 };
 ---
 
-<Layout title="Contact | ARIES IIT Delhi">
-  <TopNav client:load />
-  <div class="relative min-h-screen overflow-hidden bg-[#fbf4ec] pt-24">
+<Layout
+  title="Contact | ARIES IIT Delhi"
+  description="Reach ARIES at IIT Delhi — email, LinkedIn, and campus location."
+>
+  <InnerChrome>
+  <div class="relative min-h-screen overflow-hidden bg-[#fbf4ec] pt-16 lg:pt-0">
     <div class="absolute -right-20 -top-16 size-72 rounded-full bg-[#e4dcf7]"></div>
     <div class="absolute right-40 top-28 size-40 rounded-full bg-[#f3e7d3]"></div>
 
@@ -31,7 +36,7 @@ const socialGlyphs: Record<string, string> = {
       </p>
 
       <div class="mt-10 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
-        <ContactForm client:load />
+        <ContactForm client:idle />
 
         <aside class="rounded-2xl bg-white p-7 shadow-card-sm">
           <h2 class="text-lg font-bold text-ink">Get in touch</h2>
@@ -90,4 +95,5 @@ const socialGlyphs: Record<string, string> = {
       </div>
     </div>
   </div>
+  </InnerChrome>
 </Layout>

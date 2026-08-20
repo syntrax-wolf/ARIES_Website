@@ -1,0 +1,15 @@
+---
+import { Sidebar } from "../components/layout/Sidebar";
+
+/**
+ * Inner-page chrome from `main`: collapsible left sidebar + content.
+ * Landing and member profiles keep the top navbar on purpose.
+ */
+---
+
+<div class="flex min-h-screen bg-cream">
+  <Sidebar client:load currentPath={Astro.url.pathname} />
+  <main class="min-w-0 flex-1">
+    <slot />
+  </main>
+</div>

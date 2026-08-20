@@ -2,7 +2,7 @@
 export const prerender = false;
 
 import Layout from "../../layouts/Layout.astro";
-import { TopNav } from "../../components/landing/TopNav";
+import InnerChrome from "../../layouts/InnerChrome.astro";
 import { AdminEditor } from "../../components/admin/AdminEditor";
 import { createWritableStore } from "../../lib/content/d1";
 import {
@@ -11,16 +11,16 @@ import {
   resolveActor,
   resourcesEditableBy,
 } from "../../lib/content/actor";
-import { documentDbFromLocals } from "../../lib/gate/runtime";
+import { getDocumentDb } from "../../lib/gate/runtime";
 import { sessionFromRequest } from "../../lib/gate/request";
-import { canApprove, canManageAllowlist, canManageRoster, canPublishResource, isLeadership } from "../../../../src/lib/permissions";
+import { canApprove, canManageAllowlist, canManageRoster, canPublishResource, isLeadership } from "../../lib/permissions";
 
 const session = sessionFromRequest(Astro.request);
 if (!session) {
   return Astro.redirect("/admin");
 }
 
-const db = await documentDbFromLocals(Astro.locals);
+const db = await getDocumentDb();
 const store = createWritableStore(db);
 const actor = await resolveActor(store, session);
 const projects = projectsEditableBy(actor, await store.listProjects());
@@ -55,9 +55,9 @@ if (actor.session.kind === "admin" || canManageAllowlist(actor.level)) {
 }
 ---
 
-<Layout title="Editor | ARIES IIT Delhi">
-  <TopNav client:load />
-  <div class="min-h-screen bg-[#fbf4ec] px-6 pt-32 pb-16">
+<Layout title="Editor | ARIES IIT Delhi" noindex>
+  <InnerChrome>
+  <div class="min-h-screen bg-[#fbf4ec] px-6 pt-16 pb-16 lg:pt-12">
     <div class="mx-auto max-w-5xl">
       <AdminEditor
         client:load
@@ -72,4 +72,5 @@ if (actor.session.kind === "admin" || canManageAllowlist(actor.level)) {
       />
     </div>
   </div>
+  </InnerChrome>
 </Layout>

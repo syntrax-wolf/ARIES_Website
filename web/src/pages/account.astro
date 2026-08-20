@@ -2,7 +2,7 @@
 export const prerender = false;
 
 import Layout from "../layouts/Layout.astro";
-import { TopNav } from "../components/landing/TopNav";
+import InnerChrome from "../layouts/InnerChrome.astro";
 import { sessionFromRequest } from "../lib/gate/request";
 
 const session = sessionFromRequest(Astro.request);
@@ -11,9 +11,9 @@ if (!session) {
 }
 ---
 
-<Layout title="Account | ARIES IIT Delhi">
-  <TopNav client:load />
-  <div class="min-h-screen bg-[#fbf4ec] px-6 pt-32">
+<Layout title="Account | ARIES IIT Delhi" noindex>
+  <InnerChrome>
+  <div class="min-h-screen bg-[#fbf4ec] px-6 pt-16 lg:pt-12">
     <div class="mx-auto max-w-lg rounded-2xl bg-white p-8 shadow-card-sm">
       <h1 class="text-2xl font-black text-ink">Signed in</h1>
       <p class="mt-3 text-sm text-ink/70">
@@ -38,4 +38,5 @@ if (!session) {
       </div>
     </div>
   </div>
+  </InnerChrome>
 </Layout>

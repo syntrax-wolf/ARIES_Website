@@ -1,6 +1,8 @@
 ---
+export const prerender = true;
+
 import Layout from "../../layouts/Layout.astro";
-import { TopNav } from "../../components/landing/TopNav";
+import InnerChrome from "../../layouts/InnerChrome.astro";
 import { Eyebrow } from "../../components/ui/Eyebrow";
 import { ProjectsExplorer } from "../../components/projects/ProjectsExplorer";
 import { loadBuildStore } from "../../lib/content/build-store";
@@ -9,9 +11,12 @@ const store = await loadBuildStore();
 const projects = store.listProjects();
 ---
 
-<Layout title="Projects | ARIES IIT Delhi">
-  <TopNav client:load />
-  <div class="min-h-screen bg-[linear-gradient(180deg,#fbf7f0_35%,#b5a0ea_130%)] pt-24">
+<Layout
+  title="Projects | ARIES IIT Delhi"
+  description="Club projects from ARIES at IIT Delhi — research, engineering, and student builds."
+>
+  <InnerChrome>
+  <div class="min-h-screen bg-[linear-gradient(180deg,#fbf7f0_35%,#b5a0ea_130%)] pt-16 lg:pt-0">
     <section class="relative overflow-hidden">
       <img
         src="/images/projects/hero-deer.jpg"
@@ -53,7 +58,8 @@ const projects = store.listProjects();
 
     <div class="mx-auto max-w-[1360px] px-6 md:px-14">
       <Eyebrow className="mb-2 mt-4">Projects</Eyebrow>
-      <ProjectsExplorer client:load projects={projects} />
+      <ProjectsExplorer client:visible projects={projects} />
     </div>
   </div>
+  </InnerChrome>
 </Layout>
