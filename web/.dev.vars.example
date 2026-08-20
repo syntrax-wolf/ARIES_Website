@@ -1,0 +1,38 @@
+# Copy to web/.dev.vars (Wrangler local secrets). Not deployed.
+# Production: pnpm wrangler secret put NAME  (from the web/ directory)
+
+# Canonical public origin used for sitemap, canonical URLs, and Open Graph.
+# PUBLIC_SITE_URL=https://ariesiitd.com
+
+# Session cookie HMAC. Required for Gate cookies.
+SESSION_SECRET=
+
+# Bootstrap Admin password. Only identifier `admin` plus this secret may mint an Admin Session.
+ADMIN_PASSWORD=
+
+# DevClub OIDC (Kerberos login). Leave empty to disable IIT Delhi sign-in locally.
+DEVCLUB_CLIENT_ID=
+DEVCLUB_CLIENT_SECRET=
+DEVCLUB_REDIRECT_URI=http://localhost:4321/api/auth/callback/devclub
+
+# Build public HTML from local D1 instead of content/*.json
+# ARIES_CONTENT_SOURCE=d1
+
+# Comma-separated Kerberos ids used only when D1 is unavailable (local astro dev).
+# ARIES_ALLOWLIST=cs1230001
+
+# Sanity Content Lake (migration scripts only).
+# SANITY_PROJECT_ID=
+# SANITY_DATASET=production
+# SANITY_API_VERSION=2026-08-08
+# SANITY_TOKEN=
+
+# Supabase Postgres (migration scripts only).
+# SUPABASE_URL=
+# SUPABASE_SERVICE_ROLE_KEY=
+
+# Public base for R2 Media URLs (Worker serves /media/*).
+# MEDIA_PUBLIC_BASE=/media
+
+# Cloudflare deploy hook. POSTed after a CMS write. Leave empty locally.
+# REBUILD_HOOK_URL=

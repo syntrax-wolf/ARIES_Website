@@ -1,4 +1,4 @@
-import { canUploadKind } from "../../../../src/lib/permissions.ts";
+import { canUploadKind } from "../permissions.ts";
 
 export const IMAGE_MAX = 2 * 1024 * 1024;
 export const VIDEO_MAX = 40 * 1024 * 1024;
@@ -55,7 +55,7 @@ export function planUpload(input: {
   if (isVideo && input.size > VIDEO_MAX) {
     return { ok: false, error: "video too large" };
   }
-  const id = `${Date.now()}-upload`;
+  const id = crypto.randomUUID();
   if (isImage) {
     return {
       ok: true,

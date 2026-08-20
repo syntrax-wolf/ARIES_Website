@@ -9,6 +9,7 @@ import {
   oidcCookieName,
   oidcCookieOptions,
 } from "../../../lib/gate/devclub";
+import { cookieIsSecure } from "../../../lib/gate/gate";
 
 export async function GET({ request }: { request: Request }) {
   if (!isDevclubConfigured()) {
@@ -33,7 +34,8 @@ export async function GET({ request }: { request: Request }) {
   });
 
   const opts = oidcCookieOptions();
-  const cookie = `${oidcCookieName()}=${encodeURIComponent(JSON.stringify({ codeVerifier, state, redirectUri }))}; Path=${opts.path}; HttpOnly; SameSite=Lax; Max-Age=${opts.maxAge}`;
+  const secure = cookieIsSecure(request.url) || opts.secure;
+  const cookie = `${oidcCookieName()}=${encodeURIComponent(JSON.stringify({ codeVerifier, state, redirectUri }))}; Path=${opts.path}; HttpOnly; SameSite=Lax; Max-Age=${opts.maxAge}${secure ? "; Secure" : ""}`;
   return new Response(null, {
     status: 302,
     headers: {

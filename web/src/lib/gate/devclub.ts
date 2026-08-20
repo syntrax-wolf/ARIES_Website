@@ -1,4 +1,5 @@
 import * as client from "openid-client";
+import { runtimeVar } from "../cloudflare-env";
 
 export const DEVCLUB_DISCOVERY_URL =
   "https://auth.devclub.in/api/oauth/.well-known/openid-configuration";
@@ -6,19 +7,19 @@ export const DEVCLUB_SCOPE = "openid profile email kerberos entry_number";
 const COOKIE = "dc_oidc";
 
 export function isDevclubConfigured() {
-  return Boolean(process.env.DEVCLUB_CLIENT_ID?.trim() && process.env.DEVCLUB_CLIENT_SECRET?.trim());
+  return Boolean(runtimeVar("DEVCLUB_CLIENT_ID").trim() && runtimeVar("DEVCLUB_CLIENT_SECRET").trim());
 }
 
 export function devclubRedirectUri(requestUrl: string) {
-  const fromEnv = process.env.DEVCLUB_REDIRECT_URI?.trim();
+  const fromEnv = runtimeVar("DEVCLUB_REDIRECT_URI").trim();
   if (fromEnv) return fromEnv;
   const url = new URL(requestUrl);
   return `${url.origin}/api/auth/callback/devclub`;
 }
 
 export async function getDevclubConfig() {
-  const clientId = process.env.DEVCLUB_CLIENT_ID?.trim();
-  const clientSecret = process.env.DEVCLUB_CLIENT_SECRET?.trim();
+  const clientId = runtimeVar("DEVCLUB_CLIENT_ID").trim();
+  const clientSecret = runtimeVar("DEVCLUB_CLIENT_SECRET").trim();
   if (!clientId || !clientSecret) {
     throw new Error("DevClub OAuth is not configured (DEVCLUB_CLIENT_ID / DEVCLUB_CLIENT_SECRET)");
   }

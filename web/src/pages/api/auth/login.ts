@@ -4,7 +4,9 @@ import {
   decideAdminGate,
   mintSessionCookie,
   sessionCookieHeader,
+  cookieIsSecure,
 } from "../../../lib/gate/gate";
+import { runtimeVar } from "../../../lib/cloudflare-env";
 
 export async function POST({ request }: { request: Request }) {
   const body = (await request.json().catch(() => ({}))) as {
@@ -14,8 +16,8 @@ export async function POST({ request }: { request: Request }) {
   };
   const identifier = String(body.entryNumber || body.email || "").trim();
   const password = String(body.password || "");
-  const secret = process.env.ADMIN_PASSWORD ?? "";
-  const signing = process.env.SESSION_SECRET ?? secret;
+  const secret = runtimeVar("ADMIN_PASSWORD");
+  const signing = runtimeVar("SESSION_SECRET") || secret;
   const decision = decideAdminGate(identifier, password, secret);
 
   if (!decision.ok) {
@@ -30,7 +32,7 @@ export async function POST({ request }: { request: Request }) {
     status: 200,
     headers: {
       "Content-Type": "application/json",
-      "Set-Cookie": sessionCookieHeader(cookie),
+      "Set-Cookie": sessionCookieHeader(cookie, cookieIsSecure(request.url)),
     },
   });
 }

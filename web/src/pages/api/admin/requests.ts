@@ -8,14 +8,15 @@ import {
   enqueueJoinRequest,
   rejectChangeRequest,
 } from "../../../lib/content/queue";
-import { documentDbFromLocals } from "../../../lib/gate/runtime";
+import { getDocumentDb } from "../../../lib/gate/runtime";
 import { sessionFromRequest } from "../../../lib/gate/request";
 import { triggerRebuild } from "../../../lib/content/rebuild";
+import { runtimeVar } from "../../../lib/cloudflare-env";
 
-async function context(request: Request, locals: unknown) {
+async function context(request: Request) {
   const session = sessionFromRequest(request);
   if (!session) return null;
-  const db = await documentDbFromLocals(locals);
+  const db = await getDocumentDb();
   const store = createWritableStore(db);
   const actor = await resolveActor(store, session);
   return { store, actor };
@@ -23,12 +24,10 @@ async function context(request: Request, locals: unknown) {
 
 export async function GET({
   request,
-  locals,
 }: {
   request: Request;
-  locals: unknown;
 }) {
-  const ctx = await context(request, locals);
+  const ctx = await context(request);
   if (!ctx) return Response.json({ error: "Unauthorized" }, { status: 401 });
   const all = await ctx.store.listChangeRequests();
   const mine = all.filter((r) => r.submittedBy === ctx.actor.memberSlug);
@@ -48,12 +47,10 @@ export async function GET({
 
 export async function POST({
   request,
-  locals,
 }: {
   request: Request;
-  locals: unknown;
 }) {
-  const ctx = await context(request, locals);
+  const ctx = await context(request);
   if (!ctx) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = (await request.json().catch(() => ({}))) as {
@@ -76,7 +73,7 @@ export async function POST({
       return Response.json({ error: result.error }, { status: 403 });
     }
     const rebuild = body.approve
-      ? await triggerRebuild(process.env.REBUILD_HOOK_URL)
+      ? await triggerRebuild(runtimeVar("REBUILD_HOOK_URL"))
       : { ok: true as const, skipped: true };
     return Response.json({
       ok: true,

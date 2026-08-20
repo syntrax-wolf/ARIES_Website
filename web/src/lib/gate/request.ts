@@ -1,4 +1,5 @@
 import { readSessionCookie, SESSION_COOKIE, type GateSession } from "./gate";
+import { runtimeVar } from "../cloudflare-env";
 
 export function cookieValue(header: string | null, name: string): string | undefined {
   if (!header) return undefined;
@@ -7,7 +8,7 @@ export function cookieValue(header: string | null, name: string): string | undef
 }
 
 export function signingSecret(): string {
-  return process.env.SESSION_SECRET ?? process.env.ADMIN_PASSWORD ?? "";
+  return runtimeVar("SESSION_SECRET") || runtimeVar("ADMIN_PASSWORD");
 }
 
 export function sessionFromRequest(request: Request): GateSession | null {

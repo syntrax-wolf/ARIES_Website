@@ -2,33 +2,23 @@ export const prerender = false;
 
 import { createWritableStore } from "../../../lib/content/d1";
 import { resolveActor } from "../../../lib/content/actor";
-import { documentDbFromLocals } from "../../../lib/gate/runtime";
+import { getDocumentDb } from "../../../lib/gate/runtime";
 import { sessionFromRequest } from "../../../lib/gate/request";
 import { planUpload } from "../../../lib/media/upload";
 import { memoryMedia } from "../../../lib/media/memory";
+import { workerEnv, runtimeVar } from "../../../lib/cloudflare-env";
 
-const publicBase = () => (process.env.MEDIA_PUBLIC_BASE || "/media").replace(/\/$/, "");
-
-type R2Like = {
-  put(key: string, value: ArrayBuffer | Uint8Array, options?: { httpMetadata?: { contentType: string } }): Promise<unknown>;
-};
-
-function r2FromLocals(locals: unknown): R2Like | null {
-  const runtime = (locals as { runtime?: { env?: { MEDIA?: R2Like } } })?.runtime;
-  return runtime?.env?.MEDIA ?? null;
-}
+const publicBase = () => (runtimeVar("MEDIA_PUBLIC_BASE") || "/media").replace(/\/$/, "");
 
 export async function POST({
   request,
-  locals,
 }: {
   request: Request;
-  locals: unknown;
 }) {
   const session = sessionFromRequest(request);
   if (!session) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-  const db = await documentDbFromLocals(locals);
+  const db = await getDocumentDb();
   const store = createWritableStore(db);
   const actor = await resolveActor(store, session);
 
@@ -49,7 +39,7 @@ export async function POST({
   });
   if (!plan.ok) return Response.json({ error: plan.error }, { status: 400 });
 
-  const r2 = r2FromLocals(locals);
+  const r2 = workerEnv().MEDIA ?? null;
   const put = async (key: string, blob: File, contentType: string) => {
     const bytes = new Uint8Array(await blob.arrayBuffer());
     if (r2) {

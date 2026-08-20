@@ -4,15 +4,16 @@ import { createWritableStore } from "../../../lib/content/d1";
 import { publishEvent, publishProject, publishResource } from "../../../lib/content/publish";
 import { mergeRoster, saveProfile, saveTeamData } from "../../../lib/content/roster";
 import { resolveActor } from "../../../lib/content/actor";
-import { documentDbFromLocals } from "../../../lib/gate/runtime";
+import { getDocumentDb } from "../../../lib/gate/runtime";
 import { sessionFromRequest } from "../../../lib/gate/request";
 import { triggerRebuild } from "../../../lib/content/rebuild";
-import type { AriesEvent, Member, Project, Resource, TeamData } from "../../../../../src/lib/types";
+import { runtimeVar } from "../../../lib/cloudflare-env";
+import type { AriesEvent, Member, Project, Resource, TeamData } from "../../../lib/types";
 
 const SLUG_RE = /^[a-z0-9][a-z0-9-]*$/;
 
 async function ok(mode: string) {
-  const rebuild = await triggerRebuild(process.env.REBUILD_HOOK_URL);
+  const rebuild = await triggerRebuild(runtimeVar("REBUILD_HOOK_URL"));
   return Response.json({
     ok: true,
     mode,
@@ -23,10 +24,8 @@ async function ok(mode: string) {
 
 export async function POST({
   request,
-  locals,
 }: {
   request: Request;
-  locals: unknown;
 }) {
   const session = sessionFromRequest(request);
   if (!session) return Response.json({ error: "Unauthorized" }, { status: 401 });
@@ -40,7 +39,7 @@ export async function POST({
     email?: string | null;
   };
 
-  const db = await documentDbFromLocals(locals);
+  const db = await getDocumentDb();
   const store = createWritableStore(db);
   const actor = await resolveActor(store, session);
 

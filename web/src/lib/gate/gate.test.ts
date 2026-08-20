@@ -6,6 +6,8 @@ import {
   decideSignup,
   mintSessionCookie,
   readSessionCookie,
+  sessionCookieHeader,
+  cookieIsSecure,
 } from "./gate.ts";
 
 test("an Allowlisted Kerberos receives a Session", () => {
@@ -50,4 +52,11 @@ test("signup is refused", () => {
   const decision = decideSignup();
   assert.equal(decision.ok, false);
   if (!decision.ok) assert.match(decision.error, /no signup/i);
+});
+
+test("session cookies are Secure on https origins", () => {
+  assert.equal(cookieIsSecure("https://aries-website.devansh-654.workers.dev/"), true);
+  assert.equal(cookieIsSecure("http://localhost:4321/"), false);
+  assert.match(sessionCookieHeader("abc", true), /Secure/);
+  assert.doesNotMatch(sessionCookieHeader("abc", false), /Secure/);
 });

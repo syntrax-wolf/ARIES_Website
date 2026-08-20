@@ -65,12 +65,26 @@ export function readSessionCookie(raw: string | undefined, signingSecret: string
   }
 }
 
-export function sessionCookieHeader(value: string): string {
-  return `${SESSION_COOKIE}=${value}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${MAX_AGE_SEC}`;
+export function sessionCookieHeader(value: string, secure = false): string {
+  const parts = [
+    `${SESSION_COOKIE}=${value}`,
+    "Path=/",
+    "HttpOnly",
+    "SameSite=Lax",
+    `Max-Age=${MAX_AGE_SEC}`,
+  ];
+  if (secure) parts.push("Secure");
+  return parts.join("; ");
 }
 
-export function clearSessionCookieHeader(): string {
-  return `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`;
+export function clearSessionCookieHeader(secure = false): string {
+  const parts = [`${SESSION_COOKIE}=`, "Path=/", "HttpOnly", "SameSite=Lax", "Max-Age=0"];
+  if (secure) parts.push("Secure");
+  return parts.join("; ");
+}
+
+export function cookieIsSecure(requestUrl: string): boolean {
+  return new URL(requestUrl).protocol === "https:";
 }
 
 function sign(body: string, secret: string) {

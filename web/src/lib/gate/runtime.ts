@@ -1,15 +1,15 @@
 import { createD1DocumentDb, createMemoryDocumentDb, type DocumentDb } from "../content/d1";
+import { runtimeVar, workerEnv } from "../cloudflare-env";
 
-export async function documentDbFromLocals(locals: unknown): Promise<DocumentDb> {
-  const runtime = (locals as { runtime?: { env?: { DB?: Parameters<typeof createD1DocumentDb>[0] } } })
-    ?.runtime;
-  if (runtime?.env?.DB) return createD1DocumentDb(runtime.env.DB);
+export async function getDocumentDb(): Promise<DocumentDb> {
+  const db = workerEnv().DB;
+  if (db) return createD1DocumentDb(db as Parameters<typeof createD1DocumentDb>[0]);
 
-  const db = createMemoryDocumentDb();
-  const extra = (process.env.ARIES_ALLOWLIST ?? "")
+  const memory = createMemoryDocumentDb();
+  const extra = runtimeVar("ARIES_ALLOWLIST")
     .split(",")
     .map((k) => k.trim())
     .filter(Boolean);
-  for (const kerberos of extra) await db.addAllowlist(kerberos);
-  return db;
+  for (const kerberos of extra) await memory.addAllowlist(kerberos);
+  return memory;
 }
