@@ -47,9 +47,19 @@ for (const resource of resources) {
 }
 const team = readFile("team.json", { years: [], alumni: [] });
 statements.push(insertDocument("team", "_", team));
+const allowlist = readFile("allowlist.json", []);
+for (const kerberos of allowlist) {
+  const id = String(kerberos).trim().toLowerCase();
+  if (!id) continue;
+  statements.push(
+    `INSERT INTO allowlist (kerberos) VALUES (${sqlString(id)}) ON CONFLICT(kerberos) DO NOTHING;`,
+  );
+}
 
 const seedFile = path.join(root, ".seed.sql");
 fs.writeFileSync(seedFile, statements.join("\n") + "\n");
+
+const remote = process.argv.includes("--remote");
 
 const wrangler = path.join(root, "node_modules", "wrangler", "bin", "wrangler.js");
 const wranglerBin = fs.existsSync(wrangler)
@@ -64,6 +74,6 @@ function run(args) {
   if (result.status !== 0) process.exit(result.status ?? 1);
 }
 
-run(["d1", "migrations", "apply", "aries-content", "--local"]);
-run(["d1", "execute", "aries-content", "--local", "--file", seedFile]);
-console.log(`Seeded local D1 from ${contentRoot}`);
+run(["d1", "migrations", "apply", "aries-content", remote ? "--remote" : "--local"]);
+run(["d1", "execute", "aries-content", remote ? "--remote" : "--local", "--file", seedFile]);
+console.log(`Seeded ${remote ? "remote" : "local"} D1 from ${contentRoot}`);

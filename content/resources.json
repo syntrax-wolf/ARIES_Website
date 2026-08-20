@@ -1,28 +1,99 @@
 [
   {
-    "slug": "intro-to-transformers-notes",
-    "title": "Intro to Transformers",
-    "description": "Club notes from the talk: attention, positional encodings, and why scaling works.",
-    "type": "Blog",
-    "addedOn": "2024-03-12",
+    "url": "https://github.com/SamyakSS83/modern_dl_tutorial",
+    "slug": "modern-dl-tutorial",
+    "type": "Featured",
+    "title": "Modern DL Tutorial",
+    "addedOn": "2026-08-02",
+    "authors": [
+      {
+        "kind": "external",
+        "name": "Samyak Sanghvi"
+      }
+    ],
     "featured": true,
-    "authors": [{ "name": "Ada Lovelace", "slug": "ada-lovelace", "kind": "member" }],
-    "body": "## Why transformers\n\nSelf-attention lets every token look at every other token. That is the idea behind the club's intro talk.\n\n## Try it\n\nStart with a tiny encoder, then add positional encodings."
+    "description": "A self-study PyTorch deep learning curriculum by Samyak Sanghvi — CNNs, transformers, vision models, LoRA, agents and a multimodal capstone."
   },
   {
-    "slug": "huggingface-course",
-    "title": "Hugging Face NLP Course",
-    "description": "Free course covering tokenizers, fine-tuning, and inference.",
-    "type": "Course",
-    "addedOn": "2024-01-08",
-    "url": "https://huggingface.co/learn/nlp-course"
-  },
-  {
-    "slug": "blog-attention-is-all-you-need",
-    "title": "Attention is all you need (club notes)",
-    "description": "Folded from the old Studio post: transformers on campus.",
+    "body": "",
+    "slug": "embedding-spaces",
     "type": "Blog",
-    "addedOn": "2023-11-02",
-    "body": "The transformer paper, rewritten as club notes after the talk."
+    "title": "Embedding Spaces",
+    "addedOn": "2026-08-02",
+    "authors": [],
+    "featured": true,
+    "description": "A short blog exploring how neural networks map meaning into geometric spaces. Coming soon."
+  },
+  {
+    "url": "https://code.visualstudio.com",
+    "slug": "vs-code",
+    "type": "Tutorial",
+    "title": "VS Code",
+    "addedOn": "2025-05-14",
+    "featured": false,
+    "description": "A powerful code editor with extensions for every developer."
+  },
+  {
+    "url": "https://dataintensive.net",
+    "slug": "designing-data-intensive-applications",
+    "type": "Blog",
+    "title": "Designing Data-Intensive Applications",
+    "addedOn": "2025-05-11",
+    "featured": false,
+    "description": "The big ideas behind reliable, scalable and maintainable systems."
+  },
+  {
+    "url": "https://www.coursera.org/specializations/deep-learning",
+    "slug": "deep-learning-specialization",
+    "type": "Course",
+    "title": "Deep Learning Specialization",
+    "addedOn": "2025-05-09",
+    "featured": false,
+    "description": "Master deep learning, from neural networks to advanced architectures."
+  },
+  {
+    "url": "https://docs.github.com/en/get-started",
+    "slug": "git-github-tutorial",
+    "type": "Tutorial",
+    "title": "Git & GitHub Tutorial",
+    "addedOn": "2025-05-07",
+    "featured": false,
+    "description": "Step-by-step guide to version control and collaboration with GitHub."
+  },
+  {
+    "url": "https://www.tensorflow.org/learn",
+    "slug": "tensorflow-documentation",
+    "type": "Tutorial",
+    "title": "TensorFlow Documentation",
+    "addedOn": "2025-05-12",
+    "featured": false,
+    "description": "Official guides and API reference for TensorFlow."
+  },
+  {
+    "url": "https://www.oreilly.com/library/view/clean-code-a/9780136083238/",
+    "slug": "clean-code",
+    "type": "Blog",
+    "title": "Clean Code",
+    "addedOn": "2025-05-10",
+    "featured": false,
+    "description": "A handbook of agile software craftsmanship."
+  },
+  {
+    "url": "https://cs229.stanford.edu",
+    "slug": "stanford-cs229-machine-learning",
+    "type": "Course",
+    "title": "Stanford CS229 – Machine Learning",
+    "addedOn": "2025-05-08",
+    "featured": false,
+    "description": "Complete machine learning course by Andrew Ng."
+  },
+  {
+    "url": "https://pandas.pydata.org/docs/getting_started/index.html",
+    "slug": "python-pandas-tutorial",
+    "type": "Tutorial",
+    "title": "Python Pandas Tutorial",
+    "addedOn": "2025-05-06",
+    "featured": false,
+    "description": "Learn data manipulation and analysis with pandas."
   }
 ]

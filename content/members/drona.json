@@ -1,0 +1,19 @@
+{
+  "name": "Drona",
+  "role": "Coordinator",
+  "slug": "drona",
+  "level": "coordinator",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786625728489-cb3ccd00.webp",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "mailto:dronabajajofficial@gmail.com",
+      "kind": "custom",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "entryNumber": "ms1240746",
+  "email": "ms1240746@mse.iitd.ac.in"
+}

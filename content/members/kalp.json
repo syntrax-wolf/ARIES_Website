@@ -1,0 +1,28 @@
+{
+  "name": "Kalp Hetalkumar Shah",
+  "role": "Research Executive",
+  "slug": "kalp",
+  "year": "Sophomore",
+  "email": "cs1251111@cse.iitd.ac.in",
+  "level": "executive",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786356620846-12e13b3e.jpeg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://github.com/khs2007",
+      "label": "GitHub"
+    },
+    {
+      "url": "https://www.linkedin.com/in/kalpshahiitd86",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "mailto:kalp100807@gmail.com",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "resumeUrl": "https://drive.google.com/file/d/1E-aOQh0g-HhLUsh3_o3Jmii23BTE1TKl/view?usp=sharing",
+  "entryNumber": "cs1251111"
+}

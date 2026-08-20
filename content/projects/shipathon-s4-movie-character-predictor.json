@@ -1,0 +1,29 @@
+{
+  "name": "Shipathon S4",
+  "slug": "shipathon-s4-movie-character-predictor",
+  "tags": [
+    "Shipathon",
+    "NLP",
+    "Word2Vec"
+  ],
+  "about": "Problem Statement 3 — movie character predictor using WhatsApp chat. Used Word2Vec to create a vector space of context-based dialogues to classify jargon into six movie characters representing different behaviours. Recreated centroid classifier using Euclidean distances to classify chats by the movie character they most resemble.",
+  "links": [],
+  "accent": "Movie Character Predictor",
+  "tagline": "Classify WhatsApp chats into movie-character personas.",
+  "category": "Hackathon",
+  "features": [],
+  "techStack": [
+    "Word2Vec",
+    "Python"
+  ],
+  "highlights": [],
+  "description": "Word2Vec embeddings over context-based dialogues, classified with a centroid model into six movie-character behaviour types.",
+  "screenshots": [],
+  "contributors": [
+    {
+      "kind": "member",
+      "name": "Nishant Mathuriya",
+      "slug": "nishant-mathuriya"
+    }
+  ]
+}

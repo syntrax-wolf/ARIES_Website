@@ -1,0 +1,28 @@
+{
+  "name": "Siddhant",
+  "role": "Coordinator",
+  "slug": "siddhant",
+  "year": "3",
+  "email": "cs5240469@iitd.ac.in",
+  "level": "coordinator",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786865324926-27206910.jpg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "Siddhant-135",
+      "label": "GitHub"
+    },
+    {
+      "url": "https://www.linkedin.com/in/siddhantiitd",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "mailto:agrawalsiddhant14@gmail.com",
+      "label": "Email"
+    }
+  ],
+  "tagline": "Nah I'd win",
+  "location": "IIT Delhi",
+  "resumeUrl": "https://github.com/Siddhant-135",
+  "entryNumber": "cs5240469"
+}

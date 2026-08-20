@@ -1,0 +1,26 @@
+{
+  "name": "Manasvi",
+  "role": "Coordinator",
+  "slug": "manasvi",
+  "email": "ce1240369@iitd.ac.in",
+  "level": "coordinator",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786363074025-1bd501da.jpeg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://github.com/manasviim",
+      "label": "GitHub"
+    },
+    {
+      "url": "https://www.linkedin.com/in/manasvi-mandal-5a028b336/",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "mailto:manasvimandal0676@gmail.com",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "entryNumber": "ce1240369"
+}

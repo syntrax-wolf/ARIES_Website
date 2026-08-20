@@ -1,0 +1,34 @@
+{
+  "name": "Anmol Goel",
+  "role": "Alumni, ARIES",
+  "slug": "anmol-goel",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1785925270959-de642448.png",
+  "blocks": [
+    {
+      "id": "about",
+      "data": "ARIES alum working at the intersection of biology and engineering as a bioprocess engineer at Lemnisca.bio.",
+      "span": "full",
+      "type": "text",
+      "title": "About"
+    },
+    {
+      "id": "internships",
+      "data": [
+        {
+          "org": "Lemnisca.bio",
+          "role": "Bioprocess Engineer",
+          "description": "Bioprocess engineering in a biotech startup."
+        }
+      ],
+      "span": "full",
+      "type": "internships",
+      "title": "Experience"
+    }
+  ],
+  "socials": [],
+  "tagline": "Bioprocess engineer at Lemnisca.bio.",
+  "location": "Lemnisca.bio",
+  "level": "alumni",
+  "entryNumber": "bb1221000",
+  "email": "bb1221000@ariesiitd.com"
+}

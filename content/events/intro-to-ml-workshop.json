@@ -1,0 +1,13 @@
+{
+  "body": "Our semester opener for first-years: a from-zero workshop that ends with everyone training a small neural network.",
+  "date": "2026-02-14",
+  "slug": "intro-to-ml-workshop",
+  "type": "Workshop",
+  "image": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/events/1785772971867-c3a3f953.jpg",
+  "links": [],
+  "title": "Intro to ML Workshop",
+  "images": [
+    "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/events/1785856839585-b7e7b52b.jpeg"
+  ],
+  "description": "First steps into machine learning — from linear regression to your first neural net."
+}

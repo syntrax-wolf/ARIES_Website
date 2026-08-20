@@ -1,0 +1,21 @@
+{
+  "name": "Sanidhya Ojha",
+  "role": "OC",
+  "slug": "sanidhya",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786643639672-75704958.jpeg",
+  "blocks": [
+    {
+      "id": "about",
+      "data": "Sanidhya runs ARIES and pretends it's effortless. Research interests sit at the intersection of 3D human pose estimation and generative priors — and he will defend diffusion models in any argument, on any hill.",
+      "span": "full",
+      "type": "text",
+      "title": "About"
+    }
+  ],
+  "socials": [],
+  "tagline": "Sanidhya runs ARIES and pretends it's effortless. Research interests sit at the intersection of 3D human pose estimation",
+  "location": "IIT Delhi",
+  "level": "oc",
+  "entryNumber": "ee3230694",
+  "email": "ee3230694@ee.iitd.ac.in"
+}

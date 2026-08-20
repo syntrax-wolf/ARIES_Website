@@ -1,0 +1,29 @@
+{
+  "name": "BAH 2025: ANGIFIGHTER",
+  "slug": "bah-2026",
+  "tags": [],
+  "about": "Designed an end-to-end hybrid Deep Learning (ConvLSTM) + Cellular Automata pipeline for next-day prediction of Forest fires and high-fidelity simulations of the same. Curated our own India-specific Dataset for the same.",
+  "links": [],
+  "tagline": "AGNI-FIGHTER: Fire Prediction and Modelling",
+  "category": "Hackathon",
+  "featured": false,
+  "techStack": [],
+  "description": "Designed an end-to-end hybrid Deep Learning (ConvLSTM) + Cellular Automata pipeline for next-day prediction of Forest fires and high-fidelity simulations of the same",
+  "contributors": [
+    {
+      "kind": "member",
+      "name": "Siddhant",
+      "slug": "siddhant"
+    },
+    {
+      "kind": "member",
+      "name": "Nideesh",
+      "slug": "nideesh"
+    },
+    {
+      "kind": "member",
+      "name": "Dhairya",
+      "slug": "dhairya"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "Biboswan",
+  "role": "Research Executive",
+  "slug": "biboswan",
+  "year": "2029 CS",
+  "level": "executive",
+  "avatar": "/images/members/biboswan.jpg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://www.linkedin.com/in/biboswan-201b2b310?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+      "kind": "linkedin",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "https://github.com/GittohubbonoAkuma",
+      "kind": "github",
+      "label": "GitHub"
+    },
+    {
+      "url": "mailto:susanchan29112@gmail.com",
+      "kind": "custom",
+      "label": "Email"
+    }
+  ],
+  "tagline": "Love to build and break stuff",
+  "location": "IIT Delhi",
+  "entryNumber": "cs1251835",
+  "email": "cs1251835@cse.iitd.ac.in"
+}

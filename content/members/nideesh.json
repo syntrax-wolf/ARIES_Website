@@ -1,0 +1,20 @@
+{
+  "name": "Nideesh",
+  "role": "Research Coordinator",
+  "slug": "nideesh",
+  "year": "Mathematics and Computing",
+  "level": "coordinator",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786701432888-c10d1462.jpg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "gantanideesh22@gmail.com",
+      "kind": "github",
+      "label": "GitHub"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "entryNumber": "mt6240880",
+  "email": "mt6240880@iitd.ac.in"
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Eeshaan Gupta",
+  "role": "Executive",
+  "slug": "eeshan",
+  "year": "2029",
+  "level": "executive",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786619243038-04c21792.jpeg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://www.linkedin.com/in/eeshaang/",
+      "kind": "linkedin",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "https://github.com/Ishaan87",
+      "kind": "github",
+      "label": "GitHub"
+    }
+  ],
+  "tagline": "Attention is all I Need",
+  "location": "IIT Delhi",
+  "entryNumber": "bb1251554",
+  "email": "bb1251554@iitd.ac.in"
+}

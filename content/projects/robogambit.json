@@ -1,0 +1,34 @@
+{
+  "name": "RoboGambit",
+  "slug": "robogambit",
+  "tags": [],
+  "about": "Designed and developed a two-phase robotics competition built around a chess-inspired mini-game on a 6×6 board using two 4-DOF Waveshare RoArm M2 arms with electromagnetic end-effectors.\nPhase 1 (Simulation): teams implement game reasoning, ArUco-based board perception, and arm move execution in ROS 2 + Gazebo.\nPhase 2 (Hardware): 16-team double-elimination bracket; robot autonomously perceives, reasons, and executes on a physical arena via overhead 1080p camera.\nEvaluated full-stack robotics integration: sim-to-hardware transfer, autonomous game logic, robust perception, and safe human-robot collaboration.",
+  "links": [],
+  "tagline": "Chess Robotics Challenge",
+  "category": "Hackathon",
+  "featured": false,
+  "techStack": [],
+  "description": "Designed and developed a two-phase robotics competition built around a chess-inspired mini-game",
+  "contributors": [
+    {
+      "kind": "member",
+      "name": "Sanidhya Ojha",
+      "slug": "sanidhya"
+    },
+    {
+      "kind": "member",
+      "name": "Ishan",
+      "slug": "ishan"
+    },
+    {
+      "kind": "member",
+      "name": "Preesha",
+      "slug": "preesha"
+    },
+    {
+      "kind": "member",
+      "name": "Ditya",
+      "slug": "ditya"
+    }
+  ]
+}

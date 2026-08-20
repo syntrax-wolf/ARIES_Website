@@ -1,0 +1,51 @@
+{
+  "name": "Reyansh",
+  "role": "Coordinator",
+  "slug": "reyansh",
+  "year": "3rd Year, Mathematics and Computing",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1787157866688-eb191094.jpeg",
+  "blocks": [
+    {
+      "id": "projects-1787056200716",
+      "data": [
+        {
+          "name": "ARIES x ITC",
+          "tags": [
+            "ONNX",
+            "PaddleOCR",
+            "Computer Vision",
+            "YAML",
+            "UV"
+          ],
+          "links": [],
+          "description": "Tool in Computer Vision"
+        }
+      ],
+      "span": "full",
+      "type": "projects",
+      "title": "Projects"
+    }
+  ],
+  "socials": [
+    {
+      "url": "linkedin.com/in/reyansh-thigulla-8095a231b/",
+      "kind": "linkedin",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "https://github.com/Reyansh04",
+      "kind": "github",
+      "label": "GitHub"
+    },
+    {
+      "url": "mailto:reyanshthigulla@yahoo.com",
+      "kind": "custom",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "level": "coordinator",
+  "entryNumber": "mt1241136",
+  "email": "mt1241136@iitd.ac.in"
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Harshita Prasad",
+  "role": "Executive",
+  "slug": "harshita-prasad",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786865833685-409c4128.png",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://github.com/hp3047",
+      "label": "GitHub"
+    },
+    {
+      "url": "https://www.linkedin.com/in/harshita-prasad-30b04b260/",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "mailto:harshitaprasad.p@gmail.com",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "level": "executive",
+  "entryNumber": "me1251629",
+  "email": "me1251629@iitd.ac.in"
+}

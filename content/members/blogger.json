@@ -1,9 +1,10 @@
 {
-  "slug": "blogger",
-  "name": "Club Blogger",
+  "name": "ARIES Blogger",
   "role": "Blogger",
-  "tagline": "",
-  "level": "blogger",
+  "slug": "blogger",
+  "blocks": [],
   "socials": [],
-  "blocks": []
+  "tagline": "Blog author",
+  "level": "member",
+  "email": "blogger@ariesiitd.com"
 }

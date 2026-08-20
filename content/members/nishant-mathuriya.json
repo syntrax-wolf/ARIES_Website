@@ -1,0 +1,23 @@
+{
+  "name": "Nishant Mathuriya",
+  "role": "Canvas Executive",
+  "slug": "nishant-mathuriya",
+  "year": "",
+  "email": "ee1251566@iitd.ac.in",
+  "level": "executive",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786375155181-0e2993cd.jpg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "linkedin.com/in/nishantmathuriya",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "mailto:nishantmathuriyadakshana@gmail.com",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "entryNumber": "ee1251566"
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Shourya",
+  "role": "Coordinator",
+  "slug": "shourya",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786865422914-dbcd719f.jpeg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "shch4747 Â· GitHub",
+      "label": "GitHub"
+    },
+    {
+      "url": "https://www.linkedin.com/in/shourya-choudhary/",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "mailto:shch4747@gmail.com",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "level": "coordinator",
+  "entryNumber": "mt6241064",
+  "email": "mt6241064@iitd.ac.in"
+}

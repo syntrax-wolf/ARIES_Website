@@ -1,0 +1,30 @@
+{
+  "name": "Pratham Jain",
+  "role": "Research Executive",
+  "slug": "pratham-jain",
+  "year": "2029",
+  "email": "mt1251335@maths.iitd.ac.in",
+  "level": "executive",
+  "avatar": "/images/members/pratham-jain.jpg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "linkedin.com/in/prathammaxjain",
+      "kind": "linkedin",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "github.com/prathammaxjain",
+      "kind": "github",
+      "label": "GitHub"
+    },
+    {
+      "url": "mailto:pratham.mailbox@gmail.com",
+      "kind": "custom",
+      "label": "Email"
+    }
+  ],
+  "tagline": "running on love and spite",
+  "location": "IIT Delhi",
+  "entryNumber": "mt1251335"
+}

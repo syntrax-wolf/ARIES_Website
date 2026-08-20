@@ -1,0 +1,24 @@
+{
+  "name": "Kiran",
+  "role": "Executive",
+  "slug": "kiran",
+  "level": "executive",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786637808467-2c85db75.jpeg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://www.linkedin.com/in/kiran-960236378",
+      "kind": "linkedin",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "mailto:kiranbishnoi765@gmail.com",
+      "kind": "custom",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "entryNumber": "ee1251985",
+  "email": "ee1251985@ee.iitd.ac.in"
+}

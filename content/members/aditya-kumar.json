@@ -1,0 +1,22 @@
+{
+  "name": "Aditya Kumar",
+  "role": "Research Executive",
+  "slug": "aditya-kumar",
+  "avatar": "/images/members/aditya-kumar.jpg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "www.linkedin.com/in/aditya-kumar-98246133b",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "mailto:adiku10.05@gmail.com",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "level": "executive",
+  "entryNumber": "cs1251119",
+  "email": "cs1251119@cse.iitd.ac.in"
+}

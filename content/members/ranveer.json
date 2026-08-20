@@ -1,0 +1,25 @@
+{
+  "name": "Ranveer",
+  "role": "Research Executive",
+  "slug": "ranveer",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://github.com/RanveerSV",
+      "label": "GitHub"
+    },
+    {
+      "url": "https://www.linkedin.com/in/ranveersvirdi/",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "mailto:ranveervirdi.mails@gmail.com",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "level": "executive",
+  "entryNumber": "ee1251237",
+  "email": "ee1251237@ee.iitd.ac.in"
+}

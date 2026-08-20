@@ -1,0 +1,26 @@
+{
+  "name": "Sameeksha B",
+  "role": "Executive",
+  "slug": "sameeksha-b",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786866221015-6cf66855.jpeg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://www.instagram.com/sameeksha20128?igsh=ZDY3c2dvZXdwcjVy",
+      "label": "GitHub"
+    },
+    {
+      "url": "Sameeksha B | LinkedIn",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "mailto:sameekshab683@gmail.com",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "level": "executive",
+  "entryNumber": "tt1251455",
+  "email": "tt1251455@textile.iitd.ac.in"
+}

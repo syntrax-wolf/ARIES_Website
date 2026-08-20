@@ -1,0 +1,19 @@
+{
+  "name": "TouristGPT",
+  "slug": "touristgpt",
+  "tags": [],
+  "about": "",
+  "links": [],
+  "tagline": "finetune qwen coder on codeforces to maximise rating",
+  "category": "InternalProject",
+  "featured": false,
+  "techStack": [],
+  "description": "make a better codeforces traces dataset and finetune qwen coder to get a average rating of 1872 in virtual contests\n",
+  "contributors": [
+    {
+      "kind": "member",
+      "name": "Devansh",
+      "slug": "devansh"
+    }
+  ]
+}

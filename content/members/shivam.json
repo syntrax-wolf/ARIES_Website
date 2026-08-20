@@ -1,0 +1,30 @@
+{
+  "name": "Shivam Garg",
+  "role": "Research Executive",
+  "slug": "shivam",
+  "year": "",
+  "level": "executive",
+  "avatar": "/images/members/shivam.jpg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "www.linkedin.com/in/shivam-garg-683777378",
+      "kind": "linkedin",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "https://github.com/shivxmgarg",
+      "kind": "github",
+      "label": "GitHub"
+    },
+    {
+      "url": "mailto:shivam.iitd29@gmail.com",
+      "kind": "custom",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "entryNumber": "ee3251887",
+  "email": "ee3251887@ee.iitd.ac.in"
+}

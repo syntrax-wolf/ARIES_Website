@@ -1,0 +1,35 @@
+{
+  "name": "Devansh",
+  "role": "Coordinator",
+  "slug": "devansh",
+  "year": "3rd yr, Production and Industrial Engineering",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786805442973-f96a3377.webp",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://www.linkedin.com/in/devanshkd",
+      "kind": "linkedin",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "0xDevansh",
+      "kind": "github",
+      "label": "GitHub"
+    },
+    {
+      "url": "https://dvenom.in",
+      "kind": "website",
+      "label": "Website"
+    },
+    {
+      "url": "mailto:devanshkandpal54@gmail.com",
+      "kind": "custom",
+      "label": "Email"
+    }
+  ],
+  "tagline": "Out-hallucinating GPT",
+  "location": "IIT Delhi",
+  "level": "coordinator",
+  "entryNumber": "me2241111",
+  "email": "me2241111@iitd.ac.in"
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Manasvi gupta ",
+  "role": "Executive",
+  "slug": "manasvi-executive",
+  "year": "2",
+  "email": "mt1251538@maths.iitd.ac.in",
+  "level": "executive",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786373134477-774c5fb1.jpg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://www.linkedin.com/in/manasvi-gupta-70a32738b?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "mailto:manasvigupta8686@gmail.com",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "entryNumber": "mt1251538"
+}

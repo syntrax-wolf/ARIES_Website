@@ -1,0 +1,30 @@
+{
+  "name": "Vansh Narula",
+  "role": "Executive",
+  "slug": "vansh-narula",
+  "year": "Mathematics And Computing",
+  "level": "executive",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786633074798-0c61ad11.jpeg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "www.linkedin.com/in/vansh-narula-7124783b7",
+      "kind": "linkedin",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "https://github.com/vanshtheboss7-dev",
+      "kind": "github",
+      "label": "GitHub"
+    },
+    {
+      "url": "mailto:vanshtheboss7@gmail.com",
+      "kind": "custom",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "entryNumber": "mt1251342",
+  "email": "mt1251342@maths.iitd.ac.in"
+}

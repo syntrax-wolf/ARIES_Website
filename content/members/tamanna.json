@@ -1,0 +1,21 @@
+{
+  "name": "Tamanna",
+  "role": "Co-OC",
+  "slug": "tamanna",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786700865070-aa1b637a.png",
+  "blocks": [
+    {
+      "id": "about",
+      "data": "Tamanna co-runs the club and owns the research vertical. Works on interpretability of language models; firmly believes attention is not explanation and will cite the paper.",
+      "span": "full",
+      "type": "text",
+      "title": "About"
+    }
+  ],
+  "socials": [],
+  "tagline": "Tamanna co-runs the club and owns the research vertical. Works on interpretability of language models; firmly believes a",
+  "location": "IIT Delhi",
+  "level": "co_overall_coordinator",
+  "entryNumber": "ee1230747",
+  "email": "ee1230747@iitd.ac.in"
+}

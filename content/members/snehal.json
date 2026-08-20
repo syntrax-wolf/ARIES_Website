@@ -1,0 +1,26 @@
+{
+  "name": "Snehal",
+  "role": "Research Coordinator",
+  "slug": "snehal",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786865507153-0252d6e6.jpg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "snehalgupta1911",
+      "label": "GitHub"
+    },
+    {
+      "url": "https://www.linkedin.com/in/snehal-gupta-3ab670313/",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "mailto:snehalguptaiitd@gmail.com",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "level": "coordinator",
+  "entryNumber": "ee1240902",
+  "email": "ee1240902@iitd.ac.in"
+}

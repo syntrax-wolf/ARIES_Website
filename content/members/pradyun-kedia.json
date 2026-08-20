@@ -1,0 +1,25 @@
+{
+  "name": "Pradyun Kedia",
+  "role": "Executive",
+  "slug": "pradyun-kedia",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://github.com/PradyunKedia",
+      "label": "GitHub"
+    },
+    {
+      "url": "https://www.linkedin.com/in/pradyun-kedia-4b8352271?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "mailto:kedia.pradyun@gmail.com",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "level": "executive",
+  "entryNumber": "me2251883",
+  "email": "me2251883@mech.iitd.ac.in"
+}

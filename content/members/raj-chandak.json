@@ -1,0 +1,19 @@
+{
+  "name": "Raj Chandak",
+  "role": "Research Lead",
+  "slug": "raj-chandak",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786700607315-650541ad.png",
+  "blocks": [
+    {
+      "id": "about",
+      "data": "Raj leads research projects and the social calendar with equal rigour. Reinforcement learning for manipulation by day, Rave Night logistics by night.",
+      "span": "full",
+      "type": "text",
+      "title": "About"
+    }
+  ],
+  "socials": [],
+  "tagline": "Raj leads research projects and the social calendar with equal rigour. Reinforcement learning for manipulation by day, R",
+  "location": "IIT Delhi",
+  "level": "member"
+}
