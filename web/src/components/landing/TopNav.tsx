@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
-import { Menu, UserRound, X } from "lucide-react";
-import { topNavLinks } from "../../../../src/config/nav";
-import { colors } from "../../../../src/config/colors";
-import { cn } from "../../../../src/lib/utils";
+import { Menu, X } from "lucide-react";
+import { topNavLinks } from "../../config/nav";
+import { colors } from "../../config/colors";
+import { cn } from "../../lib/utils";
 import { AriesLogo } from "../AriesLogo";
 
 /**
- * Landing top navbar — fixed, follows you down the page.
- * Clear over the hero; frosted cream bar once you leave it so links
- * stay readable on mist / FAQ frames.
- * No Session lookup — public HTML stays static.
+ * Landing / profile top navbar. Over the dark hero (`overHero`), type is white
+ * until a cream bar appears on scroll. Everywhere else it stays navy.
  */
-export function TopNav() {
+export function TopNav({ overHero = false }: { overHero?: boolean }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -30,11 +28,15 @@ export function TopNav() {
   }, [open]);
 
   const solid = scrolled || open;
+  const lightType = overHero && !solid;
+  const linkClass = lightType
+    ? "text-white hover:text-white/80"
+    : "text-navy hover:text-purple";
 
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,backdrop-filter] duration-300",
+        "fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,backdrop-filter,color] duration-300",
         solid && "shadow-[0_8px_28px_rgba(14,18,57,0.10)] backdrop-blur-md",
       )}
       style={{
@@ -42,7 +44,7 @@ export function TopNav() {
       }}
     >
       <div className="mx-auto flex max-w-[1480px] items-center justify-between px-6 py-4 lg:px-10 lg:py-5">
-        <AriesLogo tone="dark" />
+        <AriesLogo tone={lightType ? "light" : "dark"} />
 
         <nav className="hidden items-center gap-8 lg:flex">
           {topNavLinks
@@ -51,28 +53,24 @@ export function TopNav() {
               <a
                 key={l.href}
                 href={l.href}
-                className="text-sm font-medium text-navy transition-colors hover:text-purple"
+                className={cn("text-sm font-medium transition-colors duration-300", linkClass)}
               >
                 {l.label}
               </a>
             ))}
           <a
-            href="/admin"
-            className="flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-bold text-navy transition-colors hover:text-purple"
-          >
-            <UserRound size={18} />
-            Member Login
-          </a>
-          <a
             href="/contact"
-            className="rounded-full bg-navy px-7 py-2.5 text-sm font-bold text-white shadow-cta transition-transform hover:scale-105"
+            className="rounded-full bg-navy px-7 py-2.5 text-sm font-bold text-white shadow-cta transition-transform duration-300 hover:scale-105"
           >
             Contact Us →
           </a>
         </nav>
 
         <button
-          className="rounded-lg p-2 text-navy lg:hidden"
+          className={cn(
+            "rounded-lg p-2 transition-colors duration-300 lg:hidden",
+            lightType ? "text-white" : "text-navy",
+          )}
           onClick={() => setOpen((v) => !v)}
           aria-label="Toggle navigation"
           aria-expanded={open}
@@ -95,16 +93,6 @@ export function TopNav() {
                 {l.label}
               </a>
             ))}
-          <div className="mt-3 px-2">
-            <a
-              href="/admin"
-              className="flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-bold text-navy"
-              onClick={() => setOpen(false)}
-            >
-              <UserRound size={18} />
-              Member Login
-            </a>
-          </div>
           <a
             href="/contact"
             className="mt-2 block rounded-full bg-navy px-6 py-3 text-center text-sm font-bold text-white"

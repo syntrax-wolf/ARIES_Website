@@ -1,4 +1,4 @@
-import { cn } from "../../../src/lib/utils";
+import { cn } from "../lib/utils";
 
 /**
  * ARIES deer logo + wordmark. `tone` picks light (white, for dark surfaces)
@@ -23,7 +23,7 @@ export function AriesLogo({
   return (
     <a
       href={href}
-      aria-label="ARIES home"
+      aria-label="ARIES IIT DELHI"
       className={cn(
         "flex items-center gap-3 no-underline",
         color,
