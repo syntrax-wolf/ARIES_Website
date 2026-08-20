@@ -13,16 +13,20 @@
 # testing
 /coverage
 
-# next.js
+# leftover Next build cache
 /.next/
-/out/
 
 # astro / workers
 web/node_modules
 web/dist
 web/.astro
+/dist
+/.astro
 .wrangler
+web/.wrangler
 web/.seed.sql
+web/.dev.vars
+.dev.vars
 
 # production
 /build
@@ -41,20 +45,7 @@ yarn-error.log*
 .env*
 !.env.example
 !web/.env.example
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+!web/.dev.vars.example
 
 # imported sheet exports (re-fetch via import script)
 /data/
-
-# Generated Supabase seed SQL (recreate with node scripts/generate-seed-sql.mjs)
-/scripts/generated-seed.sql
-/scripts/seed-chunks/
-/scripts/excel-mail-name.json
-/scripts/excel-kerberos.json
-/scripts/kerberos-updates.sql

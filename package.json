@@ -2,23 +2,21 @@
   "name": "aries-website",
   "version": "0.1.0",
   "private": true,
-  "workspaces": [
-    "web"
-  ],
+  "packageManager": "pnpm@11.6.0",
   "scripts": {
-    "dev": "npm run dev -w aries-website-web",
-    "build": "npm run build -w aries-website-web",
-    "preview": "npm run preview -w aries-website-web",
-    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test src/**/*.test.ts web/src/**/*.test.ts",
-    "db:seed": "npm run db:seed -w aries-website-web"
+    "dev": "pnpm --filter aries-website-web dev",
+    "build": "pnpm --filter aries-website-web build",
+    "preview": "pnpm --filter aries-website-web preview",
+    "test": "pnpm --filter aries-website-web test",
+    "db:seed": "pnpm --filter aries-website-web db:seed",
+    "content:export-postgres": "pnpm --filter aries-website-web content:export-postgres",
+    "content:export-sanity": "pnpm --filter aries-website-web content:export-sanity",
+    "content:ingest-sanity": "pnpm --filter aries-website-web content:ingest-sanity",
+    "deploy": "pnpm --filter aries-website-web deploy",
+    "wrangler": "pnpm --filter aries-website-web exec wrangler"
   },
   "devDependencies": {
     "@types/node": "^20",
     "typescript": "^5"
-  },
-  "allowScripts": {
-    "sharp@0.34.5": true,
-    "esbuild@0.28.1": true,
-    "workerd@1.20260815.1": true
   }
 }
