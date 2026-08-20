@@ -1,0 +1,33 @@
+{
+  "name": "Ritwik Sehrawat",
+  "role": "Guy",
+  "slug": "ritwik-sehrawat",
+  "year": "3",
+  "email": "am1240227@iitd.ac.in",
+  "level": "coordinator",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786627335860-3cd1e847.jpeg",
+  "blocks": [],
+  "github": "https://github.com/CrnchyBekfast",
+  "socials": [
+    {
+      "url": "https://www.linkedin.com/in/ritwik-sehrawat/",
+      "kind": "linkedin",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "https://github.com/CrnchyBekfast",
+      "kind": "github",
+      "label": "GitHub"
+    },
+    {
+      "url": "https://ritwiksehrawat.com/",
+      "kind": "website",
+      "label": "Website"
+    }
+  ],
+  "tagline": "full time at da movies",
+  "linkedin": "https://www.linkedin.com/in/ritwik-sehrawat",
+  "location": "Unfortunate",
+  "resumeUrl": "https://youtu.be/dQw4w9WgXcQ",
+  "entryNumber": "am1240227"
+}

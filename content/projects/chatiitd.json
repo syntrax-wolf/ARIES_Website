@@ -1,0 +1,34 @@
+{
+  "name": "ChatIITD",
+  "slug": "chatiitd",
+  "tags": [],
+  "about": "earliest MVP : https://github.com/0xDevansh/chatiitd-rag\n\nFurther developments are under non-disclosure. We are working with the IIT Delhi administration to implement a unified Agentic portal for all information pertaining to our college, covering everything from institute rules to news and student welfare resources.",
+  "links": [],
+  "tagline": "Langchain, Qdrant, Docker, LiteLLM, HuggingFace, Regex",
+  "category": "College",
+  "featured": false,
+  "techStack": [],
+  "description": "Development of a RAG based chatbot for the IITD administration. ",
+  "contributors": [
+    {
+      "kind": "member",
+      "name": "Devansh",
+      "slug": "devansh"
+    },
+    {
+      "kind": "member",
+      "name": "Ditya",
+      "slug": "ditya"
+    },
+    {
+      "kind": "member",
+      "name": "Siddhant",
+      "slug": "siddhant"
+    },
+    {
+      "kind": "member",
+      "name": "Aastha Verma",
+      "slug": "aastha-verma"
+    }
+  ]
+}

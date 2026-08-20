@@ -1,0 +1,32 @@
+{
+  "name": "Ansh Singh",
+  "role": "Alumni, ARIES · Coordinator",
+  "slug": "ansh-singh",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1785924793232-0ac17354.png",
+  "blocks": [
+    {
+      "id": "about",
+      "data": "Former Coordinator at ARIES. Research focus on LLM reliability, autonomous agents, reasoning correction, and AI safety and evaluation.",
+      "span": "full",
+      "type": "text",
+      "title": "About"
+    },
+    {
+      "id": "internships",
+      "data": [
+        {
+          "org": "Aarhus University",
+          "role": "Researcher",
+          "description": "LLM reliability, autonomous agents, reasoning correction, AI safety and evaluation."
+        }
+      ],
+      "span": "full",
+      "type": "internships",
+      "title": "Experience"
+    }
+  ],
+  "socials": [],
+  "tagline": "LLM reliability, autonomous agents, and AI safety at Aarhus UC.",
+  "location": "Aarhus University",
+  "level": "alumni"
+}

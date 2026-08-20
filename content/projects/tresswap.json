@@ -1,0 +1,23 @@
+{
+  "name": "Tresswap",
+  "slug": "tresswap",
+  "tags": [
+    "AR",
+    "GAN",
+    "Computer Vision"
+  ],
+  "about": "GAN-based AR app for virtual hairstyle try-ons using face landmark detection.",
+  "links": [],
+  "tagline": "GAN-based AR virtual hairstyle try-ons.",
+  "category": "Computer Vision",
+  "featured": true,
+  "features": [],
+  "techStack": [
+    "GAN",
+    "Facial Landmark Detection"
+  ],
+  "highlights": [],
+  "description": "Try hairstyles in augmented reality using facial landmark detection.",
+  "screenshots": [],
+  "contributors": []
+}

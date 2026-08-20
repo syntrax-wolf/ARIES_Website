@@ -1,0 +1,18 @@
+{
+  "body": "A beginner level tutorial cum hackathon curated especially for freshers. From understanding the basics of NLP to choosing your own problem statement and working to connect its frontend, backend, and ML into a complete pipeline for two packed days.\n\nDates: 17–18 January 2026.",
+  "date": "2026-01-17",
+  "slug": "shipathon-1-nlp-hackathon",
+  "type": "Hackathon",
+  "image": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/events/1785772264158-95aaec51.jpeg",
+  "links": [],
+  "title": "Shipathon 1: NLP Hackathon",
+  "images": [
+    "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/events/1785772269550-9f53337b.jpeg",
+    "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/events/1785772271567-fff76466.jpeg",
+    "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/events/1785772274067-5bccb749.jpeg",
+    "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/events/1785857489665-468a6f76.jpg",
+    "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/events/1785857492139-01cf0513.jpg",
+    "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/events/1785857494248-874abde9.jpg"
+  ],
+  "description": "A beginner-friendly NLP tutorial cum hackathon for freshers — two packed days from basics to a full ML pipeline."
+}

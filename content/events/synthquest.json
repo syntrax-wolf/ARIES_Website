@@ -1,0 +1,10 @@
+{
+  "body": "Held during TRYST 2025, SynthQuest was a hackathon on the application of AI/ML and data science to precision medicine. Participants tackled real-world healthcare challenges across four technical and policy tracks. With 500+ registrations, 300 participants, and 20 selected teams in the finals, the event witnessed mass participation and yielded 20 fully functional prototypes. From offline, multilingual diagnostic tools to voice-based medical chatbots, teams brought innovative ideas to life using BioBERT, Google ML Kit, and Arduino. Co-hosted by ARIES and Beta Society.",
+  "date": "2025-03-15",
+  "slug": "synthquest",
+  "type": "Hackathon",
+  "image": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/events/1785857421864-2ee964a7.jpg",
+  "links": [],
+  "title": "SynthQuest",
+  "description": "Precision medicine hackathon at TRYST 2025 — 500+ registrations, 20 finalist prototypes."
+}

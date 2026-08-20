@@ -1,0 +1,30 @@
+{
+  "name": "Mehul",
+  "role": "Research Coordinator",
+  "slug": "mehul",
+  "year": "Maths and Computing",
+  "level": "coordinator",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786624720531-dcfabbdb.jpg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://www.linkedin.com/in/mehul-shakya-353b5a324/",
+      "kind": "linkedin",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "MehulShakya47",
+      "kind": "github",
+      "label": "GitHub"
+    },
+    {
+      "url": "mailto:mehulshakya9@gmail.com",
+      "kind": "custom",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "entryNumber": "mt1240305",
+  "email": "mt1240305@iitd.ac.in"
+}

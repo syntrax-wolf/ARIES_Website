@@ -1,0 +1,563 @@
+{
+  "years": [
+    {
+      "year": "2026-27",
+      "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/team/1785925326265-446c565d.jpeg",
+      "photos": [
+        "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/team/1785925326265-446c565d.jpeg"
+      ],
+      "coreTeam": [
+        {
+          "name": "Sanidhya Ojha",
+          "role": "OC",
+          "slug": "sanidhya",
+          "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786643639672-75704958.jpeg"
+        },
+        {
+          "name": "Tamanna",
+          "role": "Co-Overall Coordinator",
+          "slug": "tamanna",
+          "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786700865070-aa1b637a.png"
+        },
+        {
+          "name": "Samyak",
+          "role": "Research Lead",
+          "slug": "samyak",
+          "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786702834198-27ceeb8a.jpeg"
+        },
+        {
+          "name": "Garvish",
+          "role": "Co-Overall Coordinator",
+          "slug": "garvish",
+          "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786886806913-7de5c46c.jpeg"
+        },
+        {
+          "name": "Raj Chandak",
+          "role": "Panelist",
+          "slug": "raj-chandak",
+          "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786700607315-650541ad.png"
+        }
+      ],
+      "executives": [
+        {
+          "group": "BRAIN",
+          "members": [
+            {
+              "name": "Aira",
+              "role": "Executive",
+              "slug": "aira"
+            },
+            {
+              "name": "Amey Chaudhari",
+              "role": "Executive",
+              "slug": "amey-chaudhari",
+              "photo": "/images/members/amey-chaudhari.jpg"
+            },
+            {
+              "name": "Anuvesha",
+              "role": "Executive",
+              "slug": "anuvesha",
+              "photo": "/images/members/anuvesha.jpg"
+            },
+            {
+              "name": "Ayosh Singh yadav",
+              "role": "Executive",
+              "slug": "ayosh-s-yadav",
+              "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786865881843-67e9506a.jpeg"
+            },
+            {
+              "name": "Dev Shah",
+              "role": "Executive",
+              "slug": "dev-shah",
+              "photo": "/images/members/dev-shah.webp"
+            },
+            {
+              "name": "Dhruv Gupta",
+              "role": "Executive",
+              "slug": "dhruv-gupta",
+              "photo": "/images/members/dhruv-gupta.jpg"
+            },
+            {
+              "name": "Eeshaan Gupta",
+              "role": "Executive",
+              "slug": "eeshan",
+              "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786619243038-04c21792.jpeg"
+            },
+            {
+              "name": "Harshita Prasad",
+              "role": "Executive",
+              "slug": "harshita-prasad"
+            },
+            {
+              "name": "Izma Khan",
+              "role": "Executive",
+              "slug": "izma-khan",
+              "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786638993727-59c0f4b9.jpeg"
+            },
+            {
+              "name": "Keshav Agarwal",
+              "role": "Executive",
+              "slug": "keshav-agarwal"
+            },
+            {
+              "name": "Khushi Gupta",
+              "role": "Executive",
+              "slug": "khushi-gupta",
+              "photo": "/images/members/khushi-gupta.png"
+            },
+            {
+              "name": "Kiran",
+              "role": "Executive",
+              "slug": "kiran",
+              "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786637808467-2c85db75.jpeg"
+            },
+            {
+              "name": "Manasvi gupta",
+              "role": "Executive",
+              "slug": "manasvi-executive",
+              "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786373134477-774c5fb1.jpg"
+            },
+            {
+              "name": "Navya",
+              "role": "Executive",
+              "slug": "navya",
+              "photo": "/images/members/navya.jpg"
+            },
+            {
+              "name": "Parav Kumar",
+              "role": "Executive",
+              "slug": "parav-kumar"
+            },
+            {
+              "name": "Parth Yadav",
+              "role": "Executive",
+              "slug": "parth-yadav",
+              "photo": "/images/members/parth-yadav.jpg"
+            },
+            {
+              "name": "Pradyun Kedia",
+              "role": "Executive",
+              "slug": "pradyun-kedia"
+            },
+            {
+              "name": "Rachit Goyal",
+              "role": "Executive",
+              "slug": "rachit-goyal",
+              "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786621458123-203dd342.jpeg"
+            },
+            {
+              "name": "Sameeksha B",
+              "role": "Executive",
+              "slug": "sameeksha-b"
+            },
+            {
+              "name": "Saumya",
+              "role": "Executive",
+              "slug": "saumya",
+              "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786464567366-095597c8.jpeg"
+            },
+            {
+              "name": "Simran Varma",
+              "role": "Executive",
+              "slug": "simran-varma",
+              "photo": "/images/members/simran-varma.jpg"
+            },
+            {
+              "name": "Ujjwal",
+              "role": "Executive",
+              "slug": "ujjwal"
+            },
+            {
+              "name": "Vansh Narula",
+              "role": "Executive",
+              "slug": "vansh-narula",
+              "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786633074798-0c61ad11.jpeg"
+            }
+          ]
+        },
+        {
+          "group": "CANVAS",
+          "members": [
+            {
+              "name": "Aditya Kumar",
+              "role": "Research Executive",
+              "slug": "aditya-kumar",
+              "photo": "/images/members/aditya-kumar.jpg"
+            },
+            {
+              "name": "Amarsh",
+              "role": "Research Executive",
+              "slug": "amarsh",
+              "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786357692288-5123af01.jpg"
+            },
+            {
+              "name": "Atharva Singh",
+              "role": "Research Executive",
+              "slug": "atharva-singh",
+              "photo": "/images/members/atharva-singh.jpg"
+            },
+            {
+              "name": "Avneesh Garg",
+              "role": "Research Executive",
+              "slug": "avneesh-garg"
+            },
+            {
+              "name": "Biboswan",
+              "role": "Research Executive",
+              "slug": "biboswan",
+              "photo": "/images/members/biboswan.jpg"
+            },
+            {
+              "name": "Debesh Biswas",
+              "role": "Research Executive",
+              "slug": "debesh-biswas"
+            },
+            {
+              "name": "Kalp Hetalkumar Shah",
+              "role": "Research Executive",
+              "slug": "kalp",
+              "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786356620846-12e13b3e.jpeg"
+            },
+            {
+              "name": "Manas Wagh",
+              "role": "Research Executive",
+              "slug": "manas-wagh",
+              "photo": "/images/members/manas-wagh.jpg"
+            },
+            {
+              "name": "Nishant Mathuriya",
+              "role": "Research Executive",
+              "slug": "nishant-mathuriya",
+              "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786375155181-0e2993cd.jpg"
+            },
+            {
+              "name": "Panini",
+              "role": "Research Executive",
+              "slug": "panini"
+            },
+            {
+              "name": "Pratham Jain",
+              "role": "Research Executive",
+              "slug": "pratham-jain",
+              "photo": "/images/members/pratham-jain.jpg"
+            },
+            {
+              "name": "Ranveer",
+              "role": "Research Executive",
+              "slug": "ranveer"
+            },
+            {
+              "name": "Sai Anish Reddy",
+              "role": "Research Executive",
+              "slug": "sai-anish-reddy"
+            },
+            {
+              "name": "Shivam Garg",
+              "role": "Research Executive",
+              "slug": "shivam",
+              "photo": "/images/members/shivam.jpg"
+            },
+            {
+              "name": "Shreyash",
+              "role": "Research Executive",
+              "slug": "shreyash",
+              "photo": "/images/members/shreyash.png"
+            },
+            {
+              "name": "Shubham Goel",
+              "role": "Research Executive",
+              "slug": "shubham-goel",
+              "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786646388649-eb8195f6.jpg"
+            },
+            {
+              "name": "Vandita",
+              "role": "Research Executive",
+              "slug": "vandita",
+              "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786358555417-5a1fb3cf.jpeg"
+            },
+            {
+              "name": "Vanshika Kataria",
+              "role": "Research Executive",
+              "slug": "vanshika",
+              "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786646319449-46796661.jpg"
+            },
+            {
+              "name": "Yashika",
+              "role": "Research Executive",
+              "slug": "yashika",
+              "photo": "/images/members/yashika.jpg"
+            }
+          ]
+        }
+      ],
+      "coordinators": [
+        {
+          "name": "Devansh",
+          "role": "Coordinator",
+          "slug": "devansh",
+          "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786805442973-f96a3377.webp"
+        },
+        {
+          "name": "Ditya",
+          "role": "Coordinator",
+          "slug": "ditya",
+          "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786650615416-18c3eb93.png"
+        },
+        {
+          "name": "Drona",
+          "role": "Coordinator",
+          "slug": "drona",
+          "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786625728489-cb3ccd00.webp"
+        },
+        {
+          "name": "Ishan",
+          "role": "Coordinator",
+          "slug": "ishan",
+          "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786635338680-a8ae05f0.jpg"
+        },
+        {
+          "name": "Kashvi",
+          "role": "Coordinator",
+          "slug": "kashvi",
+          "photo": "/images/members/kashvi.jpg"
+        },
+        {
+          "name": "Manasvi",
+          "role": "Coordinator",
+          "slug": "manasvi",
+          "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786363074025-1bd501da.jpeg"
+        },
+        {
+          "name": "Reyansh",
+          "role": "Coordinator",
+          "slug": "reyansh",
+          "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1787157866688-eb191094.jpeg"
+        },
+        {
+          "name": "Rishabh Sain",
+          "role": "Coordinator",
+          "slug": "rishabh",
+          "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786648602059-d4c338d5.jpeg"
+        },
+        {
+          "name": "Shaarav",
+          "role": "Coordinator",
+          "slug": "shaarav",
+          "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786608819775-37a82e90.jpeg"
+        },
+        {
+          "name": "Shourya",
+          "role": "Coordinator",
+          "slug": "shourya"
+        },
+        {
+          "name": "Siddhant",
+          "role": "Coordinator",
+          "slug": "siddhant",
+          "photo": "/images/members/siddhant.jpg"
+        },
+        {
+          "name": "Ambar",
+          "role": "Research Coordinator",
+          "slug": "ambar",
+          "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786627649093-d8b4b80c.png"
+        },
+        {
+          "name": "Dhairya",
+          "role": "Research Coordinator",
+          "slug": "dhairya",
+          "photo": "/images/members/dhairya.jpg"
+        },
+        {
+          "name": "Geetansh",
+          "role": "Research Coordinator",
+          "slug": "geetansh"
+        },
+        {
+          "name": "Har Ashish",
+          "role": "Research Coordinator",
+          "slug": "har-ashish",
+          "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786626478747-f101ef49.jpeg"
+        },
+        {
+          "name": "Mehul",
+          "role": "Research Coordinator",
+          "slug": "mehul",
+          "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786624720531-dcfabbdb.jpg"
+        },
+        {
+          "name": "Nideesh",
+          "role": "Research Coordinator",
+          "slug": "nideesh"
+        },
+        {
+          "name": "Preesha",
+          "role": "Research Coordinator",
+          "slug": "preesha",
+          "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786621442593-f71c8c42.jpg"
+        },
+        {
+          "name": "Shaurya",
+          "role": "Research Coordinator",
+          "slug": "shaurya"
+        },
+        {
+          "name": "Snehal",
+          "role": "Research Coordinator",
+          "slug": "snehal",
+          "photo": "/images/members/snehal.jpg"
+        }
+      ]
+    },
+    {
+      "year": "2025-26",
+      "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/team/1785950551896-50e02676.jpg",
+      "photos": [
+        "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/team/1785950551896-50e02676.jpg"
+      ],
+      "coreTeam": [
+        {
+          "name": "TBD",
+          "role": "OC"
+        },
+        {
+          "name": "TBD",
+          "role": "Co-OC"
+        }
+      ],
+      "executives": [],
+      "coordinators": []
+    },
+    {
+      "year": "2024-2025",
+      "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/team/1786620426388-58ea1b75.jpeg",
+      "photos": [
+        "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/team/1786620426388-58ea1b75.jpeg"
+      ],
+      "coreTeam": [],
+      "executives": [],
+      "coordinators": [
+        {
+          "name": "Ritwik Sehrawat",
+          "role": "Coordinator",
+          "slug": "ritwik-sehrawat"
+        },
+        {
+          "name": "Joy Shanker",
+          "role": "Coordinator",
+          "slug": "joy-shanker"
+        }
+      ]
+    }
+  ],
+  "alumni": [
+    {
+      "org": "WorldQuant",
+      "name": "Vaibhav Gupta",
+      "role": "Quant Researcher",
+      "slug": "vaibhav-gupta",
+      "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1785926463621-eb1367ed.jpeg"
+    },
+    {
+      "org": "Zuse Institute",
+      "name": "Aryan Dua",
+      "role": "Asynchronous Optimization",
+      "slug": "aryan-dua",
+      "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1785924557884-17f6ff94.png"
+    },
+    {
+      "org": "Highway9 Networks",
+      "name": "Sabhya Khurana",
+      "role": "RAG + chatbot development",
+      "slug": "sabhya-khurana",
+      "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1785924667768-101cf17b.jpeg"
+    },
+    {
+      "org": "Aarhus UC",
+      "name": "Ansh Singh",
+      "role": "AI Safety & Evaluation",
+      "slug": "ansh-singh",
+      "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1785924793232-0ac17354.png"
+    },
+    {
+      "org": "Cooking SuperFast Computer Use Agents at RamAIn (YC W26)",
+      "name": "Vansh Ramani",
+      "role": "Graph Learning & Dataset Compression",
+      "slug": "vansh-ramani",
+      "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786611316230-7f3031de.png"
+    },
+    {
+      "org": "Graviton Research Capital LLP",
+      "name": "Manas Jain",
+      "role": "SDE",
+      "slug": "manas-jain",
+      "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1785924872901-6ccdbd2b.jpeg"
+    },
+    {
+      "org": "Samsung Korea",
+      "name": "Maithili Joshi",
+      "role": "SWE",
+      "slug": "maithili-joshi",
+      "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1785925071404-50758962.png"
+    },
+    {
+      "org": "Graviton",
+      "name": "Vaibhav Seth",
+      "role": "Quantitative Researcher",
+      "slug": "vaibhav-seth",
+      "photo": "/images/members/vaibhav-seth.png"
+    },
+    {
+      "org": "Ola",
+      "name": "Rudrakshi Singhal",
+      "role": "Founder's Office",
+      "slug": "rudrakshi-singal",
+      "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1785926551185-0f747d8c.jpeg"
+    },
+    {
+      "org": "UTBD & M3RG",
+      "name": "Pranav Khetarpal",
+      "role": "Researcher",
+      "slug": "pranav-khaterpal",
+      "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1785926568437-930d8b69.jpeg"
+    },
+    {
+      "org": "Glean",
+      "name": "Aastha Verma",
+      "role": "SWE",
+      "slug": "aastha-verma",
+      "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1785925245373-598f092b.jpeg"
+    },
+    {
+      "org": "Lemnisca.bio",
+      "name": "Anmol Goel",
+      "role": "Bioprocess Engineer",
+      "slug": "anmol-goel",
+      "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1785925270959-de642448.png"
+    },
+    {
+      "org": "ISI Kolkata",
+      "name": "Indranil Bhadra",
+      "role": "Research Assistant",
+      "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786702030509-83fb5e64.jpeg"
+    },
+    {
+      "org": "TU Braunshweig",
+      "name": "Tanvi Nagar",
+      "role": "Research intern",
+      "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786702258290-fa707763.jpeg"
+    },
+    {
+      "org": "ThoughtSpot",
+      "name": "Taha Munnavver",
+      "role": "SDE Intern",
+      "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786702649272-137f6179.jpeg"
+    },
+    {
+      "org": "Jane Street",
+      "name": "Arunabh Roy",
+      "role": "Software Engineer",
+      "photo": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786864808208-e6ebca61.png"
+    }
+  ]
+}

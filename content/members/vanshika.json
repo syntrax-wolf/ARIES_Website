@@ -1,0 +1,30 @@
+{
+  "name": "Vanshika Kataria",
+  "role": "Research Executive",
+  "slug": "vanshika",
+  "year": "Engineering Physics",
+  "level": "executive",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786646319449-46796661.jpg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://www.linkedin.com/in/vanshikakataria08",
+      "kind": "linkedin",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "https://github.com/Vk2008",
+      "kind": "github",
+      "label": "GitHub"
+    },
+    {
+      "url": "mailto:kataria.vanshika08@gmail.com",
+      "kind": "custom",
+      "label": "Email"
+    }
+  ],
+  "tagline": "sloth by heart",
+  "location": "IIT Delhi",
+  "entryNumber": "ph1251320",
+  "email": "ph1251320@physics.iitd.ac.in"
+}

@@ -1,0 +1,62 @@
+---
+import "../styles/inter-latin.css";
+import "@fontsource/cormorant-garamond/600.css";
+import "@fontsource/cormorant-garamond/700.css";
+import "../styles/globals.css";
+import { DEFAULT_DESCRIPTION, DEFAULT_OG_IMAGE, DEFAULT_TITLE, SITE_NAME } from "../config/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+  ogImage?: string;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const title = Astro.props.title ?? DEFAULT_TITLE;
+const description = Astro.props.description ?? DEFAULT_DESCRIPTION;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
+const ogImage = new URL(Astro.props.ogImage ?? DEFAULT_OG_IMAGE, Astro.site ?? Astro.url).href;
+const robots = Astro.props.noindex ? "noindex, nofollow" : "index, follow";
+const jsonLd = Astro.props.jsonLd;
+---
+
+<!doctype html>
+<html lang="en" class="h-full antialiased">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <link rel="icon" href="/images/brand/logo-navy.svg" />
+    <link rel="apple-touch-icon" href="/images/brand/logo-navy.svg" />
+    <slot name="head" />
+    {
+      jsonLd && (
+        <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+      )
+    }
+  </head>
+  <body class="flex min-h-full flex-col">
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --font-inter: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-cormorant: "Cormorant Garamond", ui-serif, Georgia, serif;
+  }
+</style>

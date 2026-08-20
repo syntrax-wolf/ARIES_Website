@@ -1,0 +1,26 @@
+{
+  "name": "Aira",
+  "role": "Executive",
+  "slug": "aira",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786865976052-cbb07745.jpeg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://github.com/aira-j",
+      "label": "GitHub"
+    },
+    {
+      "url": "www.linkedin.com/in/aira-jethani-4a7a333b9",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "mailto:jethaniaira@gmail.com",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "level": "executive",
+  "entryNumber": "ce1251919",
+  "email": "ce1251919@iitd.ac.in"
+}

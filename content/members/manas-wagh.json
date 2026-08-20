@@ -1,0 +1,29 @@
+{
+  "name": "Manas Wagh",
+  "role": "Research Executive",
+  "slug": "manas-wagh",
+  "level": "executive",
+  "avatar": "/images/members/manas-wagh.jpg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "Manas Wagh | LinkedIn",
+      "kind": "linkedin",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "https://huggingface.co/spaces/Manas2307/",
+      "kind": "github",
+      "label": "GitHub"
+    },
+    {
+      "url": "mailto:maverickmc7128@gmail.com",
+      "kind": "custom",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "entryNumber": "cs1251157",
+  "email": "cs1251157@cse.iitd.ac.in"
+}

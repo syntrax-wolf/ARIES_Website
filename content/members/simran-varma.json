@@ -1,0 +1,22 @@
+{
+  "name": "Simran Varma",
+  "role": "Executive",
+  "slug": "simran-varma",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786866028963-cf458d20.jpg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://www.linkedin.com/in/simran-varma-232b102ba?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "mailto:varmasimranp@gmail.com",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "level": "executive",
+  "entryNumber": "dd1254768",
+  "email": "dd1254768@design.iitd.ac.in"
+}

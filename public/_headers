@@ -1,0 +1,4 @@
+# Hashed Astro chunks already get long-cache from the adapter.
+# Named files under /images were returning cacheLifetime 0 (Lighthouse cache-insight).
+/images/*
+  Cache-Control: public, max-age=31536000

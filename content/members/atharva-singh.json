@@ -1,0 +1,86 @@
+{
+  "name": "Atharva Singh",
+  "role": "Research Executive",
+  "slug": "atharva-singh",
+  "year": "BTech Electrical Engineering 2029",
+  "level": "executive",
+  "avatar": "/images/members/atharva-singh.jpg",
+  "blocks": [
+    {
+      "id": "text-1786645556267",
+      "data": "I'm currently a sophomore at the Electrical Engineering department of IIT Delhi. I'm passionate about technology and mathematics, with a knack for tackling complex problems and finding efficient solutions.\n\nAs a lifelong learner, I'm always eager to acquire new skills and stay current with the latest technologies. I also love playing football and squash, which helps me stay sharp and reminds me of the importance of teamwork and perseverance.\n",
+      "span": "full",
+      "type": "text",
+      "title": "About / Text"
+    },
+    {
+      "id": "tools-1786645727283",
+      "data": [
+        "Programming Languages: C, C++, Python, Verilog HDL",
+        "Libraries: Numpy, Pandas, Scikit-Learn, Pytorch, OpenCV, Matplotlib, Google Benchmark, Arduino",
+        "Machine Learning; Deep Learning; Natural Language Processing (NLP); Computer Vision (CV)"
+      ],
+      "span": "full",
+      "type": "tools",
+      "title": "Skills"
+    },
+    {
+      "id": "projects-1786647257063",
+      "data": [
+        {
+          "name": "TRACE (Transit Recognition And Classification Engine for exoplanet detection)",
+          "tags": [
+            "Astronomy Signal Processing DL ML"
+          ],
+          "links": [
+            {
+              "url": "https://github.com/mahantamayukh/BAH-exoplanets",
+              "label": "Github"
+            }
+          ],
+          "description": "Built TRACE (Transit Recognition And Classification Engine), a ML pipeline that detects and classifies exoplanet transits from noisy TESS light curves as part of the Bharat Antariksh Hackathon 2026\n"
+        },
+        {
+          "name": "Zone-Based Crowd Occupancy Estimation via Multi-Object Tracking ",
+          "tags": [
+            "Probability CV ML"
+          ],
+          "links": [],
+          "description": "Built a real-time crowd density estimation pipeline using YOLOv8 inference for pedestrian zone wise occupancy detection which helps flag overcrowding in public places."
+        },
+        {
+          "name": "Song Lyrics Genre Classifier ",
+          "tags": [
+            "NLP ML"
+          ],
+          "links": [],
+          "description": "Developed an SVM classifier using TF-IDF and Word2Vec embeddings on NLTK-preprocessed multilingual Spotify lyrics to achieve optimal cross-genre accuracy."
+        }
+      ],
+      "span": "full",
+      "type": "projects",
+      "title": "Projects"
+    }
+  ],
+  "socials": [
+    {
+      "url": "https://www.linkedin.com/in/atharva-singh-0b6881277/",
+      "kind": "linkedin",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "https://github.com/Atharva6907",
+      "kind": "github",
+      "label": "GitHub"
+    },
+    {
+      "url": "mailto:atharvasingh607@gmail.com",
+      "kind": "custom",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "entryNumber": "ee1251230",
+  "email": "ee1251230@ee.iitd.ac.in"
+}

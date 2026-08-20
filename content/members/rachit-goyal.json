@@ -1,0 +1,31 @@
+{
+  "name": "Rachit Goyal",
+  "role": "Executive",
+  "slug": "rachit-goyal",
+  "year": "B.Tech. CSE'2029",
+  "level": "executive",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786621458123-203dd342.jpeg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://www.linkedin.com/in/rachit-goyal-902226398/",
+      "kind": "linkedin",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "https://github.com/Rachit218?tab=overview&from=2026-05-01&to=2026-05-20",
+      "kind": "github",
+      "label": "GitHub"
+    },
+    {
+      "url": "mailto:rachitgoyal218@gmail.com",
+      "kind": "custom",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "resumeUrl": "https://drive.google.com/file/d/1NEcdXlOX6mc_S33_72jrZCZ4fgcUY8ZO/view?usp=sharing",
+  "entryNumber": "cs5251189",
+  "email": "cs5251189@cse.iitd.ac.in"
+}

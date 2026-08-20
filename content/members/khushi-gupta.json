@@ -1,0 +1,26 @@
+{
+  "name": "Khushi Gupta",
+  "role": "Executive",
+  "slug": "khushi-gupta",
+  "avatar": "/images/members/khushi-gupta.png",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://github.com/khushi1000gupta-dev",
+      "label": "GitHub"
+    },
+    {
+      "url": "www.linkedin.com/in/khushi-gupta-48a112393",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "mailto:khushi1000gupta@gmail.com",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "level": "executive",
+  "entryNumber": "am1251701",
+  "email": "am1251701@am.iitd.ac.in"
+}

@@ -1,0 +1,76 @@
+---
+export const prerender = false;
+
+import Layout from "../../layouts/Layout.astro";
+import InnerChrome from "../../layouts/InnerChrome.astro";
+import { AdminEditor } from "../../components/admin/AdminEditor";
+import { createWritableStore } from "../../lib/content/d1";
+import {
+  eventsEditableBy,
+  projectsEditableBy,
+  resolveActor,
+  resourcesEditableBy,
+} from "../../lib/content/actor";
+import { getDocumentDb } from "../../lib/gate/runtime";
+import { sessionFromRequest } from "../../lib/gate/request";
+import { canApprove, canManageAllowlist, canManageRoster, canPublishResource, isLeadership } from "../../lib/permissions";
+
+const session = sessionFromRequest(Astro.request);
+if (!session) {
+  return Astro.redirect("/admin");
+}
+
+const db = await getDocumentDb();
+const store = createWritableStore(db);
+const actor = await resolveActor(store, session);
+const projects = projectsEditableBy(actor, await store.listProjects());
+const events = eventsEditableBy(actor, await store.listEvents());
+const resources = resourcesEditableBy(actor, await store.listResources());
+const members = await store.listMembers();
+const team = await store.getTeam();
+const label =
+  session.kind === "admin" ? "Bootstrap Admin" : `Kerberos ${session.kerberos ?? ""}`;
+
+const tabs: Array<"members" | "team" | "projects" | "events" | "resources" | "profile" | "approvals" | "allowlist"> = [];
+if (actor.session.kind === "admin" || canManageRoster(actor.level)) {
+  tabs.push("members", "team");
+}
+if (
+  actor.session.kind === "admin" ||
+  isLeadership(actor.level) ||
+  actor.level === "coordinator" ||
+  actor.level === "executive"
+) {
+  tabs.push("projects", "events");
+}
+if (actor.session.kind === "admin" || canPublishResource(actor.level)) {
+  tabs.push("resources");
+}
+tabs.push("profile");
+if (actor.session.kind === "admin" || canApprove(actor.level)) {
+  tabs.push("approvals");
+}
+if (actor.session.kind === "admin" || canManageAllowlist(actor.level)) {
+  tabs.push("allowlist");
+}
+---
+
+<Layout title="Editor | ARIES IIT Delhi" noindex>
+  <InnerChrome>
+  <div class="min-h-screen bg-[#fbf4ec] px-6 pt-16 pb-16 lg:pt-12">
+    <div class="mx-auto max-w-5xl">
+      <AdminEditor
+        client:load
+        projects={projects}
+        events={events}
+        resources={resources}
+        members={members}
+        team={team}
+        profileSlug={actor.memberSlug === "admin" ? "" : actor.memberSlug}
+        label={label}
+        tabs={tabs}
+      />
+    </div>
+  </div>
+  </InnerChrome>
+</Layout>

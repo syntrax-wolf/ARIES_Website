@@ -1,0 +1,30 @@
+{
+  "name": "Izma Khan",
+  "role": "Executive",
+  "slug": "izma-khan",
+  "year": "EE3'29",
+  "level": "executive",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786638993727-59c0f4b9.jpeg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://www.linkedin.com/in/khan-izma/",
+      "kind": "linkedin",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "https://github.com/Izma810",
+      "kind": "github",
+      "label": "GitHub"
+    },
+    {
+      "url": "mailto:izmahilalkhan08@gmail.com",
+      "kind": "custom",
+      "label": "Email"
+    }
+  ],
+  "tagline": "hello :D",
+  "location": "IIT Delhi",
+  "entryNumber": "ee3251899",
+  "email": "ee3251899@ee.iitd.ac.in"
+}

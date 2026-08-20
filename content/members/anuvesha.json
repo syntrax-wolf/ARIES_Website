@@ -1,0 +1,30 @@
+{
+  "name": "Anuvesha",
+  "role": "Executive",
+  "slug": "anuvesha",
+  "year": "CS5",
+  "level": "executive",
+  "avatar": "/images/members/anuvesha.jpg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "www.linkedin.com/in/anuvesha07",
+      "kind": "linkedin",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "https://github.com/anuveshasingh",
+      "kind": "github",
+      "label": "GitHub"
+    },
+    {
+      "url": "mailto:anuvesha07@gmail.com",
+      "kind": "custom",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "entryNumber": "cs5251667",
+  "email": "cs5251667@cse.iitd.ac.in"
+}

@@ -1,0 +1,29 @@
+{
+  "name": "Ishan",
+  "role": "Coordinator",
+  "slug": "ishan",
+  "level": "coordinator",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786635338680-a8ae05f0.jpg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://www.linkedin.com/in/ishananand06/",
+      "kind": "linkedin",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "https://github.com/ishananand06",
+      "kind": "github",
+      "label": "GitHub"
+    },
+    {
+      "url": "mailto:ishananand1206@gmail.com",
+      "kind": "custom",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "entryNumber": "es1240923",
+  "email": "es1240923@iitd.ac.in"
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Vandita",
+  "role": "Research Executive",
+  "slug": "vandita",
+  "email": "mt1251353@maths.iitd.ac.in",
+  "level": "executive",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786358555417-5a1fb3cf.jpeg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://github.com/vanditajain2006",
+      "label": "GitHub"
+    },
+    {
+      "url": "www.linkedin.com/in/vandita-jain-9366a13a3",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "mailto:vanditajain2006@gmail.com",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "entryNumber": "mt1251353"
+}

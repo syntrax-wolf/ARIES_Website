@@ -1,0 +1,40 @@
+---
+export const prerender = true;
+
+import Layout from "../layouts/Layout.astro";
+import { TopNav } from "../components/landing/TopNav";
+import { Hero } from "../components/landing/Hero";
+import { WhatWeDo } from "../components/landing/WhatWeDo";
+import FaqAndFooter from "../components/landing/FaqAndFooter.astro";
+import { DEFAULT_DESCRIPTION, SITE_NAME } from "../config/site";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "ARIES",
+  alternateName: SITE_NAME,
+  description: DEFAULT_DESCRIPTION,
+  url: Astro.site?.href,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "New Delhi",
+    addressCountry: "IN",
+  },
+};
+---
+
+<Layout description={DEFAULT_DESCRIPTION} jsonLd={jsonLd}>
+  <link
+    slot="head"
+    rel="preload"
+    as="image"
+    href="/images/landing/hero-stag.webp"
+    fetchpriority="high"
+  />
+  <div class="relative bg-night">
+    <TopNav client:load overHero />
+    <Hero client:idle />
+    <WhatWeDo />
+    <FaqAndFooter />
+  </div>
+</Layout>

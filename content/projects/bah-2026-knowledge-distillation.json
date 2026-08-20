@@ -1,0 +1,47 @@
+{
+  "name": "BAH 2026: Student–Teacher Knowledge Distillation for GAN-Based Cloud Removal",
+  "slug": "bah-2026-knowledge-distillation",
+  "tags": [
+    "BAH",
+    "Computer Vision",
+    "Knowledge Distillation",
+    "Satellite"
+  ],
+  "about": "Entry to finals at BAH hackathon. Performs knowledge distillation from teacher model with LUPI (learning using privileged information); student trained on indigenous satellite data lacking an independent channel to replicate teacher results. Domain adaptation from Sentinel to LISS-IV (on Indian data) for student model.",
+  "image": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/projects/1787151561061-b6937c7e.jpg",
+  "links": [],
+  "tagline": "knowledge distillation for indigenous satellite cloud removal.",
+  "category": "Hackathon",
+  "featured": true,
+  "features": [],
+  "techStack": [
+    "GAN",
+    "LUPI",
+    "MAE"
+  ],
+  "highlights": [],
+  "description": "Grand finalist at BAH 2026: student model on indigenous satellite data replicates a privileged teacher using a hallucination module and feature extraction",
+  "screenshots": [],
+  "contributors": [
+    {
+      "kind": "member",
+      "name": "Preesha",
+      "slug": "preesha"
+    },
+    {
+      "kind": "member",
+      "name": "Khushi Gupta",
+      "slug": "khushi-gupta"
+    },
+    {
+      "kind": "member",
+      "name": "Izma Khan",
+      "slug": "izma-khan"
+    },
+    {
+      "kind": "member",
+      "name": "Vandita",
+      "slug": "vandita"
+    }
+  ]
+}

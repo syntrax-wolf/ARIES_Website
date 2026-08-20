@@ -1,0 +1,28 @@
+{
+  "name": "Amarsh",
+  "role": "Research Executive",
+  "slug": "amarsh",
+  "year": "Sophomore ",
+  "email": "me2252094@mech.iitd.ac.in",
+  "level": "executive",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786357692288-5123af01.jpg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://github.com/Zcodeod-OG",
+      "label": "GitHub"
+    },
+    {
+      "url": "https://www.linkedin.com/in/amarsh-choudhary-0181b8223",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "mailto:amarshchoudhary5@gmail.com",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "resumeUrl": "",
+  "entryNumber": "me2252094"
+}

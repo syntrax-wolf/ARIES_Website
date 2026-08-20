@@ -1,0 +1,92 @@
+---
+import { CalendarDays, Clock, MapPin, ArrowLeft } from "lucide-react";
+import Layout from "../../layouts/Layout.astro";
+import InnerChrome from "../../layouts/InnerChrome.astro";
+import { loadBuildStore } from "../../lib/content/build-store";
+
+export async function getStaticPaths() {
+  const store = await loadBuildStore();
+  return store.listEvents().map((e) => ({ params: { slug: e.slug } }));
+}
+
+export const prerender = true;
+
+const { slug } = Astro.params;
+const event = (await loadBuildStore()).getEvent(slug!);
+if (!event) {
+  return new Response(null, { status: 404, statusText: "Not Found" });
+}
+
+const d = new Date(event.date + "T00:00:00");
+const today = new Date().toISOString().slice(0, 10);
+const isPast = event.date < today;
+const dateLabel = d.toLocaleDateString("en-IN", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+---
+
+<Layout
+  title={`${event.title} | ARIES IIT Delhi`}
+  description={event.description}
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: event.title,
+    description: event.description,
+    startDate: event.date,
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    location: event.venue
+      ? { "@type": "Place", name: event.venue }
+      : { "@type": "Place", name: "IIT Delhi" },
+    organizer: { "@type": "Organization", name: "ARIES IIT Delhi" },
+  }}
+>
+  <InnerChrome>
+  <div class="relative min-h-screen overflow-hidden bg-[linear-gradient(160deg,#f6f1fb_0%,#ece2f7_55%,#e0d2f3_100%)] pt-16 lg:pt-0">
+    <div class="glow-circle absolute -right-24 top-40 size-96"></div>
+    <div class="relative mx-auto max-w-[1000px] px-6 pb-20 pt-14 md:px-10">
+      <a href="/events" class="inline-flex items-center gap-2 text-sm font-semibold text-purple hover:underline">
+        <ArrowLeft size={15} /> All events
+      </a>
+
+      <h1 class="mt-6 text-4xl font-bold text-[#2b1e6b] md:text-5xl">{event.title}</h1>
+
+      <div class="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-sm text-ink">
+        <span class="flex items-center gap-2">
+          <CalendarDays size={16} class="text-purple" /> {dateLabel}
+        </span>
+        {
+          !isPast && event.startTime && (
+            <span class="flex items-center gap-2">
+              <Clock size={16} class="text-purple" />
+              {event.startTime}
+              {event.endTime && ` – ${event.endTime}`}
+            </span>
+          )
+        }
+        {
+          !isPast && event.venue && (
+            <span class="flex items-center gap-2">
+              <MapPin size={16} class="text-purple" /> {event.venue}
+            </span>
+          )
+        }
+        <span class="rounded-full bg-white/70 px-3 py-0.5 text-xs font-bold uppercase tracking-wider text-[#5b4eb5]">
+          {event.type}
+        </span>
+      </div>
+
+      {
+        event.image && (
+          <img src={event.image} alt="" class="mt-10 w-full rounded-3xl object-cover" />
+        )
+      }
+
+      <p class="mt-10 text-[15px] leading-8 text-ink">{event.body || event.description}</p>
+    </div>
+  </div>
+  </InnerChrome>
+</Layout>

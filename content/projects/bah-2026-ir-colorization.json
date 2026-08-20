@@ -1,0 +1,29 @@
+{
+  "name": "BAH 2026: IR Image Colorization",
+  "slug": "bah-2026-ir-colorization",
+  "tags": [
+    "BAH",
+    "Computer Vision",
+    "Satellite",
+    "Infrared"
+  ],
+  "about": "Based on satellite TIR images — super resolution using SwinIR architecture and colorisation using a modified GAN architecture.",
+  "links": [],
+  "tagline": "Super-resolution and colorization of satellite TIR images.",
+  "category": "Hackathon",
+  "features": [],
+  "techStack": [
+    "SwinIR",
+    "GAN"
+  ],
+  "highlights": [],
+  "description": "SwinIR super-resolution plus a modified GAN for colorizing infrared satellite imagery.",
+  "screenshots": [],
+  "contributors": [
+    {
+      "kind": "member",
+      "name": "Vanshika Kataria",
+      "slug": "vanshika"
+    }
+  ]
+}

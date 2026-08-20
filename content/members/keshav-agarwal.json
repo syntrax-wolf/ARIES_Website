@@ -1,0 +1,26 @@
+{
+  "name": "Keshav Agarwal",
+  "role": "Executive",
+  "slug": "keshav-agarwal",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786865779955-c4d9a362.png",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://github.com/ka18062007",
+      "label": "GitHub"
+    },
+    {
+      "url": "https://www.linkedin.com/in/keshav-agarwal-416100374/",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "mailto:ka18062007@gmail.com",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "level": "executive",
+  "entryNumber": "bb1251633",
+  "email": "bb1251633@dbeb.iitd.ac.in"
+}

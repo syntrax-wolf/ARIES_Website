@@ -1,0 +1,32 @@
+{
+  "name": "Sabhya Khurana",
+  "role": "Alumni, ARIES · Coordinator",
+  "slug": "sabhya-khurana",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1785924667768-101cf17b.jpeg",
+  "blocks": [
+    {
+      "id": "about",
+      "data": "Former Coordinator at ARIES. Builds RAG pipelines, chatbots, multi-agent systems, and data-type specialization tooling.",
+      "span": "full",
+      "type": "text",
+      "title": "About"
+    },
+    {
+      "id": "internships",
+      "data": [
+        {
+          "org": "Highway9 Networks",
+          "role": "Engineer",
+          "description": "RAG + chatbot development, multi-agent systems, and data-type specialization."
+        }
+      ],
+      "span": "full",
+      "type": "internships",
+      "title": "Experience"
+    }
+  ],
+  "socials": [],
+  "tagline": "RAG, chatbots, and multi-agent systems at Highway9 Networks.",
+  "location": "Highway9 Networks",
+  "level": "alumni"
+}

@@ -1,0 +1,22 @@
+{
+  "name": "Navya",
+  "role": "Executive",
+  "slug": "navya",
+  "level": "executive",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1785905860988-54afbd76.jpeg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://github.com/navyagoyal10",
+      "label": "GitHub"
+    },
+    {
+      "url": "mailto:navya.ng.goyal@gmail.com",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "entryNumber": "mt1251514",
+  "email": "mt1251514@maths.iitd.ac.in"
+}

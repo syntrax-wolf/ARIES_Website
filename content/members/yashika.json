@@ -1,0 +1,26 @@
+{
+  "name": "Yashika",
+  "role": "Research Executive",
+  "slug": "yashika",
+  "avatar": "/images/members/yashika.jpg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://github.com/yashikaagg3",
+      "label": "GitHub"
+    },
+    {
+      "url": "linkedin.com/in/yashika-aggarwal-046193343",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "mailto:yashikaagg6@gmail.com",
+      "label": "Email"
+    }
+  ],
+  "tagline": "",
+  "location": "IIT Delhi",
+  "level": "executive",
+  "entryNumber": "am1251638",
+  "email": "am1251638@am.iitd.ac.in"
+}

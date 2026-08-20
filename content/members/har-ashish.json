@@ -1,0 +1,31 @@
+{
+  "name": "Har Ashish",
+  "role": "Research Coordinator",
+  "slug": "har-ashish",
+  "year": "3rd Year",
+  "email": "cs1240904@iitd.ac.in",
+  "level": "coordinator",
+  "avatar": "https://lkhansubwrevcvsatcuc.supabase.co/storage/v1/object/public/media/members/1786626478747-f101ef49.jpeg",
+  "blocks": [],
+  "socials": [
+    {
+      "url": "https://www.linkedin.com/in/har-ashish-arora",
+      "kind": "linkedin",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "https://github.com/harashish-arora",
+      "kind": "github",
+      "label": "GitHub"
+    },
+    {
+      "url": "https://harashish-arora.github.io",
+      "kind": "website",
+      "label": "Website"
+    }
+  ],
+  "tagline": "My neurons need some attention",
+  "location": "~IIT Delhi~ UWaterloo, Ontario",
+  "resumeUrl": "https://harashish-arora.github.io/CV.pdf",
+  "entryNumber": "cs1240904"
+}

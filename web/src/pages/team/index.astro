@@ -1,0 +1,25 @@
+---
+export const prerender = true;
+
+import Layout from "../../layouts/Layout.astro";
+import InnerChrome from "../../layouts/InnerChrome.astro";
+import { TeamExplorer } from "../../components/team/TeamExplorer";
+import { AlumniSection } from "../../components/team/AlumniSection";
+import { loadBuildStore } from "../../lib/content/build-store";
+
+const team = (await loadBuildStore()).getTeam();
+---
+
+<Layout
+  title="Team | ARIES IIT Delhi"
+  description="Core team, coordinators, executives, and alumni of ARIES at IIT Delhi."
+>
+  <InnerChrome>
+  <div class="min-h-screen bg-[linear-gradient(180deg,#efe9f7_0%,#e6ddf5_45%,#f8f1e7_46%,#fbf4ec_100%)] pt-16 lg:pt-0">
+    <div class="mx-auto max-w-[1360px] px-6 pt-14 md:px-14">
+      <TeamExplorer client:visible team={team} />
+      <AlumniSection client:visible alumni={team.alumni} />
+    </div>
+  </div>
+  </InnerChrome>
+</Layout>

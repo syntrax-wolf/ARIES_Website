@@ -1,0 +1,27 @@
+---
+import { FaqList } from "./FaqList";
+import { LandingFooter } from "./LandingFooter";
+---
+
+<section class="landing-frame flex flex-col overflow-hidden bg-gradient-to-b from-mist via-lilac to-[#3a2d78]">
+  <div
+    class="relative mx-auto grid w-full max-w-[1400px] flex-1 content-center gap-10 px-6 py-16 lg:grid-cols-[1fr_1.6fr] lg:gap-16 lg:px-12 lg:py-20"
+  >
+    <div>
+      <p class="text-sm font-black uppercase tracking-[0.06em] text-purple-2">
+        <span class="mr-2 inline-block h-[3px] w-9 translate-y-[-4px] bg-purple-2" aria-hidden></span>
+        FAQs
+      </p>
+      <h2 class="mt-5 text-4xl font-black leading-[1.15] text-ink md:text-[46px]">
+        Frequently Asked <span class="text-purple-2">Questions</span>
+      </h2>
+      <p class="mt-8 max-w-xs text-lg leading-9 text-ink/80 md:text-[20px]">
+        Everything you need to know about Aries and how to get involved.
+      </p>
+    </div>
+
+    <FaqList client:visible />
+  </div>
+
+  <LandingFooter client:idle />
+</section>
